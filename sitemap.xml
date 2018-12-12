@@ -5,8 +5,8 @@
     <description>Konghiran Wongchairungruang</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 12 Dec 2018 22:12:30 +0700</pubDate>
-    <lastBuildDate>Wed, 12 Dec 2018 22:12:30 +0700</lastBuildDate>
+    <pubDate>Wed, 12 Dec 2018 22:23:36 +0700</pubDate>
+    <lastBuildDate>Wed, 12 Dec 2018 22:23:36 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -75,6 +75,8 @@
 &lt;img src=&quot;/static/img/why_tdd/3_why_tdd.png&quot; alt=&quot;image tooltip here&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;บางคนอ่านมาถึงจุดนี้อาจจะบอกว่า ใช่สิก็มุง return “1” ก็ test ผ่านสิ จริงๆ แล้วขั้นตอนต่อไปคือการ Refactor Code แต่ตอนนี้เราเพิ่งมีแค่ Test case เดียว ดังนั้นเราจะไปเขียน Test case ที่ 2 กันก่อนเพื่อให้เห็นภาพมากยิ่งขึ้น&lt;/p&gt;
+
+&lt;h2 id=&quot;updating&quot;&gt;Updating…&lt;/h2&gt;
 </description>
         <pubDate>Sat, 22 Jul 2017 04:19:22 +0700</pubDate>
         <link>http://localhost:4000/testing/2017/07/22/what-is-tdd-and-why.html</link>
