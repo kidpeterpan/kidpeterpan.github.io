@@ -3,10 +3,10 @@
   <channel>
     <title>~ My Note ~</title>
     <description>Konghiran Wongchairungruang</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Dec 2018 21:08:23 +0700</pubDate>
-    <lastBuildDate>Thu, 13 Dec 2018 21:08:23 +0700</lastBuildDate>
+    <link>https://kidpeterpan.github.io/</link>
+    <atom:link href="https://kidpeterpan.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 13 Dec 2018 21:34:17 +0700</pubDate>
+    <lastBuildDate>Thu, 13 Dec 2018 21:34:17 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -79,8 +79,8 @@
 &lt;h2 id=&quot;updating&quot;&gt;Updating…&lt;/h2&gt;
 </description>
         <pubDate>Sat, 22 Jul 2017 04:19:22 +0700</pubDate>
-        <link>http://localhost:4000/all/testing/2017/07/22/what-is-tdd-and-why.html</link>
-        <guid isPermaLink="true">http://localhost:4000/all/testing/2017/07/22/what-is-tdd-and-why.html</guid>
+        <link>https://kidpeterpan.github.io/all/testing/2017/07/22/what-is-tdd-and-why.html</link>
+        <guid isPermaLink="true">https://kidpeterpan.github.io/all/testing/2017/07/22/what-is-tdd-and-why.html</guid>
         
         
         <category>all</category>
