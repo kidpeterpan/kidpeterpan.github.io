@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>ทำไมต้องใช้ TDD ( Test Driven Development ) ? - ~ My Note ~</title>
+    <meta name="author" content="Konghiran Wongchairungruang" />
+    <meta name="description" content="ทำไมต้องใช้ TDD ( Test Driven Development ) ?" />
+    <meta name="keywords" content="ทำไมต้องใช้ TDD ( Test Driven Development ) ?, ~ My Note ~, all, testing" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="1749788565247320" property="fb:app_id">
+    <meta content="~ My Note ~" property="og:site_name">
+
+    
+
+    
+      <meta content="ทำไมต้องใช้ TDD ( Test Driven Development ) ?" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="Konghiran Wongchairungruang" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/all/testing/2017/07/22/what-is-tdd-and-why.html" property="og:url">
+    
+
+    
+      <meta content="2017-07-22T04:19:22+07:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="all" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@agusmakmun6">
+    <meta name="twitter:creator" content="@agusmakmun6">
+
+    
+      <meta name="twitter:title" content="ทำไมต้องใช้ TDD ( Test Driven Development ) ?">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/all/testing/2017/07/22/what-is-tdd-and-why.html">
+    
+
+    
+      <meta name="twitter:description" content="Konghiran Wongchairungruang">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+        <div class="col-sm-8 col-offset-1 main-layout">
+            <header class="post-header">
+  <h1 class="post-title">ทำไมต้องใช้ TDD ( Test Driven Development ) ?</h1>
+</header>
+
+<span class="time">22 Jul 2017</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/all">all</a>, <a href="/category/testing">testing</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><h2 id="tdd-test-driven-development-คืออะไร">TDD (Test Driven Development) คืออะไร?</h2>
+
+<p>TDD คือการเขียนโปรแกรมโดยมีการเขียน Test case ขึ้นมาเป็นอันดับแรก ฟังดูแล้วอาจจะน่าเบื่อสำหรับใครหลายคน เพราะปกติแล้ว Programmer อย่างเราๆ ส่วนมาก เกือบ 100% ได้ Requirement มาแล้วก็เรียกได้ว่า ลุยกันเลยทีเดียว ส่วนเรื่อง Test ก็จะมาทำก็ต่อเมื่อโปรแกรมเสร็จแล้ว หรือ Run Test กันเป็น Feature ไป ซึ่งกรณีที่โปรแกรมใหญ่ขึ้น กว่าจะรู้ตัวอีกทีว่าผิด หรือส่วนที่เราสร้างขึ้นใหม่นั้นไปกระทบส่วนอื่น บางทีเราก็ออกมาไกลเกินไปแล้ว อาจจะใช้เวลานานในการหาจุดผิดหรือจุดที่ไปกระทบ อย่างโชคดีที่สุดคือ Tester เจอก่อนที่มันจะหลุดไปถึง Production นี่เป็นคำตอบที่ดีที่สุด ที่อาจบอกได้ว่าทำไมเราต้องใช้ TDD เข้ามาช่วย พูดมาถึงจุดนี้แล้ว สรุปแล้วมันคืออะไร ถ้าพูดแบบสั้นๆ เลย TDD ก็คือ</p>
+
+<h2 id="spec-ของ-program-ที่มันสามารถ-execute-ได้">Spec ของ Program ที่มันสามารถ Execute ได้</h2>
+
+<p>ใช่แล้วครับ แต่ก่อนเราเขียน Spec ลงไปในเอกสารต่างๆ เช่น Microsoft word, Microsoft excel ซึ่งถ้าโปรแกรมถูกพัฒนามานานแล้ว มีหลายครั้งที่ Spec ไม่ได้ถูก Update ตามไปด้วย เพื่อให้เห็นภาพเราลองมาเขียนโปรแกรมแบบ TDD อย่างง่ายกันครับ</p>
+
+<h2 id="ขั้นตอนในการเขียนโปรแกรมแบบ-tdd-มีอย่างไรบ้าง">ขั้นตอนในการเขียนโปรแกรมแบบ TDD มีอย่างไรบ้าง?</h2>
+
+<p><img src="/static/img/why_tdd/0_hIxnev7Cd-SLezHv.png" alt="image tooltip here" /></p>
+
+<p>ขั้นตอนที่ 1 คือ การเขียน Test case ให้ Fail ซะก่อน มันจะแดงจะอะไรก็ช่าง ขอให้นึกภาพสุดท้ายของการทำงานที่เราต้องการ และเขียนมันออกมา</p>
+
+<p>ขั้นตอนที่ 2 คือ การเขียน Code ขึ้นมา เพื่อให้ผ่าน Test case นั้นได้ จะเขียนแบบไหนก็ได้ขอให้ผลลัพธ์เป็นสิ่งที่ Test case นั้นๆ ต้องการ</p>
+
+<p>ขั้นตอนที่ 3 คือ การ Refactor Code เจ้า Code ที่เราเขียนโดยไม่สนใจว่า Code นั้นจะดีหรือไม่ดี แต่ได้ผลลัพธ์ถูกต้องเมื่อกี้นี้แหละ ให้มันดีและสวยงามซะ</p>
+
+<h2 id="มาเริ่มลง-code-จริงกันเลย">มาเริ่มลง Code จริงกันเลย</h2>
+
+<p>ในที่นี้ผมจะใช้ IDE คือ Intellij และจะทำการทดสอบการเขียนโปรแกรมแบบ TDD ในภาษา JAVA Requirement ของโปรแกรมเป็นดังนี้ โปรแกรมต้องการ Input 2 ตัวแล้วจะให้ Output เป็น String พร้อมผลลัพท์ของ Parameter 2 ตัวรวมกัน</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">getSum</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">)</span> <span class="c1">//1+1=2</span>
+</code></pre></div></div>
+<p>ทำการ Create Project ขึ้นมา ซึ่งจะมีสองส่วนคือ ส่วนที่เป็นพื้นที่สำหรับเขียน Test case และส่วนที่เอาไว้สำหรับเขียนโปรแกรมของเรา</p>
+
+<p><img src="/static/img/why_tdd/1_d_rv4GuuV-roZAChySUaeQ.png" alt="image tooltip here" /></p>
+
+<p>หลังจากนั้นเราก็ทำตามขั้นตอนเลยครับ คือเขียน Test ขึ้นมาก่อน ทำการสร้าง Sum2DigitTest.java ขึ้นมา แล้วก็เขียนภาพสุดท้ายที่เราต้องการลงไปครับ ในขั้นตอนแรก สิ่งที่อยากได้คือ เมื่อใส่ Parameter ตัวแรกเป็น 1 ก็ควรจะได้ String ที่เป็น “1” ออกมา เราเขียน Test Case ได้ดังนี้</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.junit.Assert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sum2DigitTest</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">dummyRightOperand</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leftOperandShouldBe1</span><span class="o">(){</span>
+        <span class="n">Sum2Digit</span> <span class="n">sum2Digit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Sum2Digit</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">dummyRightOperand</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">expected</span> <span class="o">=</span> <span class="s">"1"</span><span class="o">;</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">sum2Digit</span><span class="o">.</span><span class="na">getLeft</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>หลังจากนั้นเราจะทำการสร้าง Class Sum2Digit แล้วสร้าง Constuctor และ getLeft ที่ return ผลลัพท์ที่ Test case ต้องการออกมา โดยย้ำนะครับว่า เขียนแค่ผ่าน</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.junit.Assert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sum2Digit</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">leftOperand</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Sum2Digit</span><span class="o">(</span><span class="kt">int</span> <span class="n">leftOperand</span><span class="o">,</span><span class="kt">int</span> <span class="n">rightOperand</span><span class="o">){</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLeft</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="s">"1"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>จากนั้นลองมา Run Test ดูครับ
+<img src="/static/img/why_tdd/3_why_tdd.png" alt="image tooltip here" /></p>
+
+<p>บางคนอ่านมาถึงจุดนี้อาจจะบอกว่า ใช่สิก็มุง return “1” ก็ test ผ่านสิ จริงๆ แล้วขั้นตอนต่อไปคือการ Refactor Code แต่ตอนนี้เราเพิ่งมีแค่ Test case เดียว ดังนั้นเราจะไปเขียน Test case ที่ 2 กันก่อนเพื่อให้เห็นภาพมากยิ่งขึ้น</p>
+
+<h2 id="updating">Updating…</h2>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="agusmakmun6">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Google + -->
+  <div class="g-plus" data-action="share" data-annotation="bubble"></div>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/all/testing/2017/07/22/what-is-tdd-and-why.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1749788565247320";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+  
+
+<div class="PageNavigation">
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "Konghiran Wongchairungruang";
+    var disqus_identifier = "http://localhost:4000_ทำไมต้องใช้ TDD ( Test Driven Development ) ?";
+    var disqus_title = "ทำไมต้องใช้ TDD ( Test Driven Development ) ?";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+            <footer>
+              &copy; Konghiran Wongchairungruang
+              
+                - <a href="https://github.com/kidpeterpan">https://github.com/kidpeterpan</a> - Powered by Jekyll & Hosted By Github Page
+              
+              <!-- <div class="btn-github" style="float:right;">
+                <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=agusmakmun.github.io&type=star&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+                <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=agusmakmun.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="85" height="20px"></iframe>
+              </div> -->
+            </footer>
+          </div>
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="75px" width="75px" /></a>
+          <h1 class="author-name">Konghiran Wongchairungruang</h1>
+          
+            <div class="profile-about">
+              I am Pan. Who are you?
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              
+                <li><a href="https://github.com/kidpeterpan" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="ค้นหา" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <!-- <strong>Navigation</strong> -->
+            <li><a href="/">หน้าหลัก</a></li>
+            <li><a href="/category/all">สารบัญ</a></li>
+            <!-- 
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/feed.xml">XML Feed</a></li>
+             -->
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
