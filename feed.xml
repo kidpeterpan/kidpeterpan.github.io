@@ -5,9 +5,26 @@
     <description>Konghiran Wongchairungruang</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 15 Dec 2018 14:03:34 +0700</pubDate>
-    <lastBuildDate>Sat, 15 Dec 2018 14:03:34 +0700</lastBuildDate>
+    <pubDate>Sat, 15 Dec 2018 15:43:33 +0700</pubDate>
+    <lastBuildDate>Sat, 15 Dec 2018 15:43:33 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
+    
+      <item>
+        <title>Markdown คืออะไร ? ทำไมต้องใช้ Markdown ?</title>
+        <description>&lt;h1 id=&quot;markdown-คืออะไร-&quot;&gt;Markdown คืออะไร ?&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;markdown&lt;/strong&gt; คือ markup language แบบหนึ่งที่ ที่ design มาเพื่อให้ง่ายต่อการเขียน content เราสามารถจัดการกับ format ต่างๆ ของ content รวมไปถึงรูปภาพและ link ได้โดยง่ายดาย markdown ถูกคิดค้นโดย John Gruber และ Aaron Swartz ในปี 2004 ซึ่งเราสามารถพบเห็น markdown ได้บ่อยครั้งกับ file readme ของ project ต่างๆ file หรือ website หลายๆ แห่งก็รองรับการเขียน content ด้วย markdown markdown จะลงท้ายด้วย .md หรือ .markdown&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 15 Dec 2018 15:18:22 +0700</pubDate>
+        <link>http://localhost:4000/markdown/2018/12/15/markdown-คือ-อะไร-ทำไม-ต้องใช้-markdown/</link>
+        <guid isPermaLink="true">http://localhost:4000/markdown/2018/12/15/markdown-คือ-อะไร-ทำไม-ต้องใช้-markdown/</guid>
+        
+        
+        <category>all</category>
+        
+        <category>markdown</category>
+        
+      </item>
     
       <item>
         <title>ทำไมต้องใช้ TDD ( Test Driven Development ) ?</title>
