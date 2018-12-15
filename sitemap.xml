@@ -5,8 +5,8 @@
     <description>Konghiran Wongchairungruang</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 15 Dec 2018 18:17:31 +0700</pubDate>
-    <lastBuildDate>Sat, 15 Dec 2018 18:17:31 +0700</lastBuildDate>
+    <pubDate>Sat, 15 Dec 2018 18:53:48 +0700</pubDate>
+    <lastBuildDate>Sat, 15 Dec 2018 18:53:48 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -28,6 +28,55 @@
 
 &lt;h2 id=&quot;3-editor&quot;&gt;3. Editor&lt;/h2&gt;
 &lt;p&gt;editor หลายตัวตอนนี้รองรับการเขียนด้วย markdown ไม่ว่าจะเป็น vscode, atom, sublime ซึ่งบางครั้งเราสามารถใช้ markdown เพื่อจด note ให้มีความสวยงามและเป็นระเบียบได้ แถมมันยังเบามากๆ อีกด้วย&lt;/p&gt;
+
+&lt;h1 id=&quot;ตัวอย่าง&quot;&gt;ตัวอย่าง&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Header&lt;/strong&gt;&lt;br /&gt;
+เราสามารถสร้าง header ได้จากการเขียน&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# แล้วตามด้วยหัวข้อที่ต้องการเขียน 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;โดยจะเป็น &lt;strong&gt;#&lt;/strong&gt; หรือ &lt;strong&gt;##&lt;/strong&gt;.. มากกว่า 1 ตัวก็ได้ &lt;strong&gt;#&lt;/strong&gt; 1 ตัวจะให้ค่าคือ html h1 &lt;strong&gt;#&lt;/strong&gt; 2 ตัวจะได้ค่าเป็น h2 เป็นต้น&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# This is haader.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;ผลลัพธ์คือ&lt;/p&gt;
+&lt;h1 id=&quot;this-is-header&quot;&gt;This is header.&lt;/h1&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Line Break&lt;/strong&gt;&lt;br /&gt;
+การขึ้นบรรทัดใหม่ สามารถทำได้โดยเว้นวรรค 2 space แล้ว enter&lt;br /&gt;
+ตัวอย่างแรกคือ enter เลยโดยไม่เว้นวรรค 2 space&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ลองดูว่าจะขึ้นบรรทัดใหม่ไหม
+บรรทัด1
+บรรทัด2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;ผลลัพธ์คือ&lt;br /&gt;
+ลองดูว่าจะขึ้นบรรทัดใหม่ไหม
+บรรทัด1
+บรรทัด2
+ตัวอย่างที่ 2 คือ เว้นวรรค 2 space แล้ว enter&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ลองดูว่าจะขึ้นบรรทัดใหม่ไหม
+บรรทัด1
+บรรทัด2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;ผลลัพธิ์คือ
+ลองดูว่าจะขึ้นบรรทัดใหม่ไหม&lt;br /&gt;
+บรรทัด1&lt;br /&gt;
+บรรทัด2&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;TODO List&lt;/strong&gt;&lt;br /&gt;
+เราสามารถสร้าง todo list ได้โดย&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- [ ] ตัวอย่าง todo list แบบไม่ถูกติ๊ก
+- [x] ตัวอย่าง todo list แบบถูกติ๊ก
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;ผลลัพธ์คือ&lt;/p&gt;
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;ตัวอย่าง todo list แบบไม่ถูกติ๊ก&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;ตัวอย่าง todo list แบบถูกติ๊ก&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;และนี่ก็เป็นตัวอย่างคร่าวๆ ของการเขียน content ด้วย markdown สนใจดู syntex อื่นๆ ของ markdown ได้ที่ &lt;a href=&quot;https://daringfireball.net/projects/markdown/syntax&quot;&gt;https://daringfireball.net/projects/markdown/syntax&lt;/a&gt;&lt;br /&gt;
+ ขอให้สนุกกับการเขียน markdown ครับ&lt;/p&gt;
+
 </description>
         <pubDate>Sat, 15 Dec 2018 15:18:22 +0700</pubDate>
         <link>http://localhost:4000/markdown/2018/12/15/markdown-คือ-อะไร-ทำไม-ต้องใช้-markdown/</link>
