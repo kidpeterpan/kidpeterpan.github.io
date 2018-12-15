@@ -5,8 +5,8 @@
     <description>Konghiran Wongchairungruang</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 15 Dec 2018 18:53:48 +0700</pubDate>
-    <lastBuildDate>Sat, 15 Dec 2018 18:53:48 +0700</lastBuildDate>
+    <pubDate>Sat, 15 Dec 2018 18:56:50 +0700</pubDate>
+    <lastBuildDate>Sat, 15 Dec 2018 18:56:50 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -86,90 +86,6 @@
         <category>all</category>
         
         <category>markdown</category>
-        
-      </item>
-    
-      <item>
-        <title>ทำไมต้องใช้ TDD ( Test Driven Development ) ?</title>
-        <description>&lt;h2 id=&quot;tdd-test-driven-development-คืออะไร&quot;&gt;TDD (Test Driven Development) คืออะไร?&lt;/h2&gt;
-
-&lt;p&gt;TDD คือการเขียนโปรแกรมโดยมีการเขียน Test case ขึ้นมาเป็นอันดับแรก ฟังดูแล้วอาจจะน่าเบื่อสำหรับใครหลายคน เพราะปกติแล้ว Programmer อย่างเราๆ ส่วนมาก เกือบ 100% ได้ Requirement มาแล้วก็เรียกได้ว่า ลุยกันเลยทีเดียว ส่วนเรื่อง Test ก็จะมาทำก็ต่อเมื่อโปรแกรมเสร็จแล้ว หรือ Run Test กันเป็น Feature ไป ซึ่งกรณีที่โปรแกรมใหญ่ขึ้น กว่าจะรู้ตัวอีกทีว่าผิด หรือส่วนที่เราสร้างขึ้นใหม่นั้นไปกระทบส่วนอื่น บางทีเราก็ออกมาไกลเกินไปแล้ว อาจจะใช้เวลานานในการหาจุดผิดหรือจุดที่ไปกระทบ อย่างโชคดีที่สุดคือ Tester เจอก่อนที่มันจะหลุดไปถึง Production นี่เป็นคำตอบที่ดีที่สุด ที่อาจบอกได้ว่าทำไมเราต้องใช้ TDD เข้ามาช่วย พูดมาถึงจุดนี้แล้ว สรุปแล้วมันคืออะไร ถ้าพูดแบบสั้นๆ เลย TDD ก็คือ&lt;/p&gt;
-
-&lt;h2 id=&quot;spec-ของ-program-ที่มันสามารถ-execute-ได้&quot;&gt;Spec ของ Program ที่มันสามารถ Execute ได้&lt;/h2&gt;
-
-&lt;p&gt;ใช่แล้วครับ แต่ก่อนเราเขียน Spec ลงไปในเอกสารต่างๆ เช่น Microsoft word, Microsoft excel ซึ่งถ้าโปรแกรมถูกพัฒนามานานแล้ว มีหลายครั้งที่ Spec ไม่ได้ถูก Update ตามไปด้วย เพื่อให้เห็นภาพเราลองมาเขียนโปรแกรมแบบ TDD อย่างง่ายกันครับ&lt;/p&gt;
-
-&lt;h2 id=&quot;ขั้นตอนในการเขียนโปรแกรมแบบ-tdd-มีอย่างไรบ้าง&quot;&gt;ขั้นตอนในการเขียนโปรแกรมแบบ TDD มีอย่างไรบ้าง?&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/img/why_tdd/0_hIxnev7Cd-SLezHv.png&quot; alt=&quot;image tooltip here&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ขั้นตอนที่ 1 คือ การเขียน Test case ให้ Fail ซะก่อน มันจะแดงจะอะไรก็ช่าง ขอให้นึกภาพสุดท้ายของการทำงานที่เราต้องการ และเขียนมันออกมา&lt;/p&gt;
-
-&lt;p&gt;ขั้นตอนที่ 2 คือ การเขียน Code ขึ้นมา เพื่อให้ผ่าน Test case นั้นได้ จะเขียนแบบไหนก็ได้ขอให้ผลลัพธ์เป็นสิ่งที่ Test case นั้นๆ ต้องการ&lt;/p&gt;
-
-&lt;p&gt;ขั้นตอนที่ 3 คือ การ Refactor Code เจ้า Code ที่เราเขียนโดยไม่สนใจว่า Code นั้นจะดีหรือไม่ดี แต่ได้ผลลัพธ์ถูกต้องเมื่อกี้นี้แหละ ให้มันดีและสวยงามซะ&lt;/p&gt;
-
-&lt;h2 id=&quot;มาเริ่มลง-code-จริงกันเลย&quot;&gt;มาเริ่มลง Code จริงกันเลย&lt;/h2&gt;
-
-&lt;p&gt;ในที่นี้ผมจะใช้ IDE คือ Intellij และจะทำการทดสอบการเขียนโปรแกรมแบบ TDD ในภาษา JAVA Requirement ของโปรแกรมเป็นดังนี้ โปรแกรมต้องการ Input 2 ตัวแล้วจะให้ Output เป็น String พร้อมผลลัพท์ของ Parameter 2 ตัวรวมกัน&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;getSum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//1+1=2&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;ทำการ Create Project ขึ้นมา ซึ่งจะมีสองส่วนคือ ส่วนที่เป็นพื้นที่สำหรับเขียน Test case และส่วนที่เอาไว้สำหรับเขียนโปรแกรมของเรา&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/img/why_tdd/1_d_rv4GuuV-roZAChySUaeQ.png&quot; alt=&quot;image tooltip here&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;หลังจากนั้นเราก็ทำตามขั้นตอนเลยครับ คือเขียน Test ขึ้นมาก่อน ทำการสร้าง Sum2DigitTest.java ขึ้นมา แล้วก็เขียนภาพสุดท้ายที่เราต้องการลงไปครับ ในขั้นตอนแรก สิ่งที่อยากได้คือ เมื่อใส่ Parameter ตัวแรกเป็น 1 ก็ควรจะได้ String ที่เป็น “1” ออกมา เราเขียน Test Case ได้ดังนี้&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.junit.Assert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.junit.Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Sum2DigitTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dummyRightOperand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;leftOperandShouldBe1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Sum2Digit&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum2Digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sum2Digit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummyRightOperand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expected&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertEquals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expected&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum2Digit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLeft&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;หลังจากนั้นเราจะทำการสร้าง Class Sum2Digit แล้วสร้าง Constuctor และ getLeft ที่ return ผลลัพท์ที่ Test case ต้องการออกมา โดยย้ำนะครับว่า เขียนแค่ผ่าน&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.junit.Assert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.junit.Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Sum2Digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;leftOperand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sum2Digit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;leftOperand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rightOperand&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getLeft&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;จากนั้นลองมา Run Test ดูครับ
-&lt;img src=&quot;/static/img/why_tdd/3_why_tdd.png&quot; alt=&quot;image tooltip here&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;บางคนอ่านมาถึงจุดนี้อาจจะบอกว่า ใช่สิก็มุง return “1” ก็ test ผ่านสิ จริงๆ แล้วขั้นตอนต่อไปคือการ Refactor Code แต่ตอนนี้เราเพิ่งมีแค่ Test case เดียว ดังนั้นเราจะไปเขียน Test case ที่ 2 กันก่อนเพื่อให้เห็นภาพมากยิ่งขึ้น&lt;/p&gt;
-
-&lt;h2 id=&quot;updating&quot;&gt;Updating…&lt;/h2&gt;
-</description>
-        <pubDate>Sat, 22 Jul 2017 04:19:22 +0700</pubDate>
-        <link>http://localhost:4000/testing/2017/07/22/what-is-tdd-and-why/</link>
-        <guid isPermaLink="true">http://localhost:4000/testing/2017/07/22/what-is-tdd-and-why/</guid>
-        
-        <category>all</category>
-        
-        <category>testing</category>
-        
-        
-        <category>all</category>
-        
-        <category>testing</category>
         
       </item>
     
