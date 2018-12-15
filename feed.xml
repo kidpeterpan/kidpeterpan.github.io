@@ -5,8 +5,8 @@
     <description>Konghiran Wongchairungruang</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 15 Dec 2018 15:56:48 +0700</pubDate>
-    <lastBuildDate>Sat, 15 Dec 2018 15:56:48 +0700</lastBuildDate>
+    <pubDate>Sat, 15 Dec 2018 18:12:28 +0700</pubDate>
+    <lastBuildDate>Sat, 15 Dec 2018 18:12:28 +0700</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -15,8 +15,19 @@
 &lt;p&gt;&lt;br /&gt;&lt;br /&gt;
 &lt;img src=&quot;/static/img/content/markdown/markdown_00.png&quot; alt=&quot;image tooltip here&quot; /&gt;&lt;br /&gt;
 &lt;br /&gt;
-&lt;strong&gt;markdown&lt;/strong&gt; คือ markup language แบบหนึ่งที่ ที่ design มาเพื่อให้ง่ายต่อการเขียน content เราสามารถจัดการกับ format ต่างๆ ของ content รวมไปถึงรูปภาพและ link ได้โดยง่ายดาย markdown ถูกคิดค้นโดย John Gruber และ Aaron Swartz ในปี 2004 ซึ่งเราสามารถพบเห็น markdown ได้บ่อยครั้งกับ file readme ของ project ต่างๆ file หรือ website หลายๆ แห่งก็รองรับการเขียน content ด้วย markdown markdown จะลงท้ายด้วย .md หรือ .markdown&lt;/p&gt;
+&lt;strong&gt;markdown&lt;/strong&gt; คือ markup language แบบหนึ่งที่ ที่ design มาเพื่อให้ง่ายต่อการเขียน content เราสามารถจัดการกับ format ต่างๆ ของ content รวมไปถึงรูปภาพและ link ได้โดยง่ายดาย markdown ถูกคิดค้นโดย John Gruber และ Aaron Swartz ในปี 2004 ซึ่งเราสามารถพบเห็น markdown ได้บ่อยครั้งกับ file readme ของ project ต่างๆ file หรือ website หลายๆ แห่งก็รองรับการเขียน content ด้วย markdown file ของ markdown นั้นจะลงท้ายด้วย .md หรือ .markdown สามารถดูตัวอย่าง syntex หรือลองเขียน markdown ได้ที่
+&lt;a href=&quot;https://dillinger.io/&quot;&gt;https://dillinger.io/&lt;/a&gt;&lt;/p&gt;
 
+&lt;h1 id=&quot;ทำไมต้องใช้-markdown-&quot;&gt;ทำไมต้องใช้ Markdown ?&lt;/h1&gt;
+&lt;p&gt;คำถามนี้ผมว่าก็ถือว่าตอบยากพอสมควร ผมจะพูดว่าทำไมผมถึงเลือกใช้ markdown แทนแล้วกัน&lt;/p&gt;
+&lt;h2 id=&quot;1-github&quot;&gt;1. Github&lt;/h2&gt;
+&lt;p&gt;github แทบจะเป็นที่แรกเลยที่ผมได้เห็นไฟล์ .md ใช่แล้วเพราะบนหน้าเว็บของ gihub เองก็ support markdown ทำให้คนที่เขียนโปรแกรม สามารถเขียนคู่มือของตัวเองได้สะดวกด้วย file README.md ส่วนคนที่เข้ามาก็สามารถอ่านคู่มือการใช้งานได้สะดวกเช่นกัน ดังนั้นการจะเขียนคู่มือที่สวยงาม แล้วเป็นระเบียบได้ developer ทุกคน ก็จำเป็นต้องเรียนรู้ syntex ของ markdown&lt;/p&gt;
+
+&lt;h2 id=&quot;2-static-web-generator&quot;&gt;2. Static Web Generator&lt;/h2&gt;
+&lt;p&gt;ผมเองมีความสนใจด้านงานเขียนอยู่บ้าง เพื่อที่จะเป็นการทบทวนความรู็ของตัวเอง และส่งต่อความรู้สู่ผู้อื่นไปในเวลาเดียวกัน ผมสนใจ platform เช่น medium wordpress ถ้าใช้ platform อย่าง medium เราก็ไม่ต้องมี host เอง แต่กับ wordpress ไม่ใช่ แล้วปัญหาที่คนส่วนใหญ่เจอก็คือเมื่อมีคนใช้งานเยอะ มันก็จะช้า static web generator คืออะไร คือมันเหมือนเป็น framework แบบหนึ่งที่เราเขียนด้วย markdown แล้วมันจะ generate เป็น static html ให้ แถมเรายังนำมันไป deploy บน host ฟรีแบบ github page ได้อีกด้วย ทำให้เราไม่ต้องมี database หรือ process ที่ฝั่ง serverside เลย ทำให้เว็บตอบสนองได้เร็วมาก และ markdown ก็กลายมาเป็นอีกทางเลือกหนึ่งที่น่าสนใจ สำหรับคนที่อยากมี blog เล็กๆ เป็นของตัวเอง แล้วสามารถ custom หน้าเว็บได้ตามใจ ไม่ยึดติดกับ platform ใดๆ ตัวอย่างของ static web generator ก็เช่น hugo, middleman และ jekyll เป็นต้น&lt;/p&gt;
+
+&lt;p&gt;## 3. Editor
+ editor หลายตัวตอนนี้รองรับการเขียนด้วย markdown ไม่ว่าจะเป็น vscode, atom, sublime ซึ่งบางครั้งเราสามารถใช้ markdown เพื่อจด note ให้มีความสวยงามและเป็นระเบียบได้ แถมมันยังเบามากๆ อีกด้วย&lt;/p&gt;
 </description>
         <pubDate>Sat, 15 Dec 2018 15:18:22 +0700</pubDate>
         <link>http://localhost:4000/markdown/2018/12/15/markdown-คือ-อะไร-ทำไม-ต้องใช้-markdown/</link>
