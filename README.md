@@ -53,9 +53,10 @@ npx quartz build --serve
 
 ## 🔄 Deployment
 
+[![Deploy Quartz site to GitHub Pages](https://github.com/kidpeterpan/kidpeterpan.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/kidpeterpan/kidpeterpan.github.io/actions/workflows/deploy.yml)
+
 The site automatically deploys to GitHub Pages when changes are pushed to the main branch.
 
-Deployment Status: [![Deploy Quartz site to GitHub Pages](https://github.com/kidpeterpan/kidpeterpan.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/kidpeterpan/kidpeterpan.github.io/actions/workflows/deploy.yml)
 
 ## 📚 Resources
 
