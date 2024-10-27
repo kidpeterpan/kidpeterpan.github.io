@@ -7,6 +7,26 @@ tags:
 
 # MacBook Storage Cleanup Cheatsheet 🧹
 
+
+## Introduction 📝
+
+This cheatsheet provides essential commands and best practices for managing storage space on your MacBook. Whether you're running low on disk space or want to maintain a clean system, you'll find quick commands, cleanup procedures, and maintenance tips. The commands are designed to be safe and effective, but always ensure you have backups before performing any cleanup operations.
+
+### When to Use This Cheatsheet:
+- Running low on storage space
+- System performance is slowing down
+- Regular maintenance schedule
+- Before/After large file operations
+- Preparing for system updates
+
+### What's Included:
+- Quick storage check commands
+- Cleanup procedures
+- File type searches
+- Best practices
+- Warning signs to watch for
+- Regular maintenance Tips
+
 ## Quick Storage Check Commands 🔍
 
 ```bash
@@ -23,50 +43,8 @@ find ~/ -type f -size +500M
 du -sh ~/* | sort -rh | head -n 20
 ```
 
-## Common Large File Locations 📁
-
-### System
-
-```ts
-/Library/Caches/
-~/Library/Caches/
-/Library/Logs/
-~/Library/Logs/
-```
-
-### Apps & Downloads
-
-```ts
-~/Downloads/
-/Applications/
-~/Library/Application Support/
-```
-
-### Developer
-
-```ts
-~/Library/Developer/Xcode/
-~/Library/Developer/CoreSimulator/
-```
-
-### Browser
-
-```ts
-~/Library/Application Support/Google/Chrome/
-~/Library/Safari/
-```
 
 ## Quick Cleanup Commands ⚡
-
-### System Cache
-
-```bash
-# Clear user cache
-rm -rf ~/Library/Caches/*
-
-# Clear system cache (needs sudo)
-sudo rm -rf /Library/Caches/*
-```
 
 ### Downloads
 
@@ -91,7 +69,7 @@ rm -rf ~/.Trash/*
 
 ## Built-in Storage Management 🖥️
 
-1. Click Apple Menu ()
+1. Click Apple Menu
 2. About This Mac
 3. Storage
 4. Manage
@@ -107,35 +85,6 @@ find ~/ -type f -name "*.jpg" -o -name "*.png" -size +10M
 
 # Find large zip files
 find ~/ -type f -name "*.zip" -size +100M
-```
-
-## App-Specific Cleanup 🧰
-
-### Xcode
-
-```bash
-# Clear derived data
-rm -rf ~/Library/Developer/Xcode/DerivedData
-```
-
-### Node.js
-
-```bash
-# Clear npm cache
-npm cache clean --force
-
-# Remove node_modules
-find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-```
-
-### Browsers
-
-```bash
-# Chrome cache location
-~/Library/Caches/Google/Chrome/Default/Cache
-
-# Safari cache
-~/Library/Caches/com.apple.Safari/WebKitCache
 ```
 
 ## Warning Signs ⚠️
@@ -161,13 +110,6 @@ find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
    - Verify system functionality
    - Check available space
    - Update cleanup schedule if needed
-
-## Tools 🛠️
-
-- DaisyDisk
-- OmniDiskSweeper
-- CleanMyMac X
-- AppCleaner
 
 ## Quick Tips 💪
 
