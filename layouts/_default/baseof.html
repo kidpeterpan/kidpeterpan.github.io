@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale }}" class="scroll-smooth antialiased">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}</title>
+    {{ partial "seo.html" . }}
+    {{ with (templates.Defer (dict "key" "global")) }}
+      {{ partial "css.html" . }}
+    {{ end }}
+  </head>
+  <body class="min-h-screen bg-white text-neutral-950">
+    <header class="mx-auto max-w-[80%] px-4 pt-8">
+      <a href="{{ "/" | relURL }}" class="inline-flex items-center gap-5">
+        <img src="{{ "/images/logo.png" | relURL }}" alt="{{ site.Title }}" class="h-10 w-auto">
+        <span class="text-sm font-medium text-neutral-950">[{{ site.Title }}]</span>
+      </a>
+    </header>
+    {{ block "main" . }}{{ end }}
+    <a href="#" aria-label="Scroll to top" class="fixed bottom-6 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-sm text-neutral-500 hover:bg-neutral-200">↑</a>
+    {{ if .HasShortcode "mermaid" }}
+      {{ partial "mermaid-scripts.html" . }}
+    {{ end }}
+  </body>
+</html>

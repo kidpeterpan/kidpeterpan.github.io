@@ -1,0 +1,23 @@
+{{ define "main" }}
+  <main class="mx-auto max-w-[80%] px-4 py-12">
+    {{ .Content }}
+    {{ with site.RegularPages }}
+      <section class="mt-10 border-t border-neutral-200 pt-8">
+        <h2 class="text-lg font-semibold tracking-tight text-neutral-950">posts:</h2>
+        <ul class="mt-4 list-none space-y-2 p-0">
+          {{ range .ByDate.Reverse }}
+            <li class="flex flex-wrap items-baseline gap-2">
+              <a class="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-2 hover:decoration-neutral-950" href="{{ .RelPermalink }}">{{ .Title }}</a>
+              {{ if not .Date.IsZero }}
+                <span class="text-sm text-neutral-400">{{ .Date.Format "Jan 2, 2006" }}</span>
+              {{ end }}
+              {{ range .Params.tags }}
+                <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500 hover:bg-neutral-200">{{ . }}</a>
+              {{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+    {{ end }}
+  </main>
+{{ end }}

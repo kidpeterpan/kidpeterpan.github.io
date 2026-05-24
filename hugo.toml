@@ -1,0 +1,31 @@
+baseURL = 'https://example.org/'
+locale = 'en-us'
+title = 'kidpeterpan.github.io'
+
+[params]
+description = 'My New Hugo Project — a personal site built with Hugo and Tailwind CSS.'
+
+[build.buildStats]
+enable = true
+
+[[build.cachebusters]]
+source = 'assets/notwatching/hugo_stats\\.json'
+target = 'css'
+
+[[build.cachebusters]]
+source = '(postcss|tailwind)\\.config\\.js'
+target = 'css'
+
+[[module.mounts]]
+source = 'assets'
+target = 'assets'
+
+[[module.mounts]]
+disableWatch = true
+source = 'hugo_stats.json'
+target = 'assets/notwatching/hugo_stats.json'
+
+# Hugo 0.161+ invokes Node with --permission (Node permission model).
+# Requires Node ≥22 unless you disable it here (Node 20 is common on macOS/Homebrew).
+[security.node.permissions]
+disable = true

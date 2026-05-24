@@ -1,0 +1,9 @@
+{{- /* Diagram source is plain text; use the < shortcode delim so Hugo does not Markdown-wrap lines. Example in content:
+{{< mermaid >}}
+flowchart LR
+  A[Hugo] --> B[Mermaid]
+{{< /mermaid >}}
+*/ -}}
+<div class="my-8 overflow-x-auto">
+  <pre class="mermaid text-left text-sm leading-normal">{{- .Inner -}}</pre>
+</div>

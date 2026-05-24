@@ -1,0 +1,36 @@
+{{ define "main" }}
+  <main class="mx-auto max-w-[80%] px-4 py-12">
+    <a href="{{ "/" | relURL }}" class="mb-8 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-950">
+      ← Home
+    </a>
+    <header class="mb-8">
+      <h1 class="text-3xl font-semibold tracking-tight">{{ .Title }}</h1>
+      {{ with .Content }}
+        <div class="mt-2 text-neutral-600">{{ . }}</div>
+      {{ end }}
+    </header>
+    {{ with .Pages.ByDate.Reverse }}
+      <ul class="list-none space-y-3 p-0">
+        {{ range . }}
+          <li class="space-y-1">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <a class="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-2 hover:decoration-neutral-950" href="{{ .RelPermalink }}">{{ .Title }}</a>
+              {{ if not .Date.IsZero }}
+                <span class="text-sm text-neutral-500">{{ .Date.Format "Jan 2, 2006" }}</span>
+              {{ end }}
+            </div>
+            {{ with .Params.tags }}
+              <div class="flex flex-wrap gap-1">
+                {{ range . }}
+                  <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200">{{ . }}</a>
+                {{ end }}
+              </div>
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    {{ else }}
+      <p class="text-neutral-500">no posts found.</p>
+    {{ end }}
+  </main>
+{{ end }}
