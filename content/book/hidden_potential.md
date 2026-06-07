@@ -10,6 +10,8 @@ tags = ['book']
 
 # Hidden Potential
 
+## Creatures of Discomfort
+
 วิธีเร่งการเรียนรู้ที่เร็วที่สุดคือการ "เป็นเพื่อนกับความอึดอัด" ไม่ใช่การรอให้พร้อมหรือใช้แต่จุดแข็งของตัวเอง  
 ทักษะที่ต้องมีคือ ความกล้า 3 แบบ: 
 - กล้าทิ้งวิธีที่คุ้นเคย
@@ -17,3 +19,11 @@ tags = ['book']
 - กล้าทำผิดให้มากขึ้น
 
 ![How learning actually happens](/images/hidden_potential/how-we-think-learning-happens.webp)
+
+---
+
+## Human Sponges
+
+Being a sponge - ...
+
+---
