@@ -16,4 +16,4 @@ tags = ['book']
 - กล้าลงมือทำก่อนที่จะพร้อม
 - กล้าทำผิดให้มากขึ้น
 
-![How learning actually happens](/images/hidden_potential/How We Think Learning Happens vs. How it Actually Happens - Hidden Potential .webp)
+![How learning actually happens](/images/hidden_potential/how-we-think-learning-happens.webp)
