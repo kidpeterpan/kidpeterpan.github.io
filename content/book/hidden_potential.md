@@ -40,4 +40,18 @@ Being a sponge - ฟองน้ำทะเลมีความสามาร
 - **Clay + reactive growth** = coachable, teachable ยอมรับความอึดอัด แต่ไม่หาข้อมูลเกินที่หาได้ง่ายๆ ต้องรอคนมา shape
 - **Sponge + proactive growth** = sweet spot ลงมือด้วยตัวเองและ adapt อย่างต่อเนื่อง 
 
+> Tip: ให้เปลี่ยนจากขอ feedback เป็นขอ advice แทน
+
+![feedback vs advice](/images/hidden_potential/feedback_vs_advice.jpeg)  
+
+ก่อนรับคำแนะนำใคร เช็คสามข้อ: 
+
+- เขา **care** จริงไหม
+- มี **credibility** ในเรื่องนี้ไหม
+- **familiar** กับเราพอไหม 
+
+จุดที่ครบทั้งสาม คือ "mine this for gold"
+
+> Being a sponge ไม่ใช่แค่ proactive skill แต่เป็น **prosocial skill** ไม่ใช่แค่ดูดซับเพื่อให้ตัวเองเติบโต แต่ยังช่วยให้คนอื่นเติบโตด้วย
+
 ---
