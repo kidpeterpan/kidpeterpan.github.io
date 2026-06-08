@@ -16,6 +16,7 @@ title = 'kidpeterpan.github.io'
 
 [params]
 description = 'My New Hugo Project — a personal site built with Hugo and Tailwind CSS.'
+googleAnalytics = 'G-LT3TCEMESB'
 
 [build.buildStats]
 enable = true
