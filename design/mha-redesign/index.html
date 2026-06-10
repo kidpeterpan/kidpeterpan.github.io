@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-accent="gold" data-intensity="bold">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>kidpeterpan.github.io — Home</title>
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem("mha-theme");
+					if (t === "dark" || t === "light")
+						document.documentElement.dataset.theme = t;
+				} catch (e) {}
+			})();
+		</script>
+		<link rel="stylesheet" href="mha.css" />
+	</head>
+	<body data-screen-label="Homepage">
+		<div class="top-stripe"></div>
+
+		<header class="site-header">
+			<div class="wrap">
+				<a href="index.html" class="brand">
+					<span>[<b>kidpeterpan</b>.github.io]</span>
+				</a>
+				<div class="header-right">
+					<nav class="site-nav">
+						<a href="list.html">book</a>
+						<a href="list.html">cheat_sheet</a>
+					</nav>
+					<button class="theme-toggle" aria-label="Toggle dark mode">
+						<span class="sun">☀</span>
+						<span class="moon">☾</span>
+					</button>
+				</div>
+			</div>
+		</header>
+
+		<section class="hero">
+			<div class="hero-tex">
+				<div class="halftone"></div>
+				<div class="speedlines"></div>
+			</div>
+			<div class="wrap">
+				<div class="hero-copy">
+					<p class="hero-kicker reveal">PERSONAL BLOG — GO BEYOND</p>
+					<h1 class="reveal d1">
+						Kid<span class="alt">peterpan</span>
+					</h1>
+					<p class="tagline reveal d2">
+						Notes on books, code, and everything I'm learning along
+						the way — one step past my limits at a time.
+					</p>
+					<div class="hero-links reveal d3">
+						<a class="btn" href="list.html">READ THE NOTES →</a>
+						<a class="btn secondary" href="post.html"
+							>LATEST POST</a
+						>
+					</div>
+				</div>
+				<div class="hero-art reveal d2">
+					<div class="burst"></div>
+					<div class="ring"></div>
+					<img src="logo.png" alt="Hero illustration" />
+				</div>
+			</div>
+		</section>
+
+		<main class="wrap" style="padding-top: 56px">
+			<section class="reveal d2">
+				<div class="section-head">
+					<h2>Latest</h2>
+					<div class="rule"></div>
+					<span class="count">2 POSTS</span>
+				</div>
+				<ul class="post-list">
+					<li>
+						<a class="post-row" href="post.html">
+							<span class="idx">01</span>
+							<span class="title-group">
+								<span class="post-title">Hidden Potential</span>
+								<span class="post-meta">
+									<span class="tag">book</span>
+								</span>
+							</span>
+							<span class="date">Jun 7, 2026</span>
+						</a>
+					</li>
+					<li>
+						<a class="post-row" href="post.html">
+							<span class="idx">02</span>
+							<span class="title-group">
+								<span class="post-title">Go</span>
+								<span class="post-meta">
+									<span class="tag">cheat_sheet</span>
+								</span>
+							</span>
+							<span class="date">May 30, 2026</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+
+			<section style="margin-top: 64px" class="reveal d3">
+				<div class="section-head">
+					<h2>Sections</h2>
+					<div class="rule"></div>
+				</div>
+				<div class="section-cards">
+					<a class="section-card" href="list.html">
+						<div class="card-tex halftone"></div>
+						<h3>Book</h3>
+						<p>Reading notes &amp; takeaways, mostly in Thai.</p>
+						<div class="card-foot">
+							<span class="count">1 POST</span>
+							<span class="arrow">→</span>
+						</div>
+					</a>
+					<a class="section-card" href="list.html">
+						<div class="card-tex speedlines"></div>
+						<h3>Cheat_sheet</h3>
+						<p>Quick references I keep coming back to.</p>
+						<div class="card-foot">
+							<span class="count">1 POST</span>
+							<span class="arrow">→</span>
+						</div>
+					</a>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="halftone"></div>
+			<div class="wrap">
+				<p class="sig">© 2026 <b>kidpeterpan</b> — built with 💚</p>
+				<nav>
+					<a href="list.html">book</a>
+					<a href="list.html">cheat_sheet</a>
+					<a href="#">rss</a>
+				</nav>
+			</div>
+		</footer>
+
+		<a href="#" class="to-top" aria-label="Scroll to top">↑</a>
+
+		<script src="theme.js"></script>
+		<script
+			src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+			integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+			integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+			integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+			crossorigin="anonymous"
+		></script>
+		<script type="text/babel" src="tweaks-panel.jsx"></script>
+		<script type="text/babel" src="tweaks.jsx"></script>
+	</body>
+</html>

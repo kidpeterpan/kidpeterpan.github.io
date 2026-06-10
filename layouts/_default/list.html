@@ -1,36 +1,44 @@
 {{ define "main" }}
-  <main class="mx-auto max-w-[80%] px-4 py-12">
-    <a href="{{ "/" | relURL }}" class="mb-8 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-950">
-      ← Home
-    </a>
-    <header class="mb-8">
-      <h1 class="text-3xl font-semibold tracking-tight">{{ .Title }}</h1>
-      {{ with .Content }}
-        <div class="mt-2 text-neutral-600">{{ . }}</div>
+  <main class="wrap list-body">
+    <header class="list-head reveal">
+      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}
+        <p class="desc">{{ . }}</p>
       {{ end }}
     </header>
+
     {{ with .Pages.ByDate.Reverse }}
-      <ul class="list-none space-y-3 p-0">
-        {{ range . }}
-          <li class="space-y-1">
-            <div class="flex flex-wrap items-baseline gap-2">
-              <a class="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-2 hover:decoration-neutral-950" href="{{ .RelPermalink }}">{{ .Title }}</a>
-              {{ if not .Date.IsZero }}
-                <span class="text-sm text-neutral-500">{{ .Date.Format "Jan 2, 2006" }}</span>
-              {{ end }}
-            </div>
-            {{ with .Params.tags }}
-              <div class="flex flex-wrap gap-1">
-                {{ range . }}
-                  <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200">{{ . }}</a>
+      <section class="reveal d1" style="margin-top: 34px;">
+        <div class="section-head">
+          <div class="rule"></div>
+          <span class="count">{{ len . }} POST{{ if ne (len .) 1 }}S{{ end }}</span>
+        </div>
+        <ul class="post-list">
+          {{ range $i, $p := . }}
+            <li>
+              <a class="post-row" href="{{ $p.RelPermalink }}">
+                <span class="idx">{{ printf "%02d" (add $i 1) }}</span>
+                <span class="title-group">
+                  <span class="post-title">{{ $p.Title }}</span>
+                  {{ with $p.Params.tags }}
+                    <span class="post-meta">
+                      {{ range . }}
+                        <span class="tag">{{ . }}</span>
+                      {{ end }}
+                    </span>
+                  {{ end }}
+                </span>
+                {{ if not $p.Date.IsZero }}
+                  <span class="date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
                 {{ end }}
-              </div>
-            {{ end }}
-          </li>
-        {{ end }}
-      </ul>
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      </section>
     {{ else }}
-      <p class="text-neutral-500">no posts found.</p>
+      <p class="desc" style="margin-top: 34px;">no posts found.</p>
     {{ end }}
   </main>
 {{ end }}

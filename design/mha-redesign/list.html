@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-accent="gold" data-intensity="bold">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Books · kidpeterpan.github.io</title>
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem("mha-theme");
+					if (t === "dark" || t === "light")
+						document.documentElement.dataset.theme = t;
+				} catch (e) {}
+			})();
+		</script>
+		<link rel="stylesheet" href="mha.css" />
+	</head>
+	<body data-screen-label="Section list">
+		<div class="top-stripe"></div>
+
+		<header class="site-header">
+			<div class="wrap">
+				<a href="index.html" class="brand">
+					<img src="logo.png" alt="kidpeterpan logo" />
+					<span>[<b>kidpeterpan</b>.github.io]</span>
+				</a>
+				<div class="header-right">
+					<nav class="site-nav">
+						<a href="list.html">book</a>
+						<a href="list.html">cheat_sheet</a>
+					</nav>
+					<button class="theme-toggle" aria-label="Toggle dark mode">
+						<span class="sun">☀</span>
+						<span class="moon">☾</span>
+					</button>
+				</div>
+			</div>
+		</header>
+
+		<main class="wrap list-body">
+			<header class="list-head reveal">
+				<a href="index.html" class="back-link"
+					><span class="arr">←</span> HOME</a
+				>
+				<h1>Book</h1>
+				<p class="desc">
+					Reading notes &amp; takeaways, mostly in Thai.
+				</p>
+			</header>
+
+			<section class="reveal d1" style="margin-top: 34px">
+				<div class="section-head">
+					<div class="rule"></div>
+					<span class="count">1 POST</span>
+				</div>
+				<ul class="post-list">
+					<li>
+						<a class="post-row" href="post.html">
+							<span class="idx">01</span>
+							<span class="title-group">
+								<span class="post-title">Hidden Potential</span>
+								<span class="post-meta">
+									<span class="tag">book</span>
+								</span>
+							</span>
+							<span class="date">Jun 7, 2026</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="halftone"></div>
+			<div class="wrap">
+				<p class="sig">© 2026 <b>kidpeterpan</b> — built with 💚</p>
+				<nav>
+					<a href="list.html">book</a>
+					<a href="list.html">cheat_sheet</a>
+					<a href="#">rss</a>
+				</nav>
+			</div>
+		</footer>
+
+		<a href="#" class="to-top" aria-label="Scroll to top">↑</a>
+
+		<script src="theme.js"></script>
+		<script
+			src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+			integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+			integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+			integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+			crossorigin="anonymous"
+		></script>
+		<script type="text/babel" src="tweaks-panel.jsx"></script>
+		<script type="text/babel" src="tweaks.jsx"></script>
+	</body>
+</html>

@@ -6,10 +6,6 @@ description = 'Go Cheat Sheet'
 tags = ['programming','go']
 +++
 
----
-
-# Go 
-
 ## Hello World
 
 ```go

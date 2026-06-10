@@ -2,8 +2,9 @@
    kidpeterpan.github.io — "Plus Ultra Paper" theme
    Palette drawn from the MHA hero-suit frame:
    deku green / cape gold / sky blue / utility red
-   Ported from design/mha-redesign/mha.css
    ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
   /* fonts */
@@ -59,6 +60,13 @@ html[data-theme="dark"] {
   --halftone-dot: rgba(76, 200, 147, 0.13);
   --speedline: rgba(76, 200, 147, 0.07);
 }
+
+html[data-accent="red"]  { --accent: var(--red);  --accent-deep: #9E2C21; }
+html[data-accent="sky"]  { --accent: var(--sky);  --accent-deep: #2F7FB5; }
+html[data-theme="dark"][data-accent="red"] { --accent-deep: #B23F33; }
+html[data-theme="dark"][data-accent="sky"] { --accent-deep: #4D95C6; }
+
+html[data-intensity="subtle"] { --tex-opacity: 0.35; }
 
 /* ---------- base ---------- */
 * { box-sizing: border-box; }
@@ -469,7 +477,6 @@ html[data-theme="dark"] .hero-art img {
   transform: skewX(-8deg);
   transition: background-color 0.18s ease, color 0.18s ease;
   background: transparent;
-  display: inline-block;
 }
 
 .tag:hover { background: var(--green); color: var(--bg); }
@@ -659,7 +666,7 @@ html[data-theme="dark"] .hero-art img {
   font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--green);
-  margin: 0 0 14px;
+  margin-bottom: 14px;
 }
 
 .article-head .kicker::before {
@@ -794,7 +801,7 @@ html[data-theme="dark"] .hero-art img {
 
 .prose pre code { background: none; border: none; padding: 0; color: inherit; }
 
-/* TOC (Hugo renders nav#TableOfContents inside .toc) */
+/* TOC */
 .toc {
   position: sticky;
   top: 28px;
@@ -879,6 +886,11 @@ html[data-theme="dark"] .hero-art img {
   .reveal.d3 { transition-delay: 0.21s; }
   .reveal.d4 { transition-delay: 0.28s; }
 }
+
+/* tweak: disable offset shadow on big titles */
+html.no-hero-shadow .hero h1,
+html.no-hero-shadow .article-head h1,
+html.no-hero-shadow .list-head h1 { text-shadow: none; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {

@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Locale }}" class="scroll-smooth antialiased">
+<html lang="{{ site.Language.Locale }}" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('mha-theme');
+          if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
     {{ partial "seo.html" . }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     {{ with (templates.Defer (dict "key" "global")) }}
       {{ partial "css.html" . }}
     {{ end }}
@@ -18,15 +29,47 @@
     </script>
     {{ end }}
   </head>
-  <body class="min-h-screen bg-white text-neutral-950">
-    <header class="mx-auto max-w-[80%] px-4 pt-8">
-      <a href="{{ "/" | relURL }}" class="inline-flex items-center gap-5">
-        <img src="{{ "/images/logo.png" | relURL }}" alt="{{ site.Title }}" class="h-10 w-auto">
-        <span class="text-sm font-medium text-neutral-950">[{{ site.Title }}]</span>
-      </a>
+  <body>
+
+    <div class="top-stripe"></div>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a href="{{ "/" | relURL }}" class="brand">
+          <span>[<b>kidpeterpan</b>.github.io]</span>
+        </a>
+        <div class="header-right">
+          <nav class="site-nav">
+            {{ range site.Sections }}
+              <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
+            {{ end }}
+          </nav>
+          <button class="theme-toggle" aria-label="Toggle dark mode">
+            <span class="sun">☀</span>
+            <span class="moon">☾</span>
+          </button>
+        </div>
+      </div>
     </header>
+
     {{ block "main" . }}{{ end }}
-    <a href="#" aria-label="Scroll to top" class="fixed bottom-6 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-sm text-neutral-500 hover:bg-neutral-200">↑</a>
+
+    <footer class="site-footer">
+      <div class="halftone"></div>
+      <div class="wrap">
+        <p class="sig">© {{ now.Year }} <b>kidpeterpan</b> — built with 💚</p>
+        <nav>
+          {{ range site.Sections }}
+            <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
+          {{ end }}
+          <a href="{{ "/index.xml" | relURL }}">rss</a>
+        </nav>
+      </div>
+    </footer>
+
+    <a href="#" class="to-top" aria-label="Scroll to top">↑</a>
+
+    <script src="{{ "/js/theme.js" | relURL }}"></script>
     {{ if .HasShortcode "mermaid" }}
       {{ partial "mermaid-scripts.html" . }}
     {{ end }}

@@ -1,38 +1,37 @@
 {{ define "main" }}
-  <div class="mx-auto max-w-[80%] px-4 py-12">
-    <div class="flex gap-16">
+  <div class="wrap">
+    <div class="article-layout">
 
-      <article class="min-w-0 flex-1">
-        <a href="{{ "/" | relURL }}" class="mb-8 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-950">
-          ← Home
-        </a>
-        <header class="mb-8 space-y-2">
-          <h1 class="text-3xl font-semibold tracking-tight">{{ .Title }}</h1>
-          {{ if not .PublishDate.IsZero }}
-            <p class="text-sm text-neutral-500">{{ .PublishDate.Format "Jan 2, 2006" }}</p>
-          {{ end }}
-          {{ with .Params.tags }}
-            <div class="flex flex-wrap gap-1">
-              {{ range . }}
-                <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200">{{ . }}</a>
-              {{ end }}
-            </div>
-          {{ end }}
+      <article class="reveal">
+        <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
+
+        <header class="article-head">
+          <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
+          <h1>{{ .Title }}</h1>
+          <div class="meta-row">
+            {{ if not .PublishDate.IsZero }}
+              <span class="date">{{ .PublishDate.Format "Jan 2, 2006" }}</span>
+            {{ end }}
+            {{ range .Params.tags }}
+              <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag">{{ . }}</a>
+            {{ end }}
+          </div>
+          <div class="article-rule"></div>
         </header>
-        <div class="prose prose-neutral max-w-none">
+
+        <div class="prose">
           {{ .Content }}
         </div>
-        <footer class="mt-12 border-t border-neutral-200 pt-6">
-          <a href="{{ "/" | relURL }}" class="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-950">
-            ← Home
-          </a>
+
+        <footer class="article-foot">
+          <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
         </footer>
       </article>
 
       {{ with .TableOfContents }}
-        <aside class="hidden xl:block w-52 shrink-0">
-          <div class="sticky top-8">
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-neutral-400">On this page</p>
+        <aside class="toc-aside">
+          <div class="toc">
+            <p class="toc-label">ON THIS PAGE</p>
             {{ . }}
           </div>
         </aside>

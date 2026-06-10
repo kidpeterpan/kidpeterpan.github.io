@@ -1,23 +1,82 @@
 {{ define "main" }}
-  <main class="mx-auto max-w-[80%] px-4 py-6">
-    {{ .Content }}
-    {{ with site.RegularPages }}
-      <section class="mt-4 border-t border-neutral-200 pt-6">
-        <!--<h2 class="text-lg font-semibold tracking-tight text-neutral-950">posts:</h2>-->
-        <ul class="mt-4 list-none space-y-2 p-0">
-          {{ range .ByDate.Reverse }}
-            <li class="flex flex-wrap items-baseline gap-2">
-              <a class="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-2 hover:decoration-neutral-950" href="{{ .RelPermalink }}">{{ .Title }}</a>
-              {{ if not .Date.IsZero }}
-                <span class="text-sm text-neutral-400">{{ .Date.Format "Jan 2, 2006" }}</span>
-              {{ end }}
-              {{ range .Params.tags }}
-                <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500 hover:bg-neutral-200">{{ . }}</a>
-              {{ end }}
+  <section class="hero">
+    <div class="hero-tex">
+      <div class="halftone"></div>
+      <div class="speedlines"></div>
+    </div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="hero-kicker reveal">PERSONAL BLOG — GO BEYOND</p>
+        <h1 class="reveal d1">Kid<span class="alt">peterpan</span></h1>
+        <p class="tagline reveal d2">Notes on books, code, and everything I'm learning along the way — one step past my limits at a time.</p>
+        <div class="hero-links reveal d3">
+          {{ with site.Sections }}
+            <a class="btn" href="{{ (index . 0).RelPermalink }}">READ THE NOTES →</a>
+          {{ end }}
+          {{ with site.RegularPages.ByDate.Reverse }}
+            <a class="btn secondary" href="{{ (index . 0).RelPermalink }}">LATEST POST</a>
+          {{ end }}
+        </div>
+      </div>
+      <div class="hero-art reveal d2">
+        <div class="burst"></div>
+        <div class="ring"></div>
+        <img src="{{ "/images/logo.png" | relURL }}" alt="Hero illustration">
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap" style="padding-top: 56px;">
+
+    {{ with site.RegularPages.ByDate.Reverse }}
+      <section class="reveal d2">
+        <div class="section-head">
+          <h2>Latest</h2>
+          <div class="rule"></div>
+          <span class="count">{{ len . }} POST{{ if ne (len .) 1 }}S{{ end }}</span>
+        </div>
+        <ul class="post-list">
+          {{ range $i, $p := . }}
+            <li>
+              <a class="post-row" href="{{ $p.RelPermalink }}">
+                <span class="idx">{{ printf "%02d" (add $i 1) }}</span>
+                <span class="title-group">
+                  <span class="post-title">{{ $p.Title }}</span>
+                  <span class="post-meta">
+                    <span class="tag">{{ $p.Section }}</span>
+                  </span>
+                </span>
+                {{ if not $p.Date.IsZero }}
+                  <span class="date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
+                {{ end }}
+              </a>
             </li>
           {{ end }}
         </ul>
       </section>
     {{ end }}
+
+    {{ with site.Sections }}
+      <section style="margin-top: 64px;" class="reveal d3">
+        <div class="section-head">
+          <h2>Sections</h2>
+          <div class="rule"></div>
+        </div>
+        <div class="section-cards">
+          {{ range $i, $s := . }}
+            <a class="section-card" href="{{ $s.RelPermalink }}">
+              <div class="card-tex {{ cond (eq (mod $i 2) 0) "halftone" "speedlines" }}"></div>
+              <h3>{{ $s.Title }}</h3>
+              <p>{{ $s.Description }}</p>
+              <div class="card-foot">
+                <span class="count">{{ len $s.RegularPages }} POST{{ if ne (len $s.RegularPages) 1 }}S{{ end }}</span>
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+
   </main>
 {{ end }}
