@@ -25,6 +25,7 @@
       "main",
       "meta",
       "nav",
+      "ol",
       "p",
       "pre",
       "script",
@@ -103,7 +104,8 @@
       "creatures-of-discomfort",
       "hello-world",
       "human-sponges",
-      "the-imperfectionists"
+      "the-imperfectionists",
+      "what-makes-a-software-engineering-team-effective"
     ]
   }
 }
