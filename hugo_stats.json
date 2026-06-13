@@ -101,6 +101,7 @@
     ],
     "ids": [
       "TableOfContents",
+      "common-effectiveness-antipatterns",
       "creatures-of-discomfort",
       "effective-management-behaviors-research-from-google",
       "hello-world",
