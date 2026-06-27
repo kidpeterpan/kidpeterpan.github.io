@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="{{ site.Title }}">
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:url" content="{{ .Permalink }}">
-<meta property="og:locale" content="{{ site.Language.Locale }}">
+<meta property="og:locale" content="{{ site.Language.Lang }}">
 {{ with $desc }}
   <meta property="og:description" content="{{ . | plainify | truncate 160 }}">
 {{ end }}

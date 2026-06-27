@@ -1,6 +1,6 @@
 +++
 title = 'Loop Engineering'
-date = '2026-06-27T12:00:00+07:00'
+date = '2026-06-27T00:00:00+07:00'
 draft = false
 description = 'แปลจาก Loop Engineering โดย Addy Osmani — ว่าด้วยการออกแบบระบบที่ทำงานแทนตัวเราในการ Prompt AI Agent'
 tags = ['ai', 'engineering']
