@@ -102,9 +102,12 @@
     ],
     "ids": [
       "1-automations--ระบบอตโนมตสำหรบคนหางาน",
+      "1-install",
       "1-verification-ยงคงเปนหนาทของมนษย",
+      "2-index",
       "2-knowledge-decay--หนแหงความเขาใจ",
       "2-worktrees--พนททำงานแยกกนสำหรบหลาย-agent",
+      "3-code",
       "3-cognitive-surrender--การยอมจำนนทางความคด",
       "3-skills--ความรโปรเจกตทจดเกบเปนเอกสาร",
       "4-plugins-and-connectors--จดเชอมตอกบโลกภายนอก",
@@ -124,9 +127,16 @@
       "the-3-es-model",
       "the-imperfectionists",
       "what-makes-a-software-engineering-team-effective",
+      "ความสามารถหลก",
+      "คำถามทพบบอย",
       "คำเตอน-3-ขอทตองจำ",
       "ตวอยาง-loop-ททำงานไดจรง",
-      "บทสรป-leverage-point-ไมใชการหายไปของงาน"
+      "บทสรป",
+      "บทสรป-leverage-point-ไมใชการหายไปของงาน",
+      "ปญหาท-jetbrains-context-พยายามแก",
+      "ประโยชนหลก-4-ขอ",
+      "ผลลพธทวดไดจรง",
+      "เรมตนใชงานใน-3-ขนตอน"
     ]
   }
 }
