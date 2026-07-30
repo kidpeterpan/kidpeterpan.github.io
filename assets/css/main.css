@@ -181,7 +181,8 @@ a { color: inherit; }
 .site-nav a:hover::after { transform: scaleX(1); }
 
 /* theme toggle */
-.theme-toggle {
+.theme-toggle,
+.coffee-btn {
   appearance: none;
   border: 2px solid var(--line-strong);
   background: var(--surface);
@@ -195,11 +196,15 @@ a { color: inherit; }
   transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.35s ease;
 }
 
-.theme-toggle:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--accent); }
-.theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--accent); }
+.theme-toggle:hover,
+.coffee-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--accent); }
+.theme-toggle:active,
+.coffee-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--accent); }
 .theme-toggle .moon { display: none; }
 html[data-theme="dark"] .theme-toggle .sun { display: none; }
 html[data-theme="dark"] .theme-toggle .moon { display: block; }
+
+.coffee-btn { text-decoration: none; }
 
 /* ---------- hero ---------- */
 .hero {
