@@ -777,6 +777,28 @@ html[data-theme="dark"] .hero-art img {
   );
 }
 
+.prose table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.prose th,
+.prose td {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--green-deep);
+  border-color: var(--green-deep);
+  color: #F6F2E8;
+  font-weight: 700;
+}
+
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.86em;
