@@ -23,10 +23,14 @@
           {{ .Content }}
         </div>
 
+        {{ partial "share.html" . }}
+
         <footer class="article-foot">
           <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
         </footer>
       </article>
+
+      <script src="{{ "/js/share.js" | relURL }}"></script>
 
       {{ with .TableOfContents }}
         <aside class="toc-aside">
