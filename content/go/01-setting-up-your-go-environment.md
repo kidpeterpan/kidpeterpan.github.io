@@ -8,9 +8,9 @@ tags = ['programming', 'go', 'tutorial']
 
 ---
 
-ตอนที่ 1 ของ Go เราจะตั้งค่า environment ตั้งแต่ศูนย์ — ติดตั้ง Go, เขียนโปรแกรมแรก, เรียนรู้เครื่องมือหลัก (`go build`, `go fmt`, `go vet`) และสร้าง `Makefile` เพื่อ automate workflow
+ตอนที่ 1 ของ Go เราจะตั้งค่า environment ตั้งแต่ศูนย์ — ติดตั้ง Go, เริ่มเขียนโปรแกรมแรก, เรียนรู้เครื่องมือหลักอย่าง `go build` `go fmt` `go vet` และสร้าง `Makefile` เพื่อ automate workflow
 
-สิ่งที่ได้ตอนจบบทนี้คือโปรแกรม Hello World ที่ compile เป็น native binary ได้ พร้อม workflow มาตรฐานซึ่งนำไปใช้กับ project อื่นได้
+สิ่งที่จะได้ตอนจบจากการอ่านตอนนี้คือโปรแกรม Hello World ที่ compile เป็น native binary ได้ พร้อม workflow มาตรฐานซึ่งนำไปใช้กับ project อื่นๆ ได้
 
 {{< mermaid >}}
 graph LR
@@ -100,7 +100,7 @@ go version go1.22.0 darwin/arm64
 
 ## Step 2: สร้าง Go Module
 
-ทุก Go project คือ "module" ซึ่งระบุด้วยไฟล์ `go.mod` ที่ root ของ project สร้างด้วยคำสั่ง `go mod init`:
+ให้เรามองว่า ทุก Go project คือ "module" ซึ่งระบุด้วยไฟล์ `go.mod` ที่ root ของ project สร้างด้วยคำสั่ง `go mod init`:
 
 ```
 mkdir hello_world
@@ -226,7 +226,7 @@ func main() {
 }
 ```
 
-`./...` บอกให้ Go ทำงานกับทุก package ใน current directory และ subdirectory ทั้งหมด — pattern นี้ใช้บ่อยใน Go tooling
+`./...` คือการบอกให้ Go ทำงานกับทุก package ใน current directory และ subdirectory ทั้งหมด — pattern นี้ใช้บ่อยใน Go tooling
 
 ### ทำไม `{` ต้องอยู่บรรทัดเดียวกับ `func`?
 
