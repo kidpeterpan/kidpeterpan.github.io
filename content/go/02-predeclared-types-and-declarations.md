@@ -10,7 +10,12 @@ tags = ['programming', 'go', 'tutorial']
 
 ตอนที่ 2 เราจะเริ่มเขียน Go ที่มีข้อมูลจริงมากขึ้น หลังจากตอนที่แล้วเรามี module และ workflow `fmt → vet → build` แล้ว ตอนนี้เราจะเรียนรู้ว่า Go เก็บข้อมูลแต่ละแบบอย่างไร และควรประกาศตัวแปรแบบไหนให้โค้ดสื่อเจตนาได้ชัดเจน
 
-สิ่งที่ได้ตอนจบบทนี้: เข้าใจ `bool`, integer, float, complex, string และ rune, แปลง type ได้อย่างถูกต้อง, เลือกใช้ `var`, `:=` และ `const` ได้เหมาะสม และรู้ว่าทำไม Go จึงบังคับให้จัดการ unused variable
+สิ่งที่ได้ตอนจบบทนี้:
+
+- เข้าใจ `bool`, integer, float, complex, string และ rune ว่าควรใช้แบบไหนกับงานแบบใด
+- แปลง type ได้อย่างถูกต้องเมื่อ type ไม่ตรงกัน
+- เลือกใช้ `var`, `:=` และ `const` ได้เหมาะสมกับบริบท
+- รู้ว่าทำไม Go จึงบังคับให้จัดการ unused variable
 
 {{< mermaid >}}
 graph TD
@@ -41,8 +46,10 @@ touch main.go
 go run .
 ```
 
-> บางตัวอย่างตั้งใจเขียนให้ compile ไม่ผ่าน เพื่อแสดงกฎของ Go ให้ทำตามส่วน **แก้ไข** ก่อนจึงค่อยรันต่อ
+> [!NOTE]
+> บางตัวอย่างตั้งใจเขียนให้ compile ไม่ผ่าน เพื่อแสดงกฎของ Go ตัวอย่างเหล่านี้จะกำกับด้วย `// ❌` พร้อมคำอธิบาย — อย่าวางรวมกับโปรแกรมที่ต้องการรัน
 
+---
 ## Step 1: เริ่มจาก `zero value`
 
 Go กำหนดค่าเริ่มต้นให้ตัวแปรที่ประกาศแล้วแต่ยังไม่ได้กำหนดค่าเอง ค่าเริ่มต้นนี้เรียกว่า **zero value** และแตกต่างกันตาม type:
@@ -86,6 +93,7 @@ ok=false count=0 price=0 message=""
 
 ข้อดีของ zero value คือเราไม่ต้องเดาว่าตัวแปรที่ยังไม่ได้กำหนดค่าจะมีค่าอะไร จึงลดปัญหาตัวแปรที่มีค่าขยะซึ่งพบได้ในบางภาษา
 
+---
 ## Step 2: เข้าใจ `literal` และ `bool`
 
 **Literal** คือค่าที่เขียนไว้ตรง ๆ ในโค้ด เช่น `10`, `3.14`, `'A'` และ `"hello"` literal ใน Go ส่วนใหญ่เป็น **untyped** หมายความว่ายังไม่มี type ตายตัวจนกว่าจะถูกใช้ในบริบทที่กำหนด type ให้
@@ -140,6 +148,7 @@ if name != "" {
 
 แนวคิดนี้เป็นตัวอย่างของหลักสำคัญใน Go: เขียนเจตนาให้ชัด แทนที่จะพึ่งพากฎ implicit ที่ผู้อ่านอาจคาดเดาไม่ตรงกัน
 
+---
 ## Step 3: เลือกใช้ integer type
 
 Go มี integer ทั้งแบบ signed และ unsigned:
@@ -198,8 +207,9 @@ var b int64 = 20
 fmt.Println(int64(a) + b)
 ```
 
-ถ้าเขียน library function ที่ควรรับ integer หลายชนิด ให้ใช้ generics ตามที่จะเรียนใน Chapter 8 แทนการบังคับให้ caller ใช้ type ใด type หนึ่ง
+ถ้าเขียน library function ที่ควรรับ integer หลายชนิด ให้ใช้ generics ตามที่จะเรียนในบทว่าด้วย generics แทนการบังคับให้ caller ใช้ type ใด type หนึ่ง
 
+---
 ## Step 4: ทำความเข้าใจ integer operator
 
 integer รองรับ operator หลักดังนี้:
@@ -242,6 +252,7 @@ fmt.Println(float64(7) / 2) // 3.5
 
 อย่าหาร integer ด้วย 0 เพราะจะเกิด panic และ integer division จะตัดเศษเข้าหา 0 (truncation toward zero)
 
+---
 ## Step 5: ใช้ floating-point อย่างระวัง
 
 Go มี floating-point สองชนิด:
@@ -286,6 +297,7 @@ func main() {
 
 สำหรับ float การหารด้วย 0 มีผลต่างจาก integer: nonzero/0 จะได้ `+Inf` หรือ `-Inf` ส่วน 0/0 จะได้ `NaN` และไม่มี `%` สำหรับ float
 
+---
 ## Step 6: รู้จัก complex และ string/rune
 
 ### Complex number
@@ -343,6 +355,7 @@ func main() {
 var firstInitial rune = 'J' // สื่อว่าค่านี้เป็น character
 ```
 
+---
 ## Step 7: Convert type ด้วยตัวเอง
 
 Go ไม่ทำ automatic type promotion เพื่อป้องกันผลลัพธ์ที่คาดเดาได้ยาก เมื่อ type ไม่ตรงกันต้อง convert อย่างชัดเจน:
@@ -373,6 +386,7 @@ whole: 40
 
 การ convert `float64` เป็น `int` จะตัดส่วนทศนิยม ไม่ได้ปัดเศษ จึงควรตรวจสอบว่าการตัดเศษตรงกับความต้องการของงานหรือไม่
 
+---
 ## Step 8: ทำความเข้าใจว่า literal เป็น untyped
 
 Go ยอมให้ integer literal ใช้กับ float ได้ เพราะ literal ยังไม่มี type ตายตัว:
@@ -403,6 +417,7 @@ var ok byte = 100
 // var tooLarge byte = 1000 // ❌ 1000 เกินช่วงของ byte
 ```
 
+---
 ## Step 9: เลือกใช้ `var` หรือ `:=`
 
 Go มีวิธีประกาศตัวแปรสองแบบที่ใช้บ่อย:
@@ -444,6 +459,7 @@ var appName = "go-types" // ✅ package level
 
 หลีกเลี่ยงตัวแปร mutable ที่ package level เพราะทำให้ติดตาม data flow ได้ยาก ควรประกาศ package-level variable เฉพาะค่าที่ effectively immutable เท่านั้น
 
+---
 ## Step 10: ใช้ `const` กับค่าที่ compile ได้
 
 `const` ใช้ตั้งชื่อให้กับค่าที่ compiler คำนวณได้ตอน compile time ไม่ใช่ immutable variable ที่รับค่า runtime ได้:
@@ -489,10 +505,21 @@ var j int = typedValue     // ✅
 // var g float64 = typedValue // ❌ type ไม่ตรงกัน
 ```
 
-มีค่าพิเศษชื่อ `iota` สำหรับสร้างค่าต่อเนื่องใน `const` ซึ่งจะใช้ทำ enumeration ในบทถัด ๆ ไป
+มีค่าพิเศษชื่อ `iota` สำหรับสร้างค่าต่อเนื่องใน `const` ตัวแรกในกลุ่มมีค่า `0` ตัวถัดไปเพิ่มทีละ `1`:
+
+```go
+const (
+	statusOK    = iota // 0
+	statusError        // 1
+	statusUnknown      // 2
+)
+```
+
+`iota` เหมาะกับ enumeration แบบง่าย ๆ และจะกลับมาใช้เต็มรูปแบบในบทว่าด้วย type
 
 Go ไม่มี immutable array, slice, map หรือ struct แบบสำเร็จรูป และไม่มีวิธีทำให้ field ของ struct immutable โดยตรง แต่ภายใน function เรามักเห็นได้ชัดอยู่แล้วว่าตัวแปรถูกแก้ไขหรือไม่
 
+---
 ## Step 11: เข้าใจกฎ unused variable
 
 Go บังคับว่า local variable ที่ประกาศแล้วต้องถูกอ่านอย่างน้อยหนึ่งครั้ง:
@@ -524,6 +551,7 @@ constant ที่ไม่ถูกอ่านไม่ทำให้ compile
 const unusedConstant = "ยังไม่ได้ใช้" // ✅ compile ได้
 ```
 
+---
 ## Step 12: ตั้งชื่อให้สื่อความหมาย
 
 Go มีกฎพื้นฐานว่าชื่อต้องขึ้นต้นด้วยตัวอักษรหรือ underscore จากนั้นจึงตามด้วยตัวเลข, underscore หรือตัวอักษรได้ Unicode character ที่เป็น letter หรือ digit ก็ใช้ได้ แต่ไม่ควรใช้ชื่อที่มองด้วยตาแล้วคล้ายกัน:
@@ -545,6 +573,7 @@ a := "ASCII lowercase a"
 
 ชื่อ `_` เรียกว่า blank identifier และมีความหมายพิเศษใน Go จะอธิบายเพิ่มเติมในบทว่าด้วย function
 
+---
 ## แบบฝึกหัด
 
 ลองทำโจทย์ต่อไปนี้ใน `main.go` โดยไม่เปิดดูเฉลยก่อน:
@@ -552,7 +581,7 @@ a := "ASCII lowercase a"
 1. ประกาศ integer `i` ให้มีค่า 20 แล้ว convert ไปเป็น float `f` จากนั้น print ค่าของทั้งสองตัวแปร
 2. ประกาศ untyped constant `value` ที่นำไป assign ให้ทั้ง `int` และ `float64` ได้ แล้ว print ค่าทั้งสองแบบ
 3. ประกาศ `b` (byte), `smallI` (int32) และ `bigI` (uint64) กำหนดค่า max ของแต่ละ type แล้วบวก 1 สังเกตผลลัพธ์และ overflow
-4. เขียน function ที่รับ `string` แล้วคืน `true` เมื่อ string ไม่ว่าง โดยห้ามใช้ `if text` แบบภาษาอื่น
+4. เขียนโค้ดที่ประกาศ `name := ""` แล้ว print `"มีชื่อ"` หรือ `"ไม่มีชื่อ"` ตามค่าของ `name` โดยห้ามใช้ `if name` แบบภาษาอื่น
 5. สร้าง constant กลุ่มสถานะด้วย `iota` แล้ว print ค่าของแต่ละสถานะ
 
 หลังทำเสร็จให้ตรวจโค้ด:
@@ -563,6 +592,7 @@ go vet ./...
 go build ./...
 ```
 
+---
 ## Common Pitfalls — ข้อผิดพลาดที่พบบ่อย
 
 - **คาดหวัง truthiness** — `if x` ใช้ไม่ได้เมื่อ `x` ไม่ใช่ `bool` ต้องใช้ comparison เช่น `x != ""`
@@ -575,6 +605,7 @@ go build ./...
 - **ใช้ `0777` โดยไม่รู้ว่าเป็น octal** — ใช้ `0o777` เพื่อสื่อความหมายชัดกว่า
 - **สร้าง package-level mutable variable มากเกินไป** — ทำให้ติดตาม data flow และหาจุดที่แก้ค่าได้ยาก
 
+---
 ## สรุป
 
 ในบทนี้เราได้:
@@ -590,7 +621,7 @@ go build ./...
 
 หลักสำคัญของบทนี้คือ **เขียนโค้ดให้ชัดเจนถึงเจตนา** ความ verbose ที่เพิ่มขึ้นจากการ convert หรือการประกาศ type อย่างชัดเจน เป็นราคาที่ Go ยอมจ่ายเพื่อให้โค้ดอ่านและตรวจสอบได้ง่าย
 
-> ในตอนต่อไปเราจะเริ่มจาก composite types ของ Go ได้แก่ array, slice, map และ struct
+> *ในตอนต่อไปเราจะเริ่มจาก composite types ของ Go ได้แก่ array, slice, map และ struct*
 
 ---
 
@@ -608,7 +639,7 @@ go build ./...
 - **Epsilon** — ค่าความแตกต่างสูงสุดที่ยอมรับได้เมื่อเปรียบเทียบ float
 - **`iota`** — ค่าพิเศษที่ช่วยสร้างค่าต่อเนื่องภายใน `const`
 
+---
 ## Related
 
 - [ตอนที่ 1: Setting Up Your Go Environment](/go/01-setting-up-your-go-environment/) — ติดตั้ง Go, สร้าง module และ workflow `fmt → vet → build`
-- ตอนถัดไปจะต่อด้วย composite types ได้แก่ array, slice, map และ struct

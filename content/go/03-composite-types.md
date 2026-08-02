@@ -32,6 +32,7 @@ graph TD
   AR -->|เป็น backing store ให้| SL
 {{< /mermaid >}}
 
+---
 ## วิธีทำตามบทนี้
 
 เราจะสร้าง project แยกชื่อ `go_composite_types` เพื่อทดลองโดยไม่กระทบ project จากตอนก่อน เปิด terminal แล้วรัน:
@@ -51,6 +52,7 @@ go run .
 
 ตัวอย่างที่ตั้งใจให้ compile ไม่ผ่านจะมีคำอธิบายกำกับไว้ อย่าวางตัวอย่างเหล่านั้นรวมกับโปรแกรมที่ต้องการรัน
 
+---
 ## Step 1: เริ่มจาก array
 
 `array` คือลำดับค่าชนิดเดียวกันที่มีขนาดตายตัว ขนาดเป็นส่วนหนึ่งของ type ดังนั้น `[3]int` และ `[4]int` เป็นคนละ type
@@ -122,6 +124,7 @@ var large [4]int
 
 ใช้ array เมื่อขนาดถูกกำหนดตายตัวจริง ๆ เช่น checksum ที่ algorithm ระบุว่าต้องมี 32 byte ในงานทั่วไปที่จำนวนข้อมูลอาจเพิ่ม ให้ใช้ slice แทน
 
+---
 ## Step 2: ใช้ slice สำหรับลำดับข้อมูล
 
 `slice` คือมุมมอง (view) ไปยังข้อมูลใน backing array ที่ขยายได้ ความยาวของ slice ไม่ได้เป็นส่วนหนึ่งของ type จึงส่ง slice ขนาดใด ๆ เข้า function เดียวกันได้
@@ -148,7 +151,8 @@ func main() {
 }
 ```
 
-> ระวัง: บรรทัด `names = append(...)` ต้อง assign ผลลัพธ์กลับเสมอ เพราะ `append` อาจสร้าง backing array ใหม่แล้วคืน slice ตัวใหม่มา
+> [!CAUTION]
+> บรรทัด `names = append(...)` ต้อง assign ผลลัพธ์กลับเสมอ เพราะ `append` อาจสร้าง backing array ใหม่แล้วคืน slice ตัวใหม่มา
 
 รันแล้วจะได้รายการชื่อพร้อม length และ capacity ซึ่ง capacity อาจแตกต่างกันตามเวอร์ชันของ Go runtime แต่ต้องไม่น้อยกว่า length
 
@@ -185,6 +189,7 @@ func main() {
 }
 ```
 
+---
 ## Step 3: เข้าใจ length และ capacity
 
 `len` คือจำนวน element ที่ slice มีอยู่ ส่วน `cap` คือจำนวน element ที่สามารถใช้ backing array เดิมได้ตั้งแต่ตำแหน่งแรกของ slice
@@ -249,6 +254,7 @@ fmt.Println(items)      // [ ]
 fmt.Println(len(items)) // 2
 ```
 
+---
 ## Step 4: slice จาก slice และ backing array
 
 การเขียน `x[start:end]` ไม่ได้ copy ข้อมูล แต่สร้าง slice ใหม่ที่อ้างอิง memory เดิม:
@@ -313,6 +319,7 @@ fmt.Println("copied:", copied)           // 4
 
 จำนวนที่ `copy` ได้คือค่าน้อยที่สุดระหว่าง length ของ destination และ source ไม่ใช่ capacity
 
+---
 ## Step 5: แปลงระหว่าง array กับ slice
 
 array ก็ใช้ slice expression ได้ แต่ slice ที่ได้จะแชร์ memory กับ array:
@@ -338,6 +345,7 @@ fmt.Println(fixed)  // [1 2 3 4]
 
 array ที่สร้างจาก slice ต้องมีขนาดไม่เกิน length ของ slice ไม่เช่นนั้นจะ panic ตอน runtime
 
+---
 ## Step 6: string คือ byte sequence
 
 ใน Go `string` คือ sequence ของ byte ที่มัก encode ด้วย UTF-8 ไม่ใช่ sequence ของ character หรือ rune โดยตรง
@@ -377,6 +385,7 @@ fmt.Println(firstThree)
 
 อีกจุดที่มักพลาดคือ `string(65)` จะได้ตัวอักษร `A` ไม่ใช่ข้อความ `"65"` ถ้าต้องการแปลงตัวเลขเป็นข้อความ ให้ใช้ `strconv.Itoa(65)`
 
+---
 ## Step 7: ใช้ map สำหรับ lookup ด้วย key
 
 `map` เก็บความสัมพันธ์ระหว่าง key และ value เขียน type เป็น `map[keyType]valueType` เช่น `map[string]int`
@@ -475,8 +484,10 @@ fmt.Println(seen["db"])  // false
 
 ถ้าต้องการประหยัด memory มาก ๆ ใช้ `map[string]struct{}` ได้ แต่ `map[string]bool` อ่านง่ายกว่าในกรณีทั่วไป
 
+> [!NOTE]
 > ลำดับที่ได้จากการวน map ไม่ควรถูกนำไปคาดหวัง เพราะ Go ไม่รับประกัน iteration order
 
+---
 ## Step 8: ใช้ struct สร้าง schema ของข้อมูล
 
 `struct` ใช้รวม field ที่สัมพันธ์กันและอาจมีคนละ type เข้าด้วยกัน ต่างจาก map ที่เปิดให้ใช้ key ใดก็ได้และ value มักเป็น type เดียวกัน
@@ -550,6 +561,7 @@ fmt.Println(Point{1, 2} == Point{1, 2}) // true
 
 ถ้า struct มี field เป็น slice, map หรือ function จะเปรียบเทียบด้วย `==` ไม่ได้ เพราะ type เหล่านั้นไม่ comparable
 
+---
 ## Step 9: รวมทุกอย่างเป็นโปรแกรมสมุดรายชื่อ
 
 ตอนนี้ลองสร้างโปรแกรมเล็ก ๆ ที่ใช้ `struct`, `slice` และ `map` ร่วมกัน เป็นสมุดรายชื่อที่ค้นหาด้วยชื่อได้:
@@ -598,6 +610,7 @@ func main() {
 - `byName` เป็น map เพื่อค้นหาด้วยชื่อ
 - `ok` ป้องกันการใช้ zero value ราวกับเป็นข้อมูลที่พบจริง
 
+---
 ## แบบฝึกหัด
 
 ลองทำโจทย์ต่อไปนี้ใน `main.go` โดยไม่เปิดเฉลยก่อน:
@@ -616,6 +629,7 @@ go vet ./...
 go build ./...
 ```
 
+---
 ## Common Pitfalls — ข้อผิดพลาดที่พบบ่อย
 
 - **ลืม assign ผลลัพธ์จาก `append`** — ต้องเขียน `items = append(items, value)` เสมอ
@@ -628,6 +642,7 @@ go build ./...
 - **คาดหวังลำดับการวน map** — iteration order ไม่ได้ถูกรับประกัน
 - **ผสม keyed และ positional struct literal** — เลือกใช้แบบใดแบบหนึ่ง
 
+---
 ## สรุป
 
 1. ใช้ **array** เมื่อจำนวน element fix ตายตัวจริง ๆ และยอมรับว่าขนาดเป็นส่วนหนึ่งของ type
@@ -639,6 +654,8 @@ go build ./...
 7. ใช้ **struct** เมื่อข้อมูลมี field ที่สัมพันธ์กันและต้องการ schema ที่ compiler ตรวจสอบได้
 
 หลักสำคัญของบทนี้คือ composite type ไม่ได้ต่างกันแค่ syntax แต่มี model เรื่อง ownership และ memory ต่างกันด้วย เมื่อเข้าใจว่าค่าไหน copy, ค่าไหนแชร์ backing data และค่าไหนมี zero value อย่างไร โค้ด Go จะคาดเดาได้ง่ายขึ้นมาก
+
+> *ตอนถัดไปจะต่อด้วย control structures ของ Go — block, scope, shadowing, `if`, `for` ทั้งสี่รูปแบบ, `switch` และ `goto`*
 
 ---
 
@@ -657,8 +674,8 @@ go build ./...
 - **Struct** — type ที่รวม field หลายชนิดเข้าด้วยกันเป็น schema
 - **Anonymous struct** — struct ที่ใช้โดยไม่ตั้งชื่อ type ก่อน
 
+---
 ## Related
 
 - [ตอนที่ 1: Setting Up Your Go Environment](/go/01-setting-up-your-go-environment/) — ติดตั้ง Go, สร้าง module และ workflow พื้นฐาน
 - [ตอนที่ 2: Predeclared Types and Declarations](/go/02-predeclared-types-and-declarations/) — ชนิดข้อมูลพื้นฐาน, zero value, การประกาศตัวแปร และการแปลง type
-- ตอนถัดไปจะต่อด้วย control structures และการวน `for-range` บน slice, map และ string

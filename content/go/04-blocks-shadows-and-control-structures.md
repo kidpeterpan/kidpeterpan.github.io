@@ -49,6 +49,7 @@ go run .
 
 ตัวอย่างที่ตั้งใจให้ compile ไม่ผ่านจะมีคำอธิบายกำกับไว้ อย่าวางตัวอย่างเหล่านั้นรวมกับโปรแกรมที่ต้องการรัน
 
+---
 ## Step 1: เริ่มจาก block — ทุกตำแหน่งที่ประกาศตัวแปร
 
 ก่อนอื่นเรามาทำความเข้าใจว่า "ตัวแปรมองเห็นได้ที่ไหน" ซึ่ง Go กำหนดด้วยโครงสร้างที่เรียกว่า **block** ทุกที่ที่เกิด declaration คือ block และ block ก็ซ้อนกันเป็นชั้นได้:
@@ -81,6 +82,7 @@ func main() {
 
 `inner` ถูกประกาศใน block ของ `if` จึงเห็นได้เฉพาะข้างใน เมื่อปิด `}` ของ `if` ตัวแปรก็หมดอายุ ส่วน `hello` กับ `message` อยู่ใน block ชั้นนอก จึงมองเห็นได้จาก block ชั้นในทุกชั้น
 
+---
 ## Step 2: Shadowing — เมื่อชื่อซ้ำ ชั้นในสุดชนะ
 
 คำถามต่อมาคือ ถ้าใน block ชั้นในมี declaration ที่ชื่อซ้ำกับ identifier ใน block ที่ครอบอยู่ จะเกิดอะไรขึ้น — คำตอบคือคุณกำลัง **shadow** identifier ตัวที่อยู่ชั้นนอก
@@ -160,6 +162,7 @@ fmt.Println(true)     // 10
 > [!WARNING]
 > อย่า redefine identifier ใน universe block เด็ดขาด ถ้าโชคดีได้ compilation error ถ้าไม่โชคดีจะตามหา bug ยากมาก ส่วน shadowing ทั่วไป `go vet` ไม่รายงานเป็น error เพราะมันมีประโยชน์ในบางกรณี — ต้องพึ่ง third-party tool ในการตรวจจับ accidental shadowing
 
+---
 ## Step 3: `if` — ไม่มีวงเล็บ มี scoped variable
 
 `if` ใน Go คล้ายภาษาอื่นมาก ความต่างที่เห็นชัดสุดคือ **ไม่ใส่วงเล็บรอบ condition** และจุดเด่นเฉพาะคือประกาศตัวแปรที่ **scope เข้ากับทั้ง block ของ if และ else**:
@@ -188,6 +191,7 @@ func main() {
 > [!CAUTION]
 > ทางเทคนิคคุณใส่ simple statement อะไรก็ได้ก่อน comparison (เช่น function call หรือ assign ค่าใหม่ให้ตัวแปรเดิม) แต่ **อย่าทำ** — ใช้ฟีเจอร์นี้เพื่อ define ตัวแปรใหม่ที่ scope กับ if/else เท่านั้น อย่างอื่นทำให้สับสน และจำไว้ว่าตัวแปรที่ declare ใน `if` ก็ shadow ตัวแปรชั้นนอกได้เหมือน block อื่น ๆ
 
+---
 ## Step 4: `for` สี่รูปแบบ — keyword วนซ้ำตัวเดียวของภาษา
 
 เช่นเดียวกับภาษาตระกูล C Go ใช้ `for` วนซ้ำ แต่จุดต่างคือ **`for` เป็น keyword วนซ้ำตัวเดียวของภาษา** — ไม่มี `while` ไม่มี `do` Go ทำได้ด้วยการให้ `for` มีสี่รูปแบบ:
@@ -313,6 +317,7 @@ for i := 1; i <= 100; i++ {
 >
 > สังเกตว่า condition มี `!` นำหน้า — โค้ด Go ระบุ "เงื่อนไขที่จะออก" ขณะที่ Java `do/while` ระบุ "เงื่อนไขที่จะอยู่ต่อ"
 
+---
 ## Step 5: `for-range` — วนทุก element ของ compound type
 
 รูปแบบที่สี่ใช้วน element ของ built-in types บางตัว ใช้ได้กับ string, array, slice, map (และ channel ซึ่งจะเจอในตอนเรื่อง concurrency) — **เฉพาะ built-in compound types และ user-defined types ที่สร้างบนพวกนี้**:
@@ -418,6 +423,7 @@ for i := 1; i < len(evenVals)-1; i++ {
 > [!CAUTION]
 > pattern complete for แบบข้างบนใช้ข้ามต้น string ไม่ได้ เพราะ standard for ไม่ handle multibyte character — ถ้าจะข้าม rune บางตัวใน string ต้องใช้ for-range เพื่อให้ process rune ถูกต้อง และ infinite for ควรมี `break` หรือ `return` ใน body เสมอ เพราะแทบไม่มีงานจริงที่อยากวนตลอดกาล
 
+---
 ## Step 6: Label — ตอนที่ต้อง break/continue loop ชั้นนอก
 
 โดย default `break`/`continue` มีผลกับ for loop ที่ครอบมันโดยตรง ถ้ามี nested for แล้วอยากออก/ข้าม iteration ของ loop ชั้นนอก ให้ **ใส่ label** บน for ชั้นนอก:
@@ -444,6 +450,7 @@ outer:
 
 `go fmt` จะ indent label `outer` ให้อยู่ระดับเดียวกับ brace ของ block เพื่อให้สังเกตง่าย nested for พร้อม label นั้นหายาก ส่วนใหญ่ใช้ implement algorithm ที่ต้องข้ามไป iteration ชั้นนอกเมื่อเจอเงื่อนไขไม่ผ่านระหว่างวน inner values
 
+---
 ## Step 7: `switch` — ไม่ fall through โดย default
 
 Go มี `switch` แบบภาษาตระกูล C แต่แก้ข้อจำกัดจนใช้ได้จริง (นักพัฒนาภาษาอื่นมักเลี่ยง switch เพราะข้อจำกัดเรื่องค่าที่ switch ได้และพฤติกรรม fall-through) ตอนนี้ครอบคลุม **expression switch** ส่วน **type switch** จะพูดตอน interfaces:
@@ -546,6 +553,7 @@ for i := 1; i <= 100; i++ {
 > [!TIP]
 > เลือก blank switch แทน if/else chain เมื่อมี **case ที่สัมพันธ์กันหลายตัว** — switch ทำให้การเปรียบเทียบเด่นชัดและตอกย้ำว่ามันเป็นชุดเรื่องที่เกี่ยวข้องกัน หากแต่ละ case เป็นการเปรียบเทียบที่ไม่เกี่ยวกันเลย ให้ใช้ if/else (Go ไม่ห้าม แต่ไม่ idiomatic)
 
+---
 ## Step 8: `goto` — มีอยู่จริงแต่ไม่ควรใช้
 
 Go มี control statement ตัวที่สี่คือ `goto` แต่คุณคงแทบไม่ได้ใช้ ตั้งแต่ Edsger Dijkstra เขียน "Go To Statement Considered Harmful" (1968) `goto` ก็เป็นแกะดำของวงการ เพราะดั้งเดิมมันกระโดดไปไหนก็ได้ในโปรแกรม — เข้า/ออก loop, ข้าม variable definition, เข้ากลางชุด statement ใน `if` — ทำให้เข้าใจโปรแกรมยาก ภาษาสมัยใหม่ส่วนใหญ่จึงไม่มี
@@ -607,6 +615,7 @@ done:
 > [!IMPORTANT]
 > พยายามอย่างยิ่งที่จะเลี่ยง `goto` แต่ในสถานการณ์ที่หายากซึ่งมันทำให้โค้ดอ่านง่ายขึ้นจริง มันก็เป็นทางเลือกหนึ่ง
 
+---
 ## แบบฝึกหัด
 
 ลองทำโจทย์ต่อไปนี้ใน `main.go` โดยไม่เปิดเฉลยก่อน:
@@ -623,6 +632,7 @@ go vet ./...
 go build ./...
 ```
 
+---
 ## Common Pitfalls — ข้อผิดพลาดที่พบบ่อย
 
 - **เผลอ shadow ด้วย `:=`** — `:=` reuse เฉพาะตัวแปรใน block ปัจจุบัน ตัวแปรชื่อซ้ำจาก scope นอกจะถูกสร้างใหม่/บัง ตรวจให้ดีว่าทางซ้ายมีตัวแปรนอก scope หรือไม่
@@ -634,6 +644,7 @@ go build ./...
 - **`break` ใน switch-in-for** — break ออกแค่ case ไม่ใช่ for ต้องใส่ label ที่ for แล้ว `break label`
 - **ใส่ simple statement แปลก ๆ ก่อน condition ของ if** — ทำได้แต่สับสน ใช้เพื่อ define ตัวแปร scope กับ if/else เท่านั้น
 
+---
 ## สรุป
 
 1. เข้าใจ block hierarchy (universe → package → file → function → inner) แล้วพฤติกรรม scope ของ `if`/`for`/`switch` จะตามมาเอง — ทุกคู่ `{}` คือ block ใหม่
@@ -645,6 +656,8 @@ go build ./...
 7. ลืม `goto` ไปได้เลยในงานทั่วไป — labeled break/continue ครอบคลุมเกือบทุกกรณีแล้ว
 
 หลักสำคัญของบทนี้คือ control structures ของ Go ไม่ได้มีไว้แค่ให้เขียน loop ได้ แต่มีกฎเรื่อง scope ที่สม่ำเสมอจนคาดเดาได้ — เมื่อเข้าใจ block และ shadowing แล้ว `if`/`for`/`switch` จะเป็นแค่ตัวเลือกที่คุณเลือกตามเจตนา ไม่ใช่ความลึกลับของภาษา และแน่นอนว่าถ้าเจอ shadowing แปลก ๆ ในโค้ด ลองดูที่ `:=` ก่อนเป็นที่แรกครับ
+
+> *ตอนถัดไปจะต่อด้วย functions — จัดระเบียบโค้ดให้อยู่นอก `main` และจะเจอ `_` pattern ที่ใช้ทิ้งค่าอีกครั้ง*
 
 ---
 
@@ -662,9 +675,9 @@ go build ./...
 - **fallthrough** — keyword ให้ case หนึ่งไหลต่อไป case ถัดไป (ไม่แนะนำให้ใช้)
 - **goto** — statement กระโดดไป labeled line; Go จำกัดไม่ให้ข้าม declaration หรือเข้า inner/parallel block
 
+---
 ## Related
 
 - [ตอนที่ 3: Composite Types](/go/03-composite-types/) — ความรู้เรื่อง slice, map และ string ที่บทนี้เอามาวนด้วย `for-range`; เคยเตือนเรื่อง `:=` ไว้แล้ว บทนี้ขยายเป็นกฎ shadowing เต็มรูปแบบ
 - [ตอนที่ 2: Predeclared Types and Declarations](/go/02-predeclared-types-and-declarations/) — การประกาศตัวแปรด้วย `var` และ `:=` ซึ่งเป็นจุดเริ่มของ shadowing และเรื่อง zero value
 - [ตอนที่ 1: Setting Up Your Go Environment](/go/01-setting-up-your-go-environment/) — workflow `go fmt → go vet → go build` ที่ใช้ตรวจแบบฝึกหัดของบทนี้
-- ตอนถัดไปจะต่อด้วย functions — จัดระเบียบโค้ดให้อยู่นอก `main` และจะเจอ `_` pattern ที่ใช้ทิ้งค่าอีกครั้ง

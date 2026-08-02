@@ -10,10 +10,15 @@ tags = ['programming', 'go', 'tutorial']
 
 ตอนที่ 1 ของ Go เราจะตั้งค่า environment ตั้งแต่ศูนย์ — ติดตั้ง Go, เริ่มเขียนโปรแกรมแรก, เรียนรู้เครื่องมือหลักอย่าง `go build` `go fmt` `go vet` และสร้าง `Makefile` เพื่อ automate workflow
 
-สิ่งที่จะได้ตอนจบจากการอ่านตอนนี้คือโปรแกรม Hello World ที่ compile เป็น native binary ได้ พร้อม workflow มาตรฐานซึ่งนำไปใช้กับ project อื่นๆ ได้
+สิ่งที่ได้ตอนจบของบทนี้:
+
+- โปรแกรม Hello World ที่ compile เป็น native binary ได้
+- เข้าใจ `go build`, `go fmt` และ `go vet` และใช้ให้เป็นนิสัย
+- `Makefile` ที่รัน workflow `fmt → vet → build` ใน command เดียว
+- workflow มาตรฐานที่นำไปใช้กับ project อื่น ๆ ได้
 
 {{< mermaid >}}
-graph LR
+graph TD
   A["Source code .go"] -->|go fmt| B["Formatted code"]
   B -->|go vet| C{"Static checks pass?"}
   C -->|yes| D["go build"]
@@ -65,6 +70,7 @@ echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bash_profile
 source $HOME/.bash_profile
 ```
 
+> [!CAUTION]
 > ถ้า `tar` fail ให้เติม `sudo` เพราะการเขียนใน `/usr/local` ต้องใช้สิทธิ์ root
 
 ---
@@ -124,6 +130,7 @@ go 1.22
 
 ไฟล์นี้ทำหน้าที่คล้าย `package.json` ของ Node.js, `requirements.txt` ของ Python หรือ `Gemfile` ของ Ruby โดยระบุชื่อ module, Go version ขั้นต่ำ และ dependencies
 
+> [!WARNING]
 > **อย่าแก้ `go.mod` ด้วยมือ** — ให้ใช้ `go get` และ `go mod tidy` แทน รายละเอียดจะอยู่ในตอนต่อไปของซีรีส์
 
 ---
@@ -192,6 +199,7 @@ go run .
 
 เหมาะกับ script เล็ก ๆ หรือเวลาที่ต้องการทดสอบโค้ดอย่างรวดเร็ว
 
+> [!NOTE]
 > **Single native binary** — Go programs compile เป็น binary เดียวที่รันแบบ stand-alone ได้ ไม่ต้องติดตั้ง VM หรือ runtime แยก (ต่างจาก Java, Python และ Node.js) ทำให้ deploy ได้ง่ายมาก สำหรับ container สามารถใช้ `scratch` หรือ `distroless` image ได้เลย
 
 ---
@@ -257,6 +265,7 @@ func main();
 
 ซึ่งไม่ใช่ valid Go — กฎที่เรียบง่ายนี้ทำให้ compiler ทำงานเร็วและช่วยบังคับ coding style ไปในตัว
 
+> [!WARNING]
 > **อย่าลืม `go fmt` ก่อน commit** — หากลืมแล้วต้องมา format ภายหลัง ให้แยก commit ที่รัน `go fmt ./...` อย่างเดียวออกจาก logic changes เพื่อให้ diff อ่านง่าย
 
 ---
@@ -298,6 +307,7 @@ fmt.Printf("Hello, %s!\n", "world")
 
 รัน `go vet` อีกครั้ง — ถ้าไม่มี output แสดงว่าผ่าน
 
+> [!TIP]
 > รัน `go vet` ทุกครั้งเช่นเดียวกับ `go fmt` — มันเป็น first line of defense สำหรับหา bug แบบง่าย ๆ ส่วน bug ที่ซับซ้อนกว่านั้นให้ใช้ third-party scanners เสริม เช่น `staticcheck` และ `golangci-lint`
 
 ---
@@ -323,7 +333,8 @@ build: vet
 	go build
 ```
 
-> ⚠️ **สำคัญมาก** — บรรทัด recipe (คำสั่งใต้ target) ต้อง indent ด้วย **tab** เท่านั้น หากใช้ space จะ fail โดยไม่บอกสาเหตุชัดเจน
+> [!CAUTION]
+> **สำคัญมาก** — บรรทัด recipe (คำสั่งใต้ target) ต้อง indent ด้วย **tab** เท่านั้น หากใช้ space จะ fail โดยไม่บอกสาเหตุชัดเจน
 
 ### โครงสร้าง Makefile
 
@@ -350,6 +361,7 @@ go build
 
 จบใน command เดียว — ใช้รันทั้ง local และใน CI ได้เหมือนกัน
 
+> [!NOTE]
 > บน Windows `make` ไม่ได้ติดตั้งมาในตัว ต้องติดตั้งผ่าน Chocolatey ด้วยคำสั่ง `choco install make`
 
 ---
@@ -366,6 +378,7 @@ extension นี้จะติดตั้ง third-party tools ให้อั
 - **`gopls`** — Go language server ทางการจาก Go team (ให้ code completion, type checking และ find references ขณะพิมพ์)
 - **Delve** — Go debugger
 
+> [!NOTE]
 > **Language Server Protocol (LSP)** คือ API spec มาตรฐานที่ทำให้ editor implement code intelligence ได้ โดยไม่ต้องเขียน logic ของแต่ละภาษาไว้ในตัว editor
 
 ### GoLand (เสียเงิน)
@@ -379,7 +392,8 @@ Go-specific IDE จาก JetBrains — UI คล้าย IntelliJ/PyCharm ม�
 [go.dev/play](https://go.dev/play) คือ web-based sandbox — ใช้ลอง snippet เล็ก ๆ โดยไม่ต้องติดตั้ง Go ในเครื่อง ปุ่ม **Run** ใช้รันโค้ด, **Format** ใช้รัน `go fmt` และ **Share** สร้าง unique URL สำหรับแชร์
 
 
-> ⚠️ **ข้อจำกัดของ Playground**
+> [!WARNING]
+> **ข้อจำกัดของ Playground**
 > - ใช้ network ได้แค่ `localhost`
 > - process ที่รันนานหรือใช้ memory เยอะอาจถูก kill
 > - clock ถูกกำหนดตายตัวไว้ที่ 10 November 2009 (วันเปิดตัว Go)
@@ -397,7 +411,8 @@ Go Compatibility Promise สัญญาว่าจะ **ไม่ทำ backwa
 > — Russ Cox, GopherCon 2022
 
 
-> ⚠️ Promise ครอบคลุมเฉพาะ **ภาษาและ standard library** — ไม่ครอบคลุม `go` command หาก script CI ใช้ flag ของ `go` command ให้ pin Go version และ test ใหม่เมื่อมีการอัปเดต
+> [!WARNING]
+> Promise ครอบคลุมเฉพาะ **ภาษาและ standard library** — ไม่ครอบคลุม `go` command หาก script CI ใช้ flag ของ `go` command ให้ pin Go version และ test ใหม่เมื่อมีการอัปเดต
 
 ### อัปเดต Go
 
@@ -414,6 +429,26 @@ Go Compatibility Promise สัญญาว่าจะ **ไม่ทำ backwa
 mv /usr/local/go /usr/local/old-go
 tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz
 rm -rf /usr/local/old-go
+```
+
+---
+
+## แบบฝึกหัด
+
+ลองทำโจทย์ต่อไปนี้โดยสร้าง project ใหม่แยกจาก `hello_world` เพื่อไม่ให้กระทบตัวอย่างในบท:
+
+1. สร้าง module ชื่อ `greetings` พร้อมไฟล์ `main.go` ที่ print `Hello from Go!` แล้วรันด้วย `go run .`
+2. เขียน `fmt.Printf("Hello, %s!\n")` ที่ลืมส่ง argument แล้วรัน `go vet ./...` — สังเกต error ที่เจอ จากนั้นแก้ให้ผ่าน
+3. Compile ด้วย `go build -o hello` แล้วรัน binary จากไดเรกทอรีอื่นด้วย path เต็ม เช่น `./hello`
+4. เพิ่ม target `run` และ `clean` ใน Makefile ของ `hello_world` โดย `run` รัน `go run .` และ `clean` ลบ binary ทิ้ง — อย่าลืมเพิ่มทั้งสองใน `.PHONY`
+5. ทดลองเขียน `{` คนละบรรทัดกับ `func` แล้วรัน `go build` — อ่าน error ที่ได้ แล้วแก้กลับตาม semicolon insertion rule
+
+ตรวจโค้ดหลังทำเสร็จ:
+
+```sh
+go fmt ./...
+go vet ./...
+go build
 ```
 
 ---
@@ -443,3 +478,24 @@ rm -rf /usr/local/old-go
 Workflow `fmt → vet → build` นี้คือ heartbeat ของ Go development — ใช้ได้กับทุก project ไม่ว่าจะใหญ่หรือเล็ก
 
 > *ใน [ตอนต่อไป](/go/02-predeclared-types-and-declarations/) เราจะเจาะลึก primitive types และการประกาศตัวแปรของ Go — ตัวแปร, constants และ type พื้นฐานต่าง ๆ*
+
+---
+
+## Glossary
+
+- **Toolchain** — ชุดเครื่องมือทั้งหมดที่ใช้พัฒนาด้วย Go เช่น compiler, `go` command และ standard library
+- **Module** — หน่วยการจัดการ dependency ของ Go ระบุด้วยไฟล์ `go.mod`
+- **Package** — กลุ่มไฟล์ Go ที่อยู่ร่วมกัน ประกาศด้วยคำสั่ง `package`
+- **Entry point** — จุดเริ่มต้นของโปรแกรม; ใน Go คือ `func main()` ใน `package main`
+- **Native binary** — ไฟล์ executable ที่ compile เป็นภาษาเครื่องแล้ว รันได้โดยไม่ต้องมี runtime แยก
+- **Semicolon Insertion Rule** — กฎที่ compiler เติม `;` ท้าย statement ให้อัตโนมัติ
+- **LSP (Language Server Protocol)** — มาตรฐานที่ให้ editor ทำงานร่วมกับภาษาใดก็ได้ผ่าน language server
+- **Dependency** — package ภายนอกที่โปรแกรมใช้งาน
+- **CI (Continuous Integration)** — ระบบรัน build และตรวจสอบโค้ดอัตโนมัติทุกครั้งที่ push
+- **Go Compatibility Promise** — สัญญาว่า Go 1.x จะไม่ทำ breaking change กับภาษาและ standard library
+
+---
+
+## Related
+
+- [ตอนที่ 2: Predeclared Types and Declarations](/go/02-predeclared-types-and-declarations/) — ชนิดข้อมูลพื้นฐานและการประกาศตัวแปรของ Go ก้าวต่อไปของซีรีส์
