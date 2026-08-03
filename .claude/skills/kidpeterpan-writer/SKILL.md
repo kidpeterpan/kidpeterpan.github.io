@@ -194,6 +194,36 @@ Follow the one for your post type.
   half-translated), end the file with a bare `TBC` line rather than padding
   it out — that's the existing convention (see `hidden_potential.md`).
 
+## Step 7 — Thai-language verification
+
+Writing the right meaning is not enough; the final pass must also sound like
+natural Thai when read aloud. Load `thai-writer-verify` after drafting or
+editing a Thai post and use it as a separate language-quality pass.
+
+Pay particular attention to the failure modes that are easy to miss while
+translating:
+
+- Use `ล่ะ` for the ordinary question/final particle; do not write `หล่ะ`.
+  `มั้ย` is acceptable in a deliberately casual sentence, while `ไหม` is the
+  neutral form. Pick one register consistently.
+- Do not put a space before `?`, `!`, or `:` in Thai headings and prose. Use
+  `หัวข้อ: รายละเอียด` and `ใช่ไหม?`, not `หัวข้อ : รายละเอียด` or `ใช่ไหม ?`.
+- Check loanword spelling and meaning in context. For example, avoid a typo
+  such as `เข้าซอยต์ของตัวเอง`; say `เข้าไปในโปรเจกต์ของตัวเอง` when that is
+  what the sentence means.
+- Prefer direct Thai phrasing over literal translations. Replace awkward
+  phrases such as `ฟีเจอร์ทั้งตัว` with `เขียนฟีเจอร์ทั้งหมดให้เสร็จในครั้งเดียว`
+  when the meaning is "implement the whole feature".
+- Remove duplicate meaning. A gloss that already means "เกินจำเป็น" should not
+  be followed by another `เกินจำเป็น`, and `ทั้งหมดด้วยตัวเอง` should not repeat
+  the same idea in the next phrase.
+- A glossary annotation must explain the English term that actually appears
+  next to it. Do not leave an English term only inside the gloss, and do not
+  attach a long explanation that interrupts the sentence.
+- Keep the source meaning, especially in translated quotations. Add a short
+  Thai explanation after an English quote when readers need it, rather than
+  silently changing the quote.
+
 ## Before finishing
 
 Reread the draft once against this checklist:
@@ -203,5 +233,6 @@ Reread the draft once against this checklist:
 - [ ] Body is split into `## ` sections divided by `---`
 - [ ] At least one blockquote pull-quote or closing line per major section
 - [ ] For translations: source credit blockquote + `[params] source` present, and the post ends with a `## บทสรุป` takeaway section
+- [ ] `thai-writer-verify` language pass completed: spelling, Thai punctuation, natural phrasing, term/gloss alignment, and read-aloud flow
 - [ ] For go episodes: opening series-recap + mermaid roadmap, and `แบบฝึกหัด`/`Common Pitfalls`/`สรุป`/`Glossary`/`Related` closing sections in order
 - [ ] Reads like the author wrote it, not like a summary *about* the author's style

@@ -36,7 +36,7 @@ assumes three things:
 
 Every post starts from something the author did, felt, or noticed:
 
-- A recent event: *"เมื่อวานมีโอกาสได้ไปดู James Bond : Skyfall ภาคปฐมทัศน์"*
+- A recent event: *"เมื่อวานมีโอกาสได้ไปดู James Bond: Skyfall ภาคปฐมทัศน์"*
 - A relatable problem: *"ตั้งแต่อากาศเริ่มร้อนตัวเฮาก็ติดบิงซู... แต่ประเด็นคือมันแพงอ่ะ"*
 - A confession: *"ก็เลยต้องถอยกลับไปตั้งหลักหน่อย"*
 - A playful riff: *"ในโลกที่มีข้อมูลมากมายไหลไปมาเข้าหูซ้ายวิ่งผ่านไตขวาทะลุต่อมน้ำตา
@@ -44,7 +44,7 @@ Every post starts from something the author did, felt, or noticed:
 
 Then state why this post exists, and hit a go signal:
 
-> อ่ะ เริ่ม ! / มาอ่านกัน เริ่ม ! / มา ลุยยยย / เอาหละ เริ่มกันเลย
+> อ่ะ เริ่ม! / มาอ่านกัน เริ่ม! / มาลุยยยย / เอาล่ะ เริ่มกันเลย
 
 ## Step 2 — the voice: 15 patterns that make it feel like a friend talking
 
@@ -58,7 +58,7 @@ Then state why this post exists, and hit a go signal:
    `หละ`, `เนอะ`, `นะ`, `น้อ`, `ก๊ะ`, `เน้อ`, `จ้า`, `จ่ะ` — sparingly,
    for warmth, not in every sentence.
 4. **English tech terms embedded raw**, untranslated: `Vibe Coding`,
-   `Workflow`, `Verify เสมอ !`, `Agentic Loop`, `Secret Sauce`, `Pattern`,
+    `Workflow`, `Verify เสมอ!`, `Agentic Loop`, `Secret Sauce`, `Pattern`,
    `Skill`, `Pitch`, `Funding`, `Human-in-the-loop`. Gloss only when the
    reader genuinely needs it, in parens: `Introvert (คนที่ไม่ค่อยชอบเข้าสังคม)`,
    `Comfort Zone`. Do not gloss common words.
@@ -91,9 +91,9 @@ Then state why this post exists, and hit a go signal:
     มันจะถูกส่งมาในรูปแบบ Information เสมอ`
 12. **Casual connectors** instead of formal ones: `เอาเป็นว่า`,
     `นั่นแหละ`, `ซึ่งก็คือ`, `ไหน ๆ ก็`, `ยังไงก็ตาม`, `พูดเลยว่า`,
-    `เอ แล้ว...กันแน่ ?`, `เอ๊ะ !?`
+    `เอ แล้ว...กันแน่?`, `เอ๊ะ!?`
 13. **Wordplay and invented urgency**: `จัดปายยยย เขียนบล็อกวิธีทำทีละ
-    ขั้นตอนให้เลยละกันจะได้ทำกันเองได้ !`
+    ขั้นตอนให้เลยละกันจะได้ทำกันเองได้!`
 14. **Gratitude/credits woven in casually**, not as formal disclaimers:
     *"ขอบคุณ DTAC มา ณ ที่นี้สำหรับตั๋วครับ"*
 15. **Closing send-off** — a short sign-off line, often with a kaomoji:
@@ -120,7 +120,7 @@ Then state why this post exists, and hit a go signal:
 
 - Section headers are **punchy Thai-first titles**, frequently framed as
   questions or bold statements:
-  `ไหน แล้วใช้อะไรมาแล้วบ้าง ?`, `แล้วใช้ตัวไหนดี ?`, `จะตกงานกันมั้ย`,
+  `ไหน แล้วใช้อะไรมาแล้วบ้าง?`, `แล้วใช้ตัวไหนดี?`, `จะตกงานกันมั้ย`,
   `Information ส่งต่อง่ายมาก แต่ไม่ได้แปลว่าคนนั้น ๆ รู้`,
   `การเงินไม่พร้อมก็อย่าเพิ่งทำเลย Startup`
 - The post flows as a **question-and-answer narrative**: each header poses
@@ -148,7 +148,7 @@ Thai titles are **long, specific, benefit-led, conversational**, often with
 an English term in parens and a number or price:
 
 - `วิธีทำบิงซู (Bingsu) ของหวานเกล็ดหิมะสไตล์เกาหลีต้นทุน 70 บาท แค่มีตู้เย็นก็ทำได้!`
-- `AI Coding ปี 2026 ใช้ตัวไหนยังไงดี ?`
+- `AI Coding ปี 2026 ใช้ตัวไหนยังไงดี?`
 - `ใช้ AI ยังไงไม่ให้โง่ลง`
 - `ปฏิบัติธรรมยังไงไม่ให้เป็นบ้า`
 - `เรื่องเล่า Startup แบบหมดเปลือก เขียนจากประสบการณ์จริงไม่อิงตำราใด`
@@ -167,6 +167,32 @@ concrete payoff (`ต้นทุน 70 บาท`, `แค่มีตู้เ
 | Address the reader directly and send them off warmly | End on a generic summary sentence |
 | Use kaomoji/emoji and elongated vowels sparingly | Oversaturate — it should feel natural, not cartoonish |
 
+## Thai-language quality guardrails
+
+The playful voice does not excuse spelling or phrasing that makes the reader
+stop. Use `thai-writer-verify` as the final proofreading pass, especially for
+translated or technical posts.
+
+- Write `ล่ะ`, not `หล่ะ`, for the ordinary Thai question/final particle. Keep
+  `มั้ย` for an intentionally casual register and use `ไหม` for a neutral one;
+  do not switch between them without a reason. `หละ` may be kept only when it
+  is an intentional part of the author's established voice, not as a default
+  spelling of `ล่ะ`.
+- Do not put spaces before `?`, `!`, or `:`. Write `ใช่ไหม?`, `เอ๊ะ!?`, and
+  `หัวข้อ: รายละเอียด`.
+- Prefer a natural Thai verb phrase over a literal English-shaped phrase. For
+  example, use `เขียนฟีเจอร์ทั้งหมดให้เสร็จในครั้งเดียว` instead of
+  `เขียนฟีเจอร์ทั้งตัว`.
+- Read technical sentences aloud and remove duplicated meaning, unnecessary
+  passive voice, and awkward noun piles. Keep English terms when they are
+  useful, but gloss only the terms the reader needs.
+- When a glossary annotation is used, the English term must appear in the
+  sentence beside it. The gloss should be short, accurate, and not repeat a
+  meaning already stated in the sentence.
+- Never invent a personal anecdote to make a post sound warmer. If the source
+  or user did not provide an experience, write it as an observation or
+  recommendation.
+
 ## Before finishing
 
 - [ ] Opens with a personal hook (event / problem / confession / riff), not an abstraction
@@ -176,4 +202,5 @@ concrete payoff (`ต้นทุน 70 บาท`, `แค่มีตู้เ
 - [ ] English tech terms embedded raw; only genuinely opaque ones glossed
 - [ ] Ends with a warm send-off line
 - [ ] Reads aloud like a friend talking — if it reads like a formal essay, rewrite
+- [ ] Thai-language verification completed: spelling, punctuation, natural phrasing, and glossary alignment
 - [ ] If targeting kidpeterpan.github.io: kidpeterpan-writer's front matter, section, and glossary rules are applied on top of this voice
