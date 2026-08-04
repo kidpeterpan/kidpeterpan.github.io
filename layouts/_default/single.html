@@ -19,6 +19,13 @@
           <div class="article-rule"></div>
         </header>
 
+        {{ with .TableOfContents }}
+          <details class="toc-mobile">
+            <summary>On this page</summary>
+            {{ . | replaceRE `id="TableOfContents"` "" | safeHTML }}
+          </details>
+        {{ end }}
+
         <div class="prose">
           {{ .Content }}
         </div>

@@ -1,0 +1,25 @@
+{{- /* Reproduces Hugo's default table rendering, wrapped in a scrollable
+   container so a table wider than the viewport scrolls within its own
+   bounds instead of forcing the whole page to scroll horizontally. */ -}}
+<div class="table-scroll">
+  <table>
+    <thead>
+      {{ range .THead }}
+        <tr>
+          {{ range . }}
+            <th{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>
+          {{ end }}
+        </tr>
+      {{ end }}
+    </thead>
+    <tbody>
+      {{ range .TBody }}
+        <tr>
+          {{ range . }}
+            <td{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</td>
+          {{ end }}
+        </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
