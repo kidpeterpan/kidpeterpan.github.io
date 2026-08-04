@@ -10,7 +10,7 @@ tags = ['programming', 'go', 'tutorial']
 
 ตอนที่ 4 เราจะปูพื้นฐาน "ตรรกะและการจัดระเบียบโปรแกรม" ของ Go หลังจากตอนที่แล้วเราจัดกลุ่มข้อมูลด้วย composite types ได้แล้ว ตอนนี้เราจะมาทำให้โปรแกรมตัดสินใจและวนซ้ำได้ด้วย block, `if`, `for`, `switch` และรู้ว่า `goto` มีอยู่จริงแต่แทบไม่ควรใช้
 
-สิ่งที่ได้ตอนจบบทนี้:
+สิ่งที่จะได้ตอนจบบทนี้:
 
 - เข้าใจ block และกฎการมองเห็นตัวแปร (scope) ซึ่งเป็นรากของทุกอย่างที่เหลือ
 - รู้จัก shadowing และหลีกเลี่ยงบั๊กที่เกิดจาก `:=`
@@ -32,7 +32,7 @@ graph TD
 
 ## วิธีทำตามบทนี้
 
-เราจะใช้ project แยกชื่อ `go_blocks_control` เพื่อให้ทดลองโค้ดได้โดยไม่กระทบ project จากตอนก่อน เปิด terminal แล้วรัน:
+เราจะสร้าง project ชื่อ `go_blocks_control` แยกจาก project ตอนก่อน เพื่อทดลองโค้ดโดยไม่กระทบกัน เปิด terminal แล้วรันคำสั่งนี้:
 
 ```sh
 mkdir go_blocks_control
@@ -52,14 +52,14 @@ go run .
 ---
 ## Step 1: เริ่มจาก block — ทุกตำแหน่งที่ประกาศตัวแปร
 
-ก่อนอื่นเรามาทำความเข้าใจว่า "ตัวแปรมองเห็นได้ที่ไหน" ซึ่ง Go กำหนดด้วยโครงสร้างที่เรียกว่า **block** ทุกที่ที่เกิด declaration คือ block และ block ก็ซ้อนกันเป็นชั้นได้:
+ก่อนอื่นเรามาทำความเข้าใจว่า "ตัวแปรมองเห็นได้ที่ไหน" ซึ่ง Go กำหนดด้วยโครงสร้างที่เรียกว่า **block** ทุกตำแหน่งที่เกิด declaration จะอยู่ใน block และ block ก็ซ้อนกันเป็นชั้นได้:
 
 - **Package block** — ตัวแปร, constant, type และ function ที่ประกาศนอก function ทั้งหมด
-- **File block** — ชื่อ package ที่เกิดจาก `import` (valid เฉพาะไฟล์ที่มี import นั้น)
-- **Function block** — ตัวแปรที่ define ที่ top level ของ function รวมถึง parameter
+- **File block** — ชื่อ package ที่เกิดจาก `import` (ใช้ได้เฉพาะไฟล์ที่มี import นั้น)
+- **Function block** — ตัวแปรที่ประกาศที่ top level ของ function รวมถึง parameter
 - **Inner block** — ทุกคู่ `{}` ภายใน function รวมถึง control structures อย่าง `if`, `for`, `switch` ที่สร้าง block ของตัวเอง
 
-หลักการสำคัญคือ **เข้าถึง identifier ที่ define ใน block ชั้นนอกได้จาก block ชั้นในใด ๆ** ลองวางโค้ดนี้แล้วรัน:
+หลักการสำคัญคือ **เข้าถึง identifier ที่ประกาศใน block ชั้นนอกได้จาก block ชั้นในใด ๆ** ลองวางโค้ดนี้แล้วรัน:
 
 ```go
 package main
@@ -80,7 +80,7 @@ func main() {
 }
 ```
 
-`inner` ถูกประกาศใน block ของ `if` จึงเห็นได้เฉพาะข้างใน เมื่อปิด `}` ของ `if` ตัวแปรก็หมดอายุ ส่วน `hello` กับ `message` อยู่ใน block ชั้นนอก จึงมองเห็นได้จาก block ชั้นในทุกชั้น
+`inner` ถูกประกาศใน block ของ `if` จึงมองเห็นได้เฉพาะข้างใน เมื่อปิด `}` ของ `if` scope ของตัวแปรก็สิ้นสุด ส่วน `hello` กับ `message` อยู่ใน block ชั้นนอก จึงมองเห็นได้จาก block ชั้นในทุกชั้น
 
 ---
 ## Step 2: Shadowing — เมื่อชื่อซ้ำ ชั้นในสุดชนะ
@@ -108,11 +108,11 @@ func main() {
 ผลลัพธ์คือ `10`, `5`, `10` สังเกตว่า `x` ตัวนอก **ไม่ได้หายไปหรือถูก reassign** เพียงแต่เอื้อมไม่ถึงตอนที่ถูกบัง และเมื่อ `if` block จบลง ตัวที่บังก็จบตามไปด้วย
 
 > [!WARNING]
-> เหตุผลที่บางครั้งควรหลีกเลี่ยง `:=` เพราะมัน shadow ตัวแปรโดยไม่ตั้งใจได้ง่ายมาก จำไว้ว่า `:=` ใช้สร้างและ assign หลายตัวพร้อมกันได้ และไม่จำเป็นต้องเป็นตัวใหม่ทุกตัวทางซ้าย — ขอแค่มีตัวใหม่อย่างน้อยหนึ่งตัว `:=` ก็ legal แล้ว ซึ่งเป็นช่องให้เผลอ shadow
+> เหตุผลที่บางครั้งควรหลีกเลี่ยง `:=` เพราะมัน shadow ตัวแปรโดยไม่ตั้งใจได้ง่ายมาก จำไว้ว่า `:=` ใช้สร้างและ assign หลายตัวพร้อมกันได้ และไม่จำเป็นต้องเป็นตัวใหม่ทุกตัวทางซ้าย — ขอแค่มีตัวใหม่อย่างน้อยหนึ่งตัว `:=` ก็ถูกต้องตาม syntax แล้ว จึงเป็นช่องให้เผลอ shadow
 
 ### Shadowing ด้วย multiple assignment
 
-แม้มี `x` ใน block ชั้นนอก การเขียน `x, y := 5, 20` ภายใน `if` ก็ยัง shadow `x` อยู่ดี เพราะ `:=` **reuse เฉพาะตัวแปรที่ declare ใน block ปัจจุบันเท่านั้น**:
+แม้มี `x` ใน block ชั้นนอก การเขียน `x, y := 5, 20` ภายใน `if` ก็ยัง shadow `x` อยู่ดี เพราะ `:=` **นำกลับมาใช้ซ้ำเฉพาะตัวแปรที่ประกาศใน block ปัจจุบันเท่านั้น**:
 
 ```go
 package main
@@ -150,7 +150,7 @@ local variable `fmt` (ชนิด `string`) บัง package `fmt` ใน file
 
 ### Universe block — identifier ที่ห้ามแตะ
 
-Go มี keyword แค่ 25 ตัว และ built-in types (`int`, `string`), constants (`true`, `false`), functions (`make`, `close`) รวมถึง `nil` **ไม่ได้เป็น keyword** — มันคือ **predeclared identifiers** ที่ define ใน **universe block** ซึ่งเป็น block ที่ครอบ block อื่นทั้งหมด
+Go มี keyword แค่ 25 ตัว และ built-in types (`int`, `string`), constants (`true`, `false`), functions (`make`, `close`) รวมถึง `nil` **ไม่ได้เป็น keyword** — ทั้งหมดนี้คือ **predeclared identifiers** ที่ประกาศไว้ใน **universe block** ซึ่งเป็น block ที่ครอบ block อื่นทั้งหมด
 
 เพราะอยู่ใน universe block จึงถูก shadow ใน scope อื่นได้ เช่น `true := 10` แล้ว `fmt.Println(true)` จะพิมพ์ `10` ได้จริง:
 
@@ -160,12 +160,12 @@ fmt.Println(true)     // 10
 ```
 
 > [!WARNING]
-> อย่า redefine identifier ใน universe block เด็ดขาด ถ้าโชคดีได้ compilation error ถ้าไม่โชคดีจะตามหา bug ยากมาก ส่วน shadowing ทั่วไป `go vet` ไม่รายงานเป็น error เพราะมันมีประโยชน์ในบางกรณี — ต้องพึ่ง third-party tool ในการตรวจจับ accidental shadowing
+> อย่า redefine identifier ใน universe block เด็ดขาด ถ้าโชคดีจะเจอ compilation error ถ้าไม่โชคดีจะตามหา bug ยากมาก ส่วน shadowing ทั่วไป `go vet` ไม่รายงานเป็น error เพราะมันมีประโยชน์ในบางกรณี — ต้องพึ่ง third-party tool ในการตรวจจับ accidental shadowing
 
 ---
 ## Step 3: `if` — ไม่มีวงเล็บ มี scoped variable
 
-`if` ใน Go คล้ายภาษาอื่นมาก ความต่างที่เห็นชัดสุดคือ **ไม่ใส่วงเล็บรอบ condition** และจุดเด่นเฉพาะคือประกาศตัวแปรที่ **scope เข้ากับทั้ง block ของ if และ else**:
+`if` ใน Go คล้ายภาษาอื่นมาก ความต่างที่เห็นชัดสุดคือ **ไม่ใส่วงเล็บรอบ condition** และจุดเด่นเฉพาะคือประกาศตัวแปรที่มี **scope ครอบคลุมทั้ง block ของ if และ else**:
 
 ```go
 package main
@@ -186,10 +186,10 @@ func main() {
 }
 ```
 
-ตัวแปร `n` ถูก declare ไว้ในส่วนก่อน semicolon แล้ว scope ของมันครอบคลุมทั้ง `if`, `else if` และ `else` พอจบชุด if/else `n` ก็หมดอายุ — ลองเพิ่ม `fmt.Println(n)` หลังจบชุดดู จะได้ compile error `undefined: n` ประโยชน์คือสร้างตัวแปรที่ available เฉพาะตรงที่ต้องใช้ ไม่หลุดไปปนกับ scope อื่น
+ตัวแปร `n` ถูก declare ไว้ในส่วนก่อน semicolon แล้ว scope ของมันครอบคลุมทั้ง `if`, `else if` และ `else` พอจบชุด if/else `n` ก็หมดอายุ ลองเพิ่ม `fmt.Println(n)` หลังจบชุดดู จะได้ compile error `undefined: n` ประโยชน์คือสร้างตัวแปรที่ใช้ได้เฉพาะตรงที่ต้องใช้ ไม่หลุดไปปนกับ scope อื่น
 
 > [!CAUTION]
-> ทางเทคนิคคุณใส่ simple statement อะไรก็ได้ก่อน comparison (เช่น function call หรือ assign ค่าใหม่ให้ตัวแปรเดิม) แต่ **อย่าทำ** — ใช้ฟีเจอร์นี้เพื่อ define ตัวแปรใหม่ที่ scope กับ if/else เท่านั้น อย่างอื่นทำให้สับสน และจำไว้ว่าตัวแปรที่ declare ใน `if` ก็ shadow ตัวแปรชั้นนอกได้เหมือน block อื่น ๆ
+> ทางเทคนิคคุณใส่ simple statement อะไรก็ได้ก่อน comparison (เช่น function call หรือ assign ค่าใหม่ให้ตัวแปรเดิม) แต่ **อย่าทำ** — ใช้ฟีเจอร์นี้เพื่อประกาศตัวแปรใหม่ที่มี scope ครอบคลุม if/else เท่านั้น อย่างอื่นทำให้สับสน และจำไว้ว่าตัวแปรที่ declare ใน `if` ก็ shadow ตัวแปรชั้นนอกได้เหมือน block อื่น ๆ
 
 ---
 ## Step 4: `for` สี่รูปแบบ — keyword วนซ้ำตัวเดียวของภาษา
@@ -198,7 +198,7 @@ func main() {
 
 | รูปแบบ | หน้าตา | ใช้เมื่อ |
 |---|---|---|
-| Complete (C-style) | `for i := 0; i < 10; i++` | วนแบบไม่ใช่จากต้นถึงท้าย / คุม index เอง |
+| Complete (C-style) | `for i := 0; i < 10; i++` | วนแบบที่ไม่ได้ไล่จากต้นถึงท้าย / คุม index เอง |
 | Condition-only | `for i < 100` | วนตามค่าที่คำนวณ (แทน `while`) |
 | Infinite | `for {}` | วนไม่จบ ต้องมี `break`/`return` ข้างใน |
 | for-range | `for i, v := range x` | วนทุก element ของ compound type |
@@ -223,7 +223,7 @@ func main() {
 
 - **Initialization** — ต้องใช้ `:=` (ใช้ `var` ไม่ได้) และ shadow ตัวแปรชั้นนอกตรงนี้ได้เช่นกัน
 - **Comparison** — ต้องเป็น expression ที่ได้ `bool` เช็คก่อนทุก iteration ถ้า `true` จึงรัน body
-- **Increment** — มักเป็น `i++` แต่เป็น assignment อะไรก็ได้ รันหลังจบแต่ละ iteration ก่อนเช็ค condition
+- **Increment** — มักเป็น `i++` แต่เขียน assignment แบบใดก็ได้ โดยจะรันหลังจบแต่ละ iteration ก่อนเช็ค condition
 
 Go ยอมให้ละส่วนใดส่วนหนึ่งของ for ได้ ที่พบบ่อยคือละ initialization (เพราะคำนวณค่ามาก่อน loop) หรือละ increment (เพราะมี logic เพิ่มค่าซับซ้อนใน body):
 
@@ -245,7 +245,7 @@ for i := 0; i < 10; { // ละ increment
 
 ### Condition-only for — แทน `while`
 
-เมื่อละ **ทั้ง** initialization และ increment ให้ **ไม่ใส่ semicolon** เหลือ `for` ที่ทำงานเหมือน `while` ในภาษาอื่น:
+เมื่อละ **ทั้ง** initialization และ increment จึง **ไม่ต้องใส่ semicolon** เหลือ `for` ที่ทำงานเหมือน `while` ในภาษาอื่น:
 
 ```go
 package main
@@ -263,7 +263,7 @@ func main() {
 
 ### Infinite for
 
-แบบที่สามตัด condition ออกด้วย ได้ loop ที่วนไม่จบ:
+แบบที่สามตัด condition ออกด้วย ก็จะได้ loop ที่วนไม่จบ:
 
 ```go
 package main
@@ -277,13 +277,13 @@ func main() {
 }
 ```
 
-กด Ctrl-C เพื่อหยุด (และถ้ารันบน The Go Playground จะถูกตัดหลังไม่กี่วินาทีเพราะเป็น shared resource)
+กด Ctrl-C เพื่อหยุด (ถ้ารันบน The Go Playground โปรแกรมจะถูกตัดหลังไม่กี่วินาทีเพราะเป็น shared resource)
 
 ### break และ continue
 
-`break` ออกจาก loop ทันที ใช้ได้กับ for ทุกแบบไม่ใช่แค่ infinite for ส่วน `continue` ข้าม body ที่เหลือไป iteration ถัดไป ทางเทคนิคไม่จำเป็นต้องมี แต่ช่วยให้โค้ดอ่านง่ายขึ้นมาก
+`break` ออกจาก loop ทันที ใช้ได้กับ for ทุกแบบไม่ใช่แค่ infinite for ส่วน `continue` ข้าม body ที่เหลือไป iteration ถัดไป ทั้งสองคำสั่งไม่จำเป็นเสมอไป แต่ช่วยให้โค้ดอ่านง่ายขึ้นมาก
 
-Go สนับสนุน **if body สั้น ๆ ชิดซ้ายมากที่สุด** เพราะ nested code อ่านยาก เทียบ FizzBuzz ที่ใช้ `continue` ให้เงื่อนไขเรียงชิดซ้าย:
+Go สนับสนุน **if body ที่สั้นและชิดซ้าย** เพราะ nested code อ่านยาก ลองดู FizzBuzz ที่ใช้ `continue` ทำให้เงื่อนไขเรียงชิดซ้าย:
 
 ```go
 for i := 1; i <= 100; i++ {
@@ -320,7 +320,7 @@ for i := 1; i <= 100; i++ {
 ---
 ## Step 5: `for-range` — วนทุก element ของ compound type
 
-รูปแบบที่สี่ใช้วน element ของ built-in types บางตัว ใช้ได้กับ string, array, slice, map (และ channel ซึ่งจะเจอในตอนเรื่อง concurrency) — **เฉพาะ built-in compound types และ user-defined types ที่สร้างบนพวกนี้**:
+รูปแบบที่สี่ใช้วน element ของ built-in types บางตัว ใช้ได้กับ string, array, slice, map (และ channel ซึ่งจะเจอในตอนเรื่อง concurrency) — **เฉพาะ built-in compound types และ user-defined types ที่มี underlying type เป็นพวกนี้**:
 
 ```go
 package main
@@ -335,7 +335,7 @@ func main() {
 }
 ```
 
-จุดเด่นคือได้ **สอง loop variable**: ตัวแรกคือตำแหน่ง (index/key) ตัวที่สองคือค่า ณ ตำแหน่งนั้น ชื่อ idiomatic ขึ้นกับสิ่งที่วน — array/slice/string ใช้ `i`, map ใช้ `k`, ค่ามักใช้ `v`
+จุดเด่นคือได้ **loop variable สองตัว**: ตัวแรกคือตำแหน่ง (index/key) ตัวที่สองคือค่า ณ ตำแหน่งนั้น ชื่อ idiomatic ขึ้นกับสิ่งที่วน — array/slice/string ใช้ `i`, map ใช้ `k`, ค่ามักใช้ `v`
 
 ถ้า **ไม่ต้องการตัวแรก** ใช้ `_` แทน (Go บังคับให้เข้าถึงตัวแปรที่ declare ทุกตัว):
 
@@ -345,20 +345,20 @@ for _, v := range evenVals {
 }
 ```
 
-ถ้าต้องการ **key แต่ไม่เอา value** ให้ละตัวที่สองทิ้งได้เลย: `for k := range uniqueNames` เหตุผลที่พบบ่อยคือใช้ map เป็น set ส่วนการละ value ตอนวน array/slice นั้นหายาก — ถ้าเจอตัวเองทำแบบนี้กับ array/slice มีโอกาสสูงว่าเลือก data structure ผิดและควร refactor
+ถ้าต้องการ **key แต่ไม่เอา value** ให้ละตัวที่สองทิ้งได้เลย: `for k := range uniqueNames` เหตุผลที่พบบ่อยคือใช้ map เป็น set ส่วนการละ value ตอนวน array/slice นั้นหายาก ถ้าเจอตัวเองทำแบบนี้กับ array/slice มีโอกาสสูงว่าเลือก data structure ผิดและควร refactor
 
 ### วน map — ลำดับไม่คงที่ และนั่นคือความตั้งใจ
 
-การวน map ด้วย for-range มีพฤติกรรมพิเศษ: **ลำดับ key/value แตกต่างกันในแต่ละครั้งที่วน** ลองวน map เดิมสามรอบดู จะได้ลำดับต่างกันทุกครั้ง นี่คือ **security feature** — ใน Go รุ่นเก่า ลำดับ iteration มักจะ (แต่ไม่เสมอ) เหมือนเดิมถ้า insert items ชุดเดิม ซึ่งก่อให้เกิดสองปัญหา: คนเขียนโค้ดสมมติว่าลำดับคงที่แล้วโค้ดพังในเวลาแปลก ๆ และถ้า map hash items ไปค่าเดิมเสมอ จะโดน attack ชื่อ **Hash DoS** ที่ส่งข้อมูลให้ key hash ลง bucket เดียวกันทั้งหมดจน server ช้า
+การวน map ด้วย for-range มีพฤติกรรมพิเศษ: **Go ไม่รับประกันลำดับของ key/value** และลำดับที่ได้อาจต่างกันในแต่ละครั้งที่วน อย่าเขียนโค้ดที่พึ่งพาลำดับนี้ นี่คือ **security feature** — ใน Go รุ่นเก่า ลำดับ iteration มักจะ (แต่ไม่เสมอ) เหมือนเดิมถ้า insert items ชุดเดิม ซึ่งก่อให้เกิดสองปัญหา: คนเขียนโค้ดสมมติว่าลำดับคงที่แล้วโค้ดพังในเวลาแปลก ๆ และถ้า map hash items ไปค่าเดิมเสมอ ก็อาจโดน attack ชื่อ **Hash DoS** ที่ส่งข้อมูลให้ key hash ลง bucket เดียวกันทั้งหมดจน server ช้า
 
-Go team แก้สองอย่าง: ปรับ hash algorithm ของ map ให้ใส่ random number ที่ generate ทุกครั้งที่สร้าง map variable และทำให้ลำดับ for-range iteration บน map แกว่งเล็กน้อยทุกรอบ ทั้งสองทำให้ Hash DoS ยากขึ้นมาก
+Go team แก้ปัญหานี้ด้วยการใส่ random number ใน hash algorithm ทุกครั้งที่สร้าง map variable ทำให้ลำดับจาก for-range ไม่ควรถูกนำไปคาดหวัง และทำให้ Hash DoS ยากขึ้นมาก
 
 > [!NOTE]
-> มีข้อยกเว้นหนึ่ง: เพื่อให้ debug/log map ง่าย formatting functions (เช่น `fmt.Println`) จะพิมพ์ map โดยเรียง key จากน้อยไปมากเสมอ
+> มีข้อยกเว้นหนึ่ง: ใน map ที่ key เป็น type พื้นฐาน เช่น `string` หรือ `int`, function สำหรับ format (เช่น `fmt.Println`) จะพิมพ์ map โดยเรียง key จากน้อยไปมาก
 
 ### วน string — ได้ rune ไม่ใช่ byte
 
-การวน string ด้วย for-range ก็มีพฤติกรรมพิเศษเช่นกัน — มัน **วนบน rune ไม่ใช่ byte** เมื่อเจอ multibyte rune มันแปลง UTF-8 เป็นเลข 32-bit ตัวเดียวแล้ว assign ให้ value ส่วน offset เพิ่มตามจำนวน byte ของ rune นั้น:
+การวน string ด้วย for-range ก็มีพฤติกรรมพิเศษเช่นกัน — มัน **วนบน rune ไม่ใช่ byte** เมื่อเจอ multibyte rune มัน decode UTF-8 เป็นค่า 32-bit ตัวเดียวแล้วเก็บไว้ใน value ส่วน offset จะเพิ่มตามจำนวน byte ของ rune นั้น:
 
 ```go
 package main
@@ -376,14 +376,14 @@ func main() {
 }
 ```
 
-เมื่อวน `"apple_π!"` index จะ **ข้ามเลข 7** — เพราะ `π` กิน 2 byte ตำแหน่งถัดไปจึงเป็น 8 (ไม่ใช่ 7) และที่ตำแหน่ง 6 ได้ค่า `960` (`π`) ซึ่งใหญ่เกิน byte ถ้าเจอ byte ที่ไม่ใช่ UTF-8 ที่ valid จะคืน Unicode replacement character (`0xfffd`)
+เมื่อวน `"apple_π!"` index จะ **ข้ามเลข 7** เพราะ `π` กิน 2 byte ตำแหน่งถัดไปจึงเป็น 8 (ไม่ใช่ 7) ที่ตำแหน่ง 6 ได้ค่า `960` (`π`) ซึ่งใหญ่เกิน byte และถ้าเจอลำดับ byte ที่ไม่ใช่ UTF-8 ที่ถูกต้อง จะคืน Unicode replacement character (`0xfffd`)
 
 > [!IMPORTANT]
 > ใช้ for-range loop เพื่อเข้าถึง rune ใน string ตามลำดับ — ตัวแปรแรกคือจำนวน byte จากต้น string แต่ type ของตัวแปรที่สองคือ `rune`
 
 ### ค่าใน for-range เป็น copy
 
-ทุก iteration for-range **copy** ค่าจาก compound type ไปยัง value variable การแก้ value variable **ไม่กระทบ** ค่าใน compound type ต้นทาง:
+ทุก iteration ของ for-range จะ **copy** ค่าจาก compound type ไปยัง value variable การแก้ value variable **ไม่กระทบ** ค่าใน compound type ต้นทาง:
 
 ```go
 package main
@@ -411,7 +411,7 @@ func main() {
 | วนตามค่าที่คำนวณ (เหมือน `while`) | condition-only |
 | iterator pattern / loop ที่ต้องมี break-return | infinite for |
 
-ส่วนใหญ่จะใช้ **for-range** เป็นวิธีที่ดีที่สุดในการเดิน string, slice, map และ channel เทียบโค้ดวน element ที่สองถึงรองสุดท้าย — complete for สั้นและเข้าใจง่ายกว่า for-range ที่ต้องใส่ `if` + `continue` + `break`:
+ส่วนใหญ่จะใช้ **for-range** เป็นวิธีที่ดีที่สุดในการวน string, slice, map และ channel แต่ถ้าต้องวน element ตั้งแต่ตัวที่สองถึงรองสุดท้าย complete for จะสั้นและเข้าใจง่ายกว่า for-range ที่ต้องใส่ `if` + `continue` + `break`:
 
 ```go
 evenVals := []int{2, 4, 6, 8, 10}
@@ -421,7 +421,7 @@ for i := 1; i < len(evenVals)-1; i++ {
 ```
 
 > [!CAUTION]
-> pattern complete for แบบข้างบนใช้ข้ามต้น string ไม่ได้ เพราะ standard for ไม่ handle multibyte character — ถ้าจะข้าม rune บางตัวใน string ต้องใช้ for-range เพื่อให้ process rune ถูกต้อง และ infinite for ควรมี `break` หรือ `return` ใน body เสมอ เพราะแทบไม่มีงานจริงที่อยากวนตลอดกาล
+> pattern complete for แบบข้างบนใช้ข้ามต้น string ไม่ได้ เพราะ standard for ไม่รองรับ multibyte character — ถ้าจะข้าม rune บางตัวใน string ต้องใช้ for-range เพื่อให้ process rune ถูกต้อง และ infinite for ควรมี `break` หรือ `return` ใน body เสมอ เพราะแทบไม่มีงานจริงที่อยากวนตลอดกาล
 
 ---
 ## Step 6: Label — ตอนที่ต้อง break/continue loop ชั้นนอก
@@ -448,7 +448,7 @@ outer:
 }
 ```
 
-`go fmt` จะ indent label `outer` ให้อยู่ระดับเดียวกับ brace ของ block เพื่อให้สังเกตง่าย nested for พร้อม label นั้นหายาก ส่วนใหญ่ใช้ implement algorithm ที่ต้องข้ามไป iteration ชั้นนอกเมื่อเจอเงื่อนไขไม่ผ่านระหว่างวน inner values
+`go fmt` จะจัด indent ของ label `outer` ให้อยู่ระดับเดียวกับ brace ของ block ทำให้สังเกตโครงสร้างได้ง่าย nested for พร้อม label นั้นหายาก ส่วนใหญ่ใช้กับ algorithm ที่ต้องข้ามไป iteration ชั้นนอกเมื่อเจอเงื่อนไขไม่ผ่านระหว่างวน inner values
 
 ---
 ## Step 7: `switch` — ไม่ fall through โดย default
@@ -477,19 +477,19 @@ func main() {
 }
 ```
 
-ประเด็นสำคัญของ switch ใน Go:
+ประเด็นสำคัญของ switch ใน Go มีดังนี้:
 
-- **ไม่ใส่วงเล็บ** รอบค่าที่เปรียบเทียบ และ declare ตัวแปรที่ scope กับทุก branch ได้ (เช่น `size`)
+- **ไม่ใส่วงเล็บ** รอบค่าที่เปรียบเทียบ และ declare ตัวแปรที่มี scope ครอบคลุมทุก branch ได้ (เช่น `size`)
 - ทุก `case`/`default` อยู่ใน `{}` ของ switch แต่ **ไม่ใส่ `{}` รอบเนื้อ case** — มีหลายบรรทัดใน case ได้ ถือเป็น block เดียวกัน ตัวแปรที่ declare ใน case เห็นเฉพาะใน case นั้น
 - **ไม่ fall through โดย default** — ไม่ต้องใส่ `break` ท้าย case
 - หลายค่าที่ trigger logic เดียวกันให้คั่นด้วย comma (`case 1, 2, 3, 4`)
 - **empty case = ไม่ทำอะไร** (เช่น `case 6, 7, 8, 9:` ทำให้ `octopus`/`gopher` ไม่พิมพ์อะไร)
-- switch ได้บน **ทุก type ที่เทียบด้วย `==` ได้** — ทุก built-in type ยกเว้น slice, map, channel, function และ struct ที่มี field ของชนิดเหล่านี้
+- switch ใช้กับ **ทุก type ที่เทียบด้วย `==` ได้** — ทุก built-in type ยกเว้น slice, map, channel, function และ struct ที่มี field ของชนิดเหล่านี้
 
 > [!CAUTION]
 > Go มี keyword `fallthrough` ให้ case หนึ่งไหลต่อไป case ถัดไป แต่ **คิดให้ดีก่อนใช้** ถ้าพบว่าต้องใช้ `fallthrough` ลอง restructure logic เพื่อตัด dependency ระหว่าง case ออก
 
-และถ้ามี switch อยู่ใน for แล้วอยาก break ออกจาก **for** ต้องใส่ label บน for แล้วใช้ชื่อ label กับ break ไม่งั้น Go จะถือว่า break ออกจาก **case**:
+และถ้ามี switch อยู่ใน for แล้วอยาก break ออกจาก **for** ต้องใส่ label บน for แล้วใช้ชื่อ label กับ break ไม่เช่นนั้น Go จะถือว่า break ออกจาก **switch**:
 
 ```go
 loop:
@@ -506,7 +506,7 @@ loop:
 
 ### Blank switch — switch ที่ไม่ระบุค่าที่เปรียบเทียบ
 
-เช่นเดียวกับที่ละส่วนของ for ได้ คุณเขียน switch ที่ **ไม่ระบุค่าที่เปรียบเทียบ** ได้ เรียก **blank switch** — switch ปกติเช็คได้แค่ความเท่ากัน แต่ blank switch ใช้ **boolean comparison อะไรก็ได้** ในแต่ละ case:
+เช่นเดียวกับที่ละส่วนของ for ได้ คุณเขียน switch ที่ **ไม่ระบุค่าที่เปรียบเทียบ** ได้ เรียก **blank switch** — switch ปกติเช็คได้แค่ความเท่ากัน แต่ blank switch ใช้ **boolean condition อะไรก็ได้** ในแต่ละ case:
 
 ```go
 package main
@@ -533,7 +533,7 @@ func main() {
 
 ### เลือกใช้ if หรือ switch
 
-ในแง่ฟังก์ชัน if/else chain กับ blank switch แทบไม่ต่างกัน — ทั้งคู่ให้เปรียบเทียบเป็นชุด แต่ **switch (แม้ blank switch) สื่อว่ามีความสัมพันธ์ระหว่างค่า/การเปรียบเทียบในแต่ละ case** เขียน FizzBuzz ด้วย blank switch จะอ่านง่ายสุด ไม่ต้องมี `continue` และ default behavior ชัดเจนผ่าน `default`:
+ในแง่การทำงาน if/else chain กับ blank switch แทบไม่ต่างกัน — ทั้งคู่ให้เปรียบเทียบเงื่อนไขเป็นชุด แต่ **switch (แม้ blank switch) สื่อว่าค่า/การเปรียบเทียบในแต่ละ case มีความสัมพันธ์กัน** เขียน FizzBuzz ด้วย blank switch จะอ่านง่าย ไม่ต้องมี `continue` และมี default behavior ชัดเจนผ่าน `default`:
 
 ```go
 for i := 1; i <= 100; i++ {
@@ -556,9 +556,9 @@ for i := 1; i <= 100; i++ {
 ---
 ## Step 8: `goto` — มีอยู่จริงแต่ไม่ควรใช้
 
-Go มี control statement ตัวที่สี่คือ `goto` แต่คุณคงแทบไม่ได้ใช้ ตั้งแต่ Edsger Dijkstra เขียน "Go To Statement Considered Harmful" (1968) `goto` ก็เป็นแกะดำของวงการ เพราะดั้งเดิมมันกระโดดไปไหนก็ได้ในโปรแกรม — เข้า/ออก loop, ข้าม variable definition, เข้ากลางชุด statement ใน `if` — ทำให้เข้าใจโปรแกรมยาก ภาษาสมัยใหม่ส่วนใหญ่จึงไม่มี
+Go มี control statement ตัวที่สี่คือ `goto` แต่คุณคงแทบไม่ได้ใช้ ตั้งแต่ Edsger Dijkstra เขียน "Go To Statement Considered Harmful" (1968) `goto` ก็เป็นแกะดำของวงการ เพราะเดิมทีมันกระโดดไปไหนก็ได้ในโปรแกรม — เข้า/ออก loop, ข้าม variable definition หรือกระโดดเข้ากลางชุด statement ใน `if` — ทำให้เข้าใจโปรแกรมยาก ภาษาสมัยใหม่ส่วนใหญ่จึงไม่มี
 
-แต่ Go มี `goto` พร้อม **ข้อจำกัดที่ทำให้เข้ากับ structured programming ได้ดีขึ้น**: `goto` ระบุ labeled line แล้วกระโดดไป แต่ **ห้ามกระโดดข้าม variable declaration** และ **ห้ามกระโดดเข้า inner หรือ parallel block**:
+แต่ Go มี `goto` พร้อม **ข้อจำกัดที่ทำให้เข้ากับ structured programming ได้ดีขึ้น**: `goto` ระบุบรรทัดที่ติด label แล้วกระโดดไป แต่ **ห้ามกระโดดข้าม variable declaration** และ **ห้ามกระโดดเข้า inner หรือ parallel block**:
 
 ```go
 package main
@@ -585,7 +585,7 @@ skip:
 // goto inner jumps into block starting at ...
 ```
 
-แล้วควรใช้ `goto` ทำอะไร? **ส่วนใหญ่ไม่ควรใช้** labeled `break`/`continue` จัดการการกระโดดออก/ข้าม nested loop ได้แล้ว แต่มี valid use case หนึ่ง: มี logic ที่ไม่อยากรันกลางทาง แต่อยากรันตอนจบ function:
+แล้วควรใช้ `goto` ทำอะไร? **ส่วนใหญ่ไม่ควรใช้** labeled `break`/`continue` จัดการการกระโดดออก/ข้าม nested loop ได้แล้ว แต่มี valid use case หนึ่ง: มี logic ที่ไม่อยากให้รันระหว่างทาง แต่อยากให้รันตอนจบ function:
 
 ```go
 package main
@@ -610,7 +610,7 @@ done:
 }
 ```
 
-ทางเลือกแทน `goto` คือ boolean flag หรือ duplicate โค้ดซับซ้อนหลัง loop — แต่ทั้งคู่มีข้อเสีย boolean flag ก็คือ `goto` แบบ verbose กว่า ส่วน duplicate โค้ดทำให้ maintain ยาก ตัวอย่างจริงดูได้ที่ method `floatBits` ใน `atof.go` ของ package `strconv` ใน standard library ซึ่งจบด้วย label `overflow:` และ `out:` ที่หลายเงื่อนไข `goto` เข้าหา
+ทางเลือกแทน `goto` คือ boolean flag หรือการ duplicate โค้ดหลัง loop ทั้งคู่มีข้อเสีย: boolean flag ทำให้โค้ดยาวเหมือน `goto` ที่เขียนอ้อมกว่า ส่วนการ duplicate โค้ดทำให้ maintain ยาก ตัวอย่างจริงดูได้ที่ method `floatBits` ใน `atof.go` ของ package `strconv` ใน standard library ซึ่งจบด้วย label `overflow:` และ `out:` ที่หลายเงื่อนไข `goto` เข้าหา
 
 > [!IMPORTANT]
 > พยายามอย่างยิ่งที่จะเลี่ยง `goto` แต่ในสถานการณ์ที่หายากซึ่งมันทำให้โค้ดอ่านง่ายขึ้นจริง มันก็เป็นทางเลือกหนึ่ง
@@ -637,12 +637,12 @@ go build ./...
 
 - **เผลอ shadow ด้วย `:=`** — `:=` reuse เฉพาะตัวแปรใน block ปัจจุบัน ตัวแปรชื่อซ้ำจาก scope นอกจะถูกสร้างใหม่/บัง ตรวจให้ดีว่าทางซ้ายมีตัวแปรนอก scope หรือไม่
 - **Shadow package name** — ตั้งตัวแปรชื่อ `fmt` หรือ package อื่น ทำให้ใช้ package นั้นไม่ได้ตลอด scope ที่เหลือ
-- **Redefine identifier ใน universe block** — `true := 10` compile ผ่านแต่สร้างพฤติกรรมประหลาด
+- **Redefine identifier ใน universe block** — `true := 10` compile ผ่านแต่สร้างพฤติกรรมที่ชวนสับสน
 - **พึ่งลำดับ key ของ map** — ลำดับ for-range บน map แกว่งทุกรอบโดยตั้งใจ อย่าเขียนโค้ดที่สมมติว่าคงที่
 - **คิดว่า standard for ข้าม rune ใน string ได้** — มันนับ byte ทำให้ multibyte character เพี้ยน ต้องใช้ for-range
 - **แก้ value variable ใน for-range แล้วคาดว่า source เปลี่ยน** — value เป็น copy ต้นทางไม่เปลี่ยน
 - **`break` ใน switch-in-for** — break ออกแค่ case ไม่ใช่ for ต้องใส่ label ที่ for แล้ว `break label`
-- **ใส่ simple statement แปลก ๆ ก่อน condition ของ if** — ทำได้แต่สับสน ใช้เพื่อ define ตัวแปร scope กับ if/else เท่านั้น
+- **ใส่ simple statement แปลก ๆ ก่อน condition ของ if** — ทำได้แต่สับสน ใช้เพื่อประกาศตัวแปรที่มี scope ครอบคลุม if/else เท่านั้น
 
 ---
 ## สรุป
@@ -665,10 +665,10 @@ go build ./...
 
 - **Block** — ขอบเขตที่เกิด declaration; package/file/function block และทุกคู่ `{}`
 - **Package block** — block ที่บรรจุ identifier ที่ declare นอก function ทั้งหมด
-- **File block** — block ที่บรรจุชื่อ package จาก `import` (valid เฉพาะไฟล์นั้น)
+- **File block** — block ที่บรรจุชื่อ package จาก `import` (ใช้ได้เฉพาะไฟล์นั้น)
 - **Universe block** — block นอกสุดที่บรรจุ predeclared identifiers (`int`, `true`, `nil`, `make`, ...)
 - **Shadowing** — การ declare identifier ชื่อซ้ำใน block ชั้นใน บังตัวที่อยู่ชั้นนอก
-- **Predeclared identifier** — ชื่อที่ define ใน universe block ไม่ใช่ keyword (เช่น built-in types/constants/functions)
+- **Predeclared identifier** — ชื่อที่ประกาศไว้ใน universe block และไม่ใช่ keyword (เช่น built-in types/constants/functions)
 - **for-range** — รูปแบบ for ที่วน element ของ compound type ให้ index/key + value (value เป็น copy)
 - **Hash DoS** — attack ที่ส่งข้อมูลให้ key hash ลง bucket เดียวกันทั้งหมดเพื่อทำให้ server ช้า; Go กันด้วย random hash seed + ลำดับ iteration ที่แกว่ง
 - **Blank switch** — switch ที่ไม่ระบุค่าเปรียบเทียบ ใช้ boolean comparison ในแต่ละ case ได้

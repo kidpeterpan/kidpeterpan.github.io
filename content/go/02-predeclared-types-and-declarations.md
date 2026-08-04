@@ -10,7 +10,7 @@ tags = ['programming', 'go', 'tutorial']
 
 ตอนที่ 2 เราจะเริ่มเขียน Go ที่มีข้อมูลจริงมากขึ้น หลังจากตอนที่แล้วเรามี module และ workflow `fmt → vet → build` แล้ว ตอนนี้เราจะเรียนรู้ว่า Go เก็บข้อมูลแต่ละแบบอย่างไร และควรประกาศตัวแปรแบบไหนให้โค้ดสื่อเจตนาได้ชัดเจน
 
-สิ่งที่ได้ตอนจบบทนี้:
+สิ่งที่จะได้ตอนจบบทนี้:
 
 - เข้าใจ `bool`, integer, float, complex, string และ rune ว่าควรใช้แบบไหนกับงานแบบใด
 - แปลง type ได้อย่างถูกต้องเมื่อ type ไม่ตรงกัน
@@ -31,7 +31,7 @@ graph TD
 
 ## วิธีทำตามบทนี้
 
-เราจะใช้ project แยกชื่อ `go_types` เพื่อให้ทดลองโค้ดได้โดยไม่กระทบ project จากตอนที่ 1 หากมี project นี้อยู่แล้ว ให้ข้ามคำสั่งสร้างโฟลเดอร์ไปได้เลย
+เราจะสร้าง project ชื่อ `go_types` แยกจาก project ตอนที่ 1 เพื่อให้ทดลองโค้ดได้โดยไม่กระทบกัน หากมี project นี้อยู่แล้ว ให้ข้ามคำสั่งสร้างโฟลเดอร์ไปได้เลย
 
 ```sh
 mkdir go_types
@@ -47,12 +47,12 @@ go run .
 ```
 
 > [!NOTE]
-> บางตัวอย่างตั้งใจเขียนให้ compile ไม่ผ่าน เพื่อแสดงกฎของ Go ตัวอย่างเหล่านี้จะกำกับด้วย `// ❌` พร้อมคำอธิบาย — อย่าวางรวมกับโปรแกรมที่ต้องการรัน
+> บางตัวอย่างตั้งใจเขียนให้ compile ไม่ผ่าน เพื่อแสดงกฎของ Go ตัวอย่างเหล่านี้จะกำกับด้วย `// ❌` พร้อมคำอธิบาย — อย่าวางตัวอย่างเหล่านี้รวมกับโปรแกรมที่ต้องการรัน
 
 ---
 ## Step 1: เริ่มจาก `zero value`
 
-Go กำหนดค่าเริ่มต้นให้ตัวแปรที่ประกาศแล้วแต่ยังไม่ได้กำหนดค่าเอง ค่าเริ่มต้นนี้เรียกว่า **zero value** และแตกต่างกันตาม type:
+Go กำหนดค่าเริ่มต้นให้ตัวแปรที่ประกาศแล้วแต่ยังไม่ได้กำหนดค่า ค่าเริ่มต้นนี้เรียกว่า **zero value** และแตกต่างกันตาม type:
 
 | Type | Zero value |
 |---|---|
@@ -91,7 +91,7 @@ go run .
 ok=false count=0 price=0 message=""
 ```
 
-ข้อดีของ zero value คือเราไม่ต้องเดาว่าตัวแปรที่ยังไม่ได้กำหนดค่าจะมีค่าอะไร จึงลดปัญหาตัวแปรที่มีค่าขยะซึ่งพบได้ในบางภาษา
+ข้อดีของ zero value คือเราไม่ต้องเดาว่าตัวแปรที่ยังไม่ได้กำหนดค่าจะมีค่าอะไร จึงลดปัญหาตัวแปรที่มีค่าไม่คาดหมายซึ่งพบได้ในบางภาษา
 
 ---
 ## Step 2: เข้าใจ `literal` และ `bool`
@@ -107,7 +107,7 @@ Go มี literal ที่พบบ่อยสี่ชนิด:
 | Rune literal | `'A'`, `'\n'` | character หนึ่งตัว |
 | String literal | `"hello"`, `` `raw string` `` | ข้อความ |
 
-ยังมี literal ชนิดที่ห้าคือ imaginary literal สำหรับ complex number ซึ่งจะลงท้ายด้วย `i`
+นอกจากนี้ยังมี literal ชนิดที่ห้าคือ imaginary literal สำหรับ complex number ซึ่งจะลงท้ายด้วย `i`
 
 ### ทดลอง boolean
 
@@ -166,7 +166,7 @@ Go มี integer ทั้งแบบ signed และ unsigned:
 
 ### ชื่อพิเศษที่ควรรู้
 
-- `byte` เป็น alias ของ `uint8` ใช้แทนกันได้ เมื่อข้อมูลหมายถึง byte ในโค้ด Go มักใช้ `byte` เพราะสื่อความหมายชัดกว่า `uint8`
+- `byte` เป็น alias ของ `uint8` จึงใช้แทนกันได้ เมื่อข้อมูลหมายถึง byte ในโค้ด Go มักใช้ `byte` เพราะสื่อความหมายชัดกว่า `uint8`
 - `int` เป็น signed integer ที่มีขนาด 32 หรือ 64 bit ตาม platform เป็น type ที่ควรใช้เป็นค่าเริ่มต้นสำหรับจำนวนเต็มทั่วไป
 - `uint` คล้าย `int` แต่เป็น unsigned จึงมีค่าเป็น 0 หรือค่าบวกเท่านั้น
 - `rune` เป็น alias ของ `int32` และใช้แทน character
@@ -212,7 +212,7 @@ fmt.Println(int64(a) + b)
 ---
 ## Step 4: ทำความเข้าใจ integer operator
 
-integer รองรับ operator หลักดังนี้:
+`integer` รองรับ operator หลักดังนี้:
 
 | กลุ่ม | Operator | ความหมาย |
 |---|---|---|
@@ -260,7 +260,7 @@ Go มี floating-point สองชนิด:
 - `float32` — precision ประมาณ 6–7 หลัก
 - `float64` — precision ประมาณ 15–16 หลัก และเป็น default type ของ float literal
 
-ถ้าไม่ได้จำเป็นต้องเข้ากับ format เดิม ให้ใช้ `float64` เป็นค่าเริ่มต้น:
+ถ้าไม่ได้จำเป็นต้องตรงกับ format เดิม ให้ใช้ `float64` เป็นค่าเริ่มต้น:
 
 ```go
 package main
@@ -275,7 +275,7 @@ func main() {
 }
 ```
 
-floating-point ไม่สามารถแทนค่าทศนิยมได้อย่าง exact จึงไม่ควรใช้แทนเงินหรือค่าที่ต้องการความแม่นยำสูง ใช้ decimal module แทน และหลีกเลี่ยงการเปรียบเทียบด้วย `==`:
+floating-point ไม่สามารถแทนค่าทศนิยมได้อย่างแม่นยำพอดี จึงไม่ควรใช้แทนเงินหรือค่าที่ต้องการความแม่นยำสูง ให้ใช้ decimal module แทน และหลีกเลี่ยงการเปรียบเทียบด้วย `==`:
 
 ```go
 package main
@@ -295,7 +295,7 @@ func main() {
 }
 ```
 
-สำหรับ float การหารด้วย 0 มีผลต่างจาก integer: nonzero/0 จะได้ `+Inf` หรือ `-Inf` ส่วน 0/0 จะได้ `NaN` และไม่มี `%` สำหรับ float
+สำหรับ `float` การหารด้วย 0 มีผลต่างจาก integer: nonzero/0 จะได้ `+Inf` หรือ `-Inf` ส่วน 0/0 จะได้ `NaN` และไม่มี `%` สำหรับ float
 
 ---
 ## Step 6: รู้จัก complex และ string/rune
@@ -328,13 +328,13 @@ func main() {
 }
 ```
 
-ถ้า argument ทั้งสองเป็น untyped constant/literal ผลลัพธ์จะเป็น untyped complex ซึ่งมี default เป็น `complex128` หากทั้งสองเป็น `float32` จะได้ `complex64` กรณีอื่นโดยทั่วไปจะได้ `complex128` ส่วน imaginary literal จะเขียนลงท้ายด้วย `i` เช่น `2.5i`
+ถ้า argument ทั้งสองเป็น untyped constant/literal ผลลัพธ์จะเป็น untyped complex ซึ่งมี default เป็น `complex128` หากทั้งสองเป็น `float32` จะได้ `complex64` กรณีอื่นโดยทั่วไปจะได้ `complex128` ส่วน imaginary literal เขียนโดยเติม `i` ต่อท้าย เช่น `2.5i`
 
-ในงานทั่วไป complex ไม่ได้ถูกใช้บ่อย หากต้องทำ numerical computing จริง ๆ ให้ดู package **Gonum** แต่ควรพิจารณาภาษาหรือ library ที่เหมาะกับงานก่อน
+ในงานทั่วไป complex ไม่ได้ถูกใช้บ่อย หากต้องทำ numerical computing จริง ๆ ลองดู package **Gonum** แต่ควรพิจารณาภาษาหรือ library ที่เหมาะกับงานก่อน
 
 ### String และ rune
 
-`string` เป็น built-in type ที่รองรับ Unicode และมี zero value เป็น empty string โดย string ใน Go เป็น immutable: assign ค่าใหม่ให้ตัวแปรได้ แต่เปลี่ยนข้อมูลภายใน string เดิมไม่ได้
+`string` เป็น built-in type ที่รองรับ Unicode และมี zero value เป็น empty string โดย string ใน Go เป็น immutable: เรา assign ค่าใหม่ให้ตัวแปรได้ แต่เปลี่ยนข้อมูลภายใน string เดิมไม่ได้
 
 ```go
 package main
@@ -349,7 +349,7 @@ func main() {
 }
 ```
 
-`rune` ใช้แทน character หนึ่งตัว และเป็น alias ของ `int32` ถ้าตัวแปรหมายถึง character ให้ใช้ `rune` ไม่ใช่ `int32` เพราะชื่อ type ช่วยสื่อเจตนา:
+`rune` ใช้แทนอักขระ (character) หนึ่งตัว และเป็น alias ของ `int32` ถ้าตัวแปรหมายถึง character ให้ใช้ `rune` ไม่ใช่ `int32` เพราะชื่อ type ช่วยสื่อเจตนา:
 
 ```go
 var firstInitial rune = 'J' // สื่อว่าค่านี้เป็น character
@@ -358,7 +358,7 @@ var firstInitial rune = 'J' // สื่อว่าค่านี้เป็�
 ---
 ## Step 7: Convert type ด้วยตัวเอง
 
-Go ไม่ทำ automatic type promotion เพื่อป้องกันผลลัพธ์ที่คาดเดาได้ยาก เมื่อ type ไม่ตรงกันต้อง convert อย่างชัดเจน:
+Go ไม่ทำ automatic type promotion เพื่อป้องกันผลลัพธ์ที่คาดเดาได้ยาก เมื่อ type ไม่ตรงกันจึงต้อง convert อย่างชัดเจน:
 
 ```go
 package main
@@ -384,7 +384,7 @@ total: 40.2
 whole: 40
 ```
 
-การ convert `float64` เป็น `int` จะตัดส่วนทศนิยม ไม่ได้ปัดเศษ จึงควรตรวจสอบว่าการตัดเศษตรงกับความต้องการของงานหรือไม่
+การ convert `float64` เป็น `int` จะตัดทิ้งส่วนทศนิยม ไม่ได้ปัดเศษ จึงควรตรวจสอบว่าการตัดเศษตรงกับความต้องการของงานหรือไม่
 
 ---
 ## Step 8: ทำความเข้าใจว่า literal เป็น untyped
@@ -406,7 +406,7 @@ var b int64 = 20
 var total = int64(a) + b
 ```
 
-untyped literal มีขอบเขตเช่นกัน:
+untyped literal ก็มีข้อจำกัดเช่นกัน:
 
 - assign string literal ให้ numeric variable ไม่ได้
 - assign float literal ให้ `int` ไม่ได้ถ้าค่ามีส่วนทศนิยม
@@ -432,7 +432,7 @@ Go มีวิธีประกาศตัวแปรสองแบบท�
 
 ### ใช้ `:=` ใน function
 
-`:=` หรือ short declaration ใช้ได้เฉพาะใน function และสามารถ assign ให้ตัวแปรเดิมได้ หากทางซ้ายมีตัวแปรใหม่อย่างน้อยหนึ่งตัว:
+`:=` หรือ short declaration ใช้ได้เฉพาะใน function และสามารถ reuse ตัวแปรเดิมได้ หากทางซ้ายมีตัวแปรใหม่อย่างน้อยหนึ่งตัว:
 
 ```go
 func main() {
@@ -455,14 +455,14 @@ var appName = "go-types" // ✅ package level
 1. ใน function ใช้ `:=` เป็นหลัก
 2. ใช้ `var x int` เมื่อจงใจใช้ zero value
 3. ใช้ `var x byte = 20` เมื่อต้องการ type เฉพาะ
-4. ใช้ `var` เมื่อกลัวว่า `:=` จะสร้างตัวแปรใหม่โดยไม่ตั้งใจ (shadowing)
+4. ใช้ `var` เมื่อกังวลว่า `:=` จะสร้างตัวแปรใหม่โดยไม่ตั้งใจ (shadowing)
 
 หลีกเลี่ยงตัวแปร mutable ที่ package level เพราะทำให้ติดตาม data flow ได้ยาก ควรประกาศ package-level variable เฉพาะค่าที่ effectively immutable เท่านั้น
 
 ---
 ## Step 10: ใช้ `const` กับค่าที่ compile ได้
 
-`const` ใช้ตั้งชื่อให้กับค่าที่ compiler คำนวณได้ตอน compile time ไม่ใช่ immutable variable ที่รับค่า runtime ได้:
+`const` ใช้ตั้งชื่อให้กับค่าที่ compiler คำนวณได้ตั้งแต่ compile time ไม่ใช่ immutable variable ที่รับค่า runtime ได้:
 
 ```go
 const maxRetries = 3
@@ -474,7 +474,7 @@ const (
 )
 ```
 
-ค่าที่ใช้กับ `const` ได้ ได้แก่:
+ค่าที่ใช้กับ `const` ได้มีดังนี้:
 
 - numeric literal
 - `true` และ `false`
@@ -522,7 +522,7 @@ Go ไม่มี immutable array, slice, map หรือ struct แบบส�
 ---
 ## Step 11: เข้าใจกฎ unused variable
 
-Go บังคับว่า local variable ที่ประกาศแล้วต้องถูกอ่านอย่างน้อยหนึ่งครั้ง:
+Go บังคับว่า local variable ที่ประกาศแล้วต้องถูกใช้งานอย่างน้อยหนึ่งครั้ง:
 
 ```go
 func main() {
@@ -554,7 +554,7 @@ const unusedConstant = "ยังไม่ได้ใช้" // ✅ compile ไ
 ---
 ## Step 12: ตั้งชื่อให้สื่อความหมาย
 
-Go มีกฎพื้นฐานว่าชื่อต้องขึ้นต้นด้วยตัวอักษรหรือ underscore จากนั้นจึงตามด้วยตัวเลข, underscore หรือตัวอักษรได้ Unicode character ที่เป็น letter หรือ digit ก็ใช้ได้ แต่ไม่ควรใช้ชื่อที่มองด้วยตาแล้วคล้ายกัน:
+Go มีกฎพื้นฐานว่าชื่อต้องขึ้นต้นด้วยตัวอักษรหรือ underscore หลังจากนั้นจึงใช้ตัวเลข, underscore หรือตัวอักษรได้ Unicode character ที่เป็น letter หรือ digit ก็ใช้ได้ แต่ไม่ควรใช้ชื่อที่มองด้วยตาแล้วคล้ายกัน:
 
 ```go
 ａ := "Unicode U+FF41"
@@ -619,7 +619,7 @@ go build ./...
 7. ✅ ใช้ `const` เฉพาะค่าที่คำนวณได้ตอน compile time
 8. ✅ เข้าใจกฎ unused local variable และแนวทางตั้งชื่อแบบ idiomatic Go
 
-หลักสำคัญของบทนี้คือ **เขียนโค้ดให้ชัดเจนถึงเจตนา** ความ verbose ที่เพิ่มขึ้นจากการ convert หรือการประกาศ type อย่างชัดเจน เป็นราคาที่ Go ยอมจ่ายเพื่อให้โค้ดอ่านและตรวจสอบได้ง่าย
+หลักสำคัญของบทนี้คือ **เขียนโค้ดให้สื่อเจตนาอย่างชัดเจน** ความยาวที่เพิ่มขึ้นจากการ convert หรือการประกาศ type อย่างชัดเจน เป็นราคาที่ Go ยอมจ่ายเพื่อให้โค้ดอ่านและตรวจสอบได้ง่าย
 
 > *ในตอนต่อไปเราจะเริ่มจาก composite types ของ Go ได้แก่ array, slice, map และ struct*
 

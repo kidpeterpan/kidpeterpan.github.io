@@ -12,7 +12,7 @@ tags = ['programming', 'go', 'tutorial']
 
 ถ้าตอนที่ 2 สอนให้เราเลือกชนิดของ “ค่าเดี่ยว” เช่น `int`, `string` และ `bool` ตอนนี้เราจะเริ่มจัดกลุ่มค่าเหล่านั้นเป็นข้อมูลที่ใช้งานจริง เช่น รายการสินค้า, คะแนนสอบ, ตารางราคา และข้อมูลผู้ใช้
 
-สิ่งที่ได้ตอนจบบทนี้:
+สิ่งที่จะได้ตอนจบบทนี้:
 
 - เลือกใช้ `array`, `slice`, `map` และ `struct` ได้ถูกสถานการณ์
 - ใช้ `len`, `cap`, `append`, `make`, `copy`, `clear` ได้อย่างปลอดภัย
@@ -35,7 +35,7 @@ graph TD
 ---
 ## วิธีทำตามบทนี้
 
-เราจะสร้าง project แยกชื่อ `go_composite_types` เพื่อทดลองโดยไม่กระทบ project จากตอนก่อน เปิด terminal แล้วรัน:
+เราจะสร้าง project ชื่อ `go_composite_types` แยกจาก project ตอนก่อน เพื่อทดลองโค้ดโดยไม่กระทบกัน เปิด terminal แล้วรันคำสั่งนี้:
 
 ```sh
 mkdir go_composite_types
@@ -122,7 +122,7 @@ var large [4]int
 // small = large // ❌ compile ไม่ผ่าน: คนละ type
 ```
 
-ใช้ array เมื่อขนาดถูกกำหนดตายตัวจริง ๆ เช่น checksum ที่ algorithm ระบุว่าต้องมี 32 byte ในงานทั่วไปที่จำนวนข้อมูลอาจเพิ่ม ให้ใช้ slice แทน
+ใช้ array เมื่อขนาดถูกกำหนดตายตัวจริง ๆ เช่น checksum ที่ algorithm ระบุว่าต้องมี 32 byte ในงานทั่วไปที่จำนวนข้อมูลอาจเพิ่มขึ้น ให้ใช้ slice แทน
 
 ---
 ## Step 2: ใช้ slice สำหรับลำดับข้อมูล
@@ -171,7 +171,7 @@ fmt.Println(b == nil)      // false
 
 `nil` slice ใช้กับ `len` และ `append` ได้ทันที จึงเป็นค่าเริ่มต้นที่เหมาะสมในโค้ดส่วนใหญ่
 
-slice เทียบกันด้วย `==` ไม่ได้ ยกเว้นการเทียบกับ `nil` ถ้าต้องการเทียบ element ให้ใช้ package `slices` ซึ่งมีมาตั้งแต่ Go 1.21:
+slice เปรียบเทียบกันด้วย `==` ไม่ได้ ยกเว้นการเทียบกับ `nil` ถ้าต้องการเปรียบเทียบ element ให้ใช้ package `slices` ซึ่งมีมาตั้งแต่ Go 1.21:
 
 ```go
 package main
@@ -211,7 +211,7 @@ func main() {
 }
 ```
 
-เมื่อ length ถึง capacity เดิม runtime จะ allocate backing array ใหม่ที่ใหญ่ขึ้น แล้วย้ายข้อมูลเดิมไปให้ การเพิ่ม capacity ล่วงหน้าจึงช่วยลดการ allocate และ copy ซ้ำเมื่อเรารู้ขนาดโดยประมาณ
+เมื่อ length ถึง capacity เดิม runtime จะ allocate backing array ใหม่ที่ใหญ่ขึ้น แล้วคัดลอกข้อมูลเดิมไปไว้ใน array ใหม่ การเพิ่ม capacity ล่วงหน้าจึงช่วยลดการ allocate และ copy ซ้ำเมื่อเรารู้ขนาดโดยประมาณ
 
 ### ใช้ `make` ให้ถูกกับ `append`
 
@@ -231,10 +231,10 @@ fmt.Println(withLength)    // [10 20 30]
 fmt.Println(withCapacity)  // [10 20 30]
 ```
 
-ความแตกต่างคือ `make([]int, 3)` สร้าง element ที่มีอยู่แล้ว 3 ตัว ส่วน `make([]int, 0, 3)` สร้าง slice ที่ยังว่าง แต่จองพื้นที่ไว้ 3 ตัว
+ความแตกต่างคือ `make([]int, 3)` สร้าง element ขึ้นมาแล้ว 3 ตัว ส่วน `make([]int, 0, 3)` สร้าง slice ที่ยังว่าง แต่จองพื้นที่ไว้ 3 ตัว
 
 > [!WARNING]
-> ถ้าตั้งใจใช้ `append` ให้ใช้ `make([]T, 0, n)` ไม่ใช่ `make([]T, n)` เพราะแบบหลังจะมี zero value อยู่แล้ว:
+> ถ้าตั้งใจใช้ `append` ให้ใช้ `make([]T, 0, n)` ไม่ใช่ `make([]T, n)` เพราะแบบหลังสร้าง element ที่เป็น zero value ไว้แล้ว:
 >
 > ```go
 > values := make([]int, 3)
@@ -244,7 +244,7 @@ fmt.Println(withCapacity)  // [10 20 30]
 
 ### ล้างค่าด้วย `clear`
 
-ตั้งแต่ Go 1.21 built-in `clear` ใช้ตั้งทุก element ใน slice เป็น zero value โดย length ของ slice ยังเท่าเดิม:
+ตั้งแต่ Go 1.21 built-in `clear` ใช้ตั้งค่าทุก element ใน slice ให้เป็น zero value โดย length ของ slice ยังเท่าเดิม:
 
 ```go
 items := []string{"first", "second"}
@@ -257,7 +257,7 @@ fmt.Println(len(items)) // 2
 ---
 ## Step 4: slice จาก slice และ backing array
 
-การเขียน `x[start:end]` ไม่ได้ copy ข้อมูล แต่สร้าง slice ใหม่ที่อ้างอิง memory เดิม:
+การเขียน `x[start:end]` ไม่ได้ copy ข้อมูล แต่สร้าง slice ใหม่ที่อ้างถึงพื้นที่ memory เดิม:
 
 ```go
 package main
@@ -348,7 +348,7 @@ array ที่สร้างจาก slice ต้องมีขนาดไ�
 ---
 ## Step 6: string คือ byte sequence
 
-ใน Go `string` คือ sequence ของ byte ที่มัก encode ด้วย UTF-8 ไม่ใช่ sequence ของ character หรือ rune โดยตรง
+ใน Go `string` คือ sequence ของ byte ที่มักเข้ารหัสด้วย UTF-8 ไม่ใช่ sequence ของ character หรือ rune โดยตรง
 
 ```go
 package main
@@ -368,7 +368,7 @@ func main() {
 }
 ```
 
-emoji ใช้หลาย byte ใน UTF-8 ดังนั้น `len(message)` และ `message[3]` ไม่ได้หมายถึงจำนวนหรือค่าของ character ที่มนุษย์มองเห็น การวนด้วย `range` จะ decode เป็น rune ให้ และ index ที่ได้คือ byte offset ของ rune นั้น
+emoji ใช้หลาย byte ใน UTF-8 ดังนั้น `len(message)` ไม่ใช่จำนวน character และ `message[3]` ก็ไม่ใช่ค่าของ character ที่มนุษย์มองเห็น การวนด้วย `range` จะ decode เป็น rune ให้ และ index ที่ได้คือ byte offset ของ rune นั้น
 
 ถ้าต้องการตัดข้อความตามจำนวน Unicode code point ให้แปลงเป็น `[]rune` ก่อน:
 
@@ -381,14 +381,14 @@ fmt.Println(firstThree)
 ```
 
 > [!CAUTION]
-> อย่า slice string ที่มี Unicode ด้วย byte index ถ้าไม่แน่ใจว่าตำแหน่งนั้นอยู่ขอบเขตของ UTF-8 code point เพราะอาจได้ string ที่ encode ไม่สมบูรณ์
+> อย่า slice string ที่มี Unicode ด้วย byte index ถ้าไม่แน่ใจว่าตำแหน่งนั้นอยู่ขอบเขตของ UTF-8 code point เพราะอาจได้ string ที่เข้ารหัสไม่สมบูรณ์
 
 อีกจุดที่มักพลาดคือ `string(65)` จะได้ตัวอักษร `A` ไม่ใช่ข้อความ `"65"` ถ้าต้องการแปลงตัวเลขเป็นข้อความ ให้ใช้ `strconv.Itoa(65)`
 
 ---
 ## Step 7: ใช้ map สำหรับ lookup ด้วย key
 
-`map` เก็บความสัมพันธ์ระหว่าง key และ value เขียน type เป็น `map[keyType]valueType` เช่น `map[string]int`
+`map` เก็บความสัมพันธ์ระหว่าง key และ value โดยเขียน type เป็น `map[keyType]valueType` เช่น `map[string]int`
 
 แทนที่ `main.go` ด้วย:
 
@@ -439,7 +439,7 @@ otherScores["Nina"] = 85
 
 ### comma ok idiom
 
-การอ่าน key ที่ไม่มีจะคืน zero value จึงอาจแยกไม่ออกว่า key มีค่าเป็น zero จริง หรือไม่มี key ต้องใช้ comma ok idiom:
+การอ่าน key ที่ไม่มีอยู่จะคืน zero value จึงอาจแยกไม่ออกว่า key มีค่าเป็น zero จริง หรือไม่มี key ต้องใช้ comma ok idiom:
 
 ```go
 scores := map[string]int{
@@ -482,7 +482,7 @@ fmt.Println(seen["go"])  // true
 fmt.Println(seen["db"])  // false
 ```
 
-ถ้าต้องการประหยัด memory มาก ๆ ใช้ `map[string]struct{}` ได้ แต่ `map[string]bool` อ่านง่ายกว่าในกรณีทั่วไป
+ถ้าต้องการลดการใช้ memory มาก ๆ ใช้ `map[string]struct{}` ได้ แต่ `map[string]bool` อ่านง่ายกว่าในกรณีทั่วไป
 
 > [!NOTE]
 > ลำดับที่ได้จากการวน map ไม่ควรถูกนำไปคาดหวัง เพราะ Go ไม่รับประกัน iteration order
@@ -490,7 +490,7 @@ fmt.Println(seen["db"])  // false
 ---
 ## Step 8: ใช้ struct สร้าง schema ของข้อมูล
 
-`struct` ใช้รวม field ที่สัมพันธ์กันและอาจมีคนละ type เข้าด้วยกัน ต่างจาก map ที่เปิดให้ใช้ key ใดก็ได้และ value มักเป็น type เดียวกัน
+`struct` ใช้รวม field ที่สัมพันธ์กัน โดยแต่ละ field อาจเป็นคนละ type ต่างจาก map ที่เปิดให้ใช้ key ใดก็ได้และ value มักเป็น type เดียวกัน
 
 ```go
 package main
@@ -559,12 +559,12 @@ type Point struct {
 fmt.Println(Point{1, 2} == Point{1, 2}) // true
 ```
 
-ถ้า struct มี field เป็น slice, map หรือ function จะเปรียบเทียบด้วย `==` ไม่ได้ เพราะ type เหล่านั้นไม่ comparable
+ถ้า struct มี field ชนิด slice, map หรือ function จะเปรียบเทียบด้วย `==` ไม่ได้ เพราะ type เหล่านั้นไม่ comparable
 
 ---
 ## Step 9: รวมทุกอย่างเป็นโปรแกรมสมุดรายชื่อ
 
-ตอนนี้ลองสร้างโปรแกรมเล็ก ๆ ที่ใช้ `struct`, `slice` และ `map` ร่วมกัน เป็นสมุดรายชื่อที่ค้นหาด้วยชื่อได้:
+ตอนนี้ลองสร้างโปรแกรมเล็ก ๆ ที่ใช้ `struct`, `slice` และ `map` ร่วมกันเป็นสมุดรายชื่อที่ค้นหาด้วยชื่อได้:
 
 ```go
 package main
@@ -645,7 +645,7 @@ go build ./...
 ---
 ## สรุป
 
-1. ใช้ **array** เมื่อจำนวน element fix ตายตัวจริง ๆ และยอมรับว่าขนาดเป็นส่วนหนึ่งของ type
+1. ใช้ **array** เมื่อจำนวน element ถูกกำหนดตายตัวจริง ๆ และยอมรับว่าขนาดเป็นส่วนหนึ่งของ type
 2. ใช้ **slice** เป็นค่าเริ่มต้นสำหรับลำดับข้อมูล โดยเข้าใจ `len`, `cap` และ backing array
 3. ใช้ `make([]T, 0, n)` เมื่อรู้ขนาดโดยประมาณและจะเติมข้อมูลด้วย `append`
 4. ใช้ full slice expression หรือ `copy` เมื่อไม่ต้องการให้ slice แชร์ memory โดยไม่ตั้งใจ
