@@ -27,17 +27,17 @@ tags = ['programming', 'go', 'tutorial']
 
 {{< mermaid >}}
 graph TD
-  A[Generic type หรือ function] --> B[ประกาศ type parameter ใน []]
-  B --> C{เลือก constraint}
-  C -->|เก็บและคืนค่า| D[any]
-  C -->|ต้องเทียบ == !=| E[comparable]
-  C -->|ต้องใช้ method| F[Interface constraint]
-  C -->|ต้องใช้ operator| G[Type terms และ ~]
-  D --> H[Compiler ตรวจตอน instantiate]
+  A["Generic type หรือ function"] --> B["ประกาศ type parameter ใน []"]
+  B --> C{"เลือก constraint"}
+  C -->|เก็บและคืนค่า| D["any"]
+  C -->|ต้องเทียบ == !=| E["comparable"]
+  C -->|ต้องใช้ method| F["Interface constraint"]
+  C -->|ต้องใช้ operator| G["Type terms และ ~"]
+  D --> H["Compiler ตรวจตอน instantiate"]
   E --> H
   F --> H
   G --> H
-  H --> I[โค้ดเดียวใช้กับหลาย concrete type]
+  H --> I["โค้ดเดียวใช้กับหลาย concrete type"]
 {{< /mermaid >}}
 
 ---
