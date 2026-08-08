@@ -12,6 +12,7 @@
   window.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () {
       document.documentElement.classList.remove('anim-pre');
+      document.documentElement.classList.add('is-loaded');
     }, 60);
   });
 

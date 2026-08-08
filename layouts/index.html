@@ -7,7 +7,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <p class="hero-kicker reveal">PERSONAL BLOG — GO BEYOND</p>
-        <h1 class="reveal d1">Kid<span class="alt">peterpan</span></h1>
+        <h1 class="reveal d1"><span class="word">Kid</span><span class="word alt">peterpan</span></h1>
         <p class="tagline reveal d2">Notes on books, code, and everything I'm learning along the way — one step past my limits at a time.</p>
         <div class="hero-links reveal d3">
           {{ with site.Sections }}
@@ -31,19 +31,38 @@
     {{ with site.RegularPages.ByDate.Reverse }}
       <section class="reveal d2">
         <div class="section-head">
-          <h2>Latest</h2>
+          <h2>All notes</h2>
           <div class="rule"></div>
-          <span class="count">{{ len . }} POST{{ if ne (len .) 1 }}S{{ end }}</span>
         </div>
+
+        <div class="filter-bar">
+          <div class="dropdown">
+            <button class="dd-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="dd-label">CATEGORY</span>
+              <span class="dd-value">All</span>
+              <span class="dd-caret">▼</span>
+            </button>
+            <div class="dd-menu" role="listbox">
+              <button class="dd-item" type="button" role="option" data-cat="all" aria-selected="true"><span class="dd-name">All</span><span class="dd-count">{{ len . }}</span></button>
+              {{ range site.Sections }}
+                <button class="dd-item" type="button" role="option" data-cat="{{ .Section }}" aria-selected="false"{{ if eq (len .RegularPages) 0 }} data-empty="true"{{ end }}><span class="dd-name">{{ .Title }}</span><span class="dd-count">{{ len .RegularPages }}</span></button>
+              {{ end }}
+            </div>
+          </div>
+          <p class="result-count">SHOWING <b>{{ len . }}</b> NOTES</p>
+        </div>
+
         <ul class="post-list">
           {{ range $i, $p := . }}
-            <li>
+            <li class="post-row-wrap" data-cat="{{ $p.Section }}">
               <a class="post-row" href="{{ $p.RelPermalink }}">
                 <span class="idx">{{ printf "%02d" (add $i 1) }}</span>
                 <span class="title-group">
                   <span class="post-title">{{ $p.Title }}</span>
+                  {{ with $p.Description }}<span class="excerpt">{{ . }}</span>{{ end }}
                   <span class="post-meta">
                     <span class="tag">{{ $p.Section }}</span>
+                    <span class="read-time">{{ $p.ReadingTime }} MIN</span>
                   </span>
                 </span>
                 {{ if not $p.Date.IsZero }}
@@ -53,6 +72,7 @@
             </li>
           {{ end }}
         </ul>
+        <p class="empty-state" hidden>NO NOTES IN THIS CATEGORY YET.</p>
       </section>
     {{ end }}
 
@@ -64,7 +84,7 @@
         </div>
         <div class="section-cards">
           {{ range $i, $s := . }}
-            <a class="section-card" href="{{ $s.RelPermalink }}">
+            <a class="section-card sr" href="{{ $s.RelPermalink }}">
               <div class="card-tex {{ cond (eq (mod $i 2) 0) "halftone" "speedlines" }}"></div>
               <h3>{{ $s.Title }}</h3>
               <p>{{ $s.Description }}</p>
@@ -79,4 +99,6 @@
     {{ end }}
 
   </main>
+
+  <script src="{{ "/js/filter.js" | relURL }}"></script>
 {{ end }}
