@@ -1,6 +1,8 @@
 baseURL = 'https://kidpeterpan.github.io/'
-locale = 'en-us'
+defaultContentLanguage = 'th'
+locale = 'th-TH'
 title = 'kidpeterpan.github.io'
+enableRobotsTXT = true
 
 [markup]
   [markup.goldmark.renderer]
@@ -15,7 +17,8 @@ title = 'kidpeterpan.github.io'
     endLevel = 3
 
 [params]
-description = 'My New Hugo Project — a personal site built with Hugo and Tailwind CSS.'
+author = 'kidpeterpan'
+description = 'บันทึกการเรียนรู้ภาษา Go, software engineering, AI และหนังสือ โดย kidpeterpan'
 googleAnalytics = 'G-LT3TCEMESB'
 
 [build.buildStats]

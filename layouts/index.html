@@ -21,7 +21,7 @@
       <div class="hero-art reveal d2">
         <div class="burst"></div>
         <div class="ring"></div>
-        <img src="{{ "/images/logo.png" | relURL }}" alt="Hero illustration">
+        <img src="{{ "/images/logo.png" | relURL }}" alt="{{ site.Title }} logo">
       </div>
     </div>
   </section>
@@ -47,7 +47,7 @@
                   </span>
                 </span>
                 {{ if not $p.Date.IsZero }}
-                  <span class="date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
+                  <time class="date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "Jan 2, 2006" }}</time>
                 {{ end }}
               </a>
             </li>

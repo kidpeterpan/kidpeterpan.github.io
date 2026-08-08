@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Lang }}" data-theme="light">
+<html lang="{{ site.Language.Locale | default site.Language.Lang }}" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}</title>
+    <title>{{ if .IsHome }}{{ site.Title }} — Notes on books, code, and learning{{ else }}{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}{{ end }}</title>
     <script>
       (function () {
         try {

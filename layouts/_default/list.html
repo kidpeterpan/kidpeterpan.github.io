@@ -30,7 +30,7 @@
                   {{ end }}
                 </span>
                 {{ if not $p.Date.IsZero }}
-                  <span class="date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
+                  <time class="date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "Jan 2, 2006" }}</time>
                 {{ end }}
               </a>
             </li>
