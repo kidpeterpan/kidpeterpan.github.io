@@ -882,9 +882,13 @@ html[data-theme="dark"] .hero-art img {
   font-size: 17px;
   font-weight: 700;
   box-shadow: 3px 3px 0 rgba(15, 33, 27, 0.35);
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.2s ease;
   z-index: 40;
+  opacity: 0;
+  pointer-events: none;
 }
+
+.to-top.is-visible { opacity: 1; pointer-events: auto; }
 
 .to-top:hover { transform: translateY(-3px); }
 
@@ -1374,10 +1378,22 @@ html[data-theme="dark"] .hero-art img {
   .post-row .idx { font-size: 20px; }
   .site-nav { display: none; }
   .nav-mobile { display: block; }
-  .header-right { gap: 10px; }
+  .header-right { gap: 8px; }
   .filter-bar { position: static; }
   .dd-trigger { min-width: 0; width: 100%; }
+  .dd-menu { width: 100%; min-width: 0; }
   .filter-bar .result-count { margin-left: 0; }
+}
+
+/* Header buttons (hamburger + search + theme + coffee) plus the brand
+   text don't all fit on one row below ~480px — trim the brand text and
+   drop the coffee button (least essential) rather than let it clip off
+   the edge of the viewport. */
+@media (max-width: 480px) {
+  .site-header .wrap { gap: 8px; }
+  .brand span { font-size: 12px; }
+  .brand-suffix { display: none; }
+  .coffee-btn { display: none; }
 }
 
 /* ---------- search dialog & pagefind UI theming ---------- */
