@@ -13,7 +13,8 @@ A Hugo static site (personal blog at kidpeterpan.github.io), styled with Tailwin
 - `make restart` — stop then start
 - `hugo server` — run the dev server in the foreground directly, if you don't want the backgrounded/PID-tracked version
 - `hugo --minify` — production build (what CI runs), outputs to `public/`
-- `npm ci` — install Tailwind dependencies (`@tailwindcss/cli`, `tailwindcss`, `@tailwindcss/typography`)
+- `npx pagefind --site public` — build the search index from `public/` (run after `hugo --minify`; CI runs this too). Produces `public/pagefind/` with the search UI assets
+- `npm ci` — install Tailwind dependencies (`@tailwindcss/cli`, `tailwindcss`, `@tailwindcss/typography`) and Pagefind (`pagefind` 1.5.2, build-time search indexer)
 
 No test suite or linter is configured. There is one GitHub Actions workflow (`.github/workflows/deploy.yml`) that builds with Hugo and deploys `public/` to GitHub Pages on every push to `main`.
 

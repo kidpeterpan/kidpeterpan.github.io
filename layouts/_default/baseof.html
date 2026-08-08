@@ -52,11 +52,12 @@
               {{ end }}
             </nav>
           </details>
-          <a href="https://buymeacoffee.com/kidpeterpan" target="_blank" rel="noopener" class="coffee-btn" aria-label="Buy me a coffee">☕</a>
+          <button class="search-toggle" id="search-toggle" aria-label="Search" aria-haspopup="dialog" aria-expanded="false">🔍</button>
           <button class="theme-toggle" aria-label="Toggle dark mode">
             <span class="sun">☀</span>
             <span class="moon">☾</span>
           </button>
+          <a href="https://buymeacoffee.com/kidpeterpan" target="_blank" rel="noopener" class="coffee-btn" aria-label="Buy me a coffee">☕</a>
         </div>
       </div>
     </header>
@@ -78,7 +79,9 @@
 
     <a href="#" class="to-top" aria-label="Scroll to top">↑</a>
 
+    {{ partial "search.html" . }}
     <script src="{{ "/js/theme.js" | relURL }}"></script>
+    <script src="{{ "/js/search.js" | relURL }}"></script>
     {{ if .HasShortcode "mermaid" }}
       {{ partial "mermaid-scripts.html" . }}
     {{ end }}
