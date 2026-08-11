@@ -28,8 +28,34 @@
 
   <main class="wrap" style="padding-top: 56px;">
 
+    {{ with site.Sections }}
+      <section class="reveal d3">
+        <div class="section-head">
+          <h2>Sections</h2>
+          <div class="rule"></div>
+        </div>
+        <div class="section-cards">
+          {{ range $i, $s := . }}
+            <a class="section-card sr" href="{{ $s.RelPermalink }}">
+              {{ with $s.Params.image }}
+                <img class="card-cover" src="{{ . | relURL }}" alt="{{ $s.Title }}">
+              {{ else }}
+                <div class="card-tex {{ cond (eq (mod $i 2) 0) "halftone" "speedlines" }}"></div>
+              {{ end }}
+              <h3>{{ $s.Title }}</h3>
+              <p>{{ $s.Description }}</p>
+              <div class="card-foot">
+                <span class="count">{{ len $s.RegularPages }} POST{{ if ne (len $s.RegularPages) 1 }}S{{ end }}</span>
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+
     {{ with site.RegularPages.ByDate.Reverse }}
-      <section class="reveal d2">
+      <section style="margin-top: 64px;" class="reveal d2">
         <div class="section-head">
           <h2>All notes</h2>
           <div class="rule"></div>
@@ -73,28 +99,6 @@
           {{ end }}
         </ul>
         <p class="empty-state" hidden>NO NOTES IN THIS CATEGORY YET.</p>
-      </section>
-    {{ end }}
-
-    {{ with site.Sections }}
-      <section style="margin-top: 64px;" class="reveal d3">
-        <div class="section-head">
-          <h2>Sections</h2>
-          <div class="rule"></div>
-        </div>
-        <div class="section-cards">
-          {{ range $i, $s := . }}
-            <a class="section-card sr" href="{{ $s.RelPermalink }}">
-              <div class="card-tex {{ cond (eq (mod $i 2) 0) "halftone" "speedlines" }}"></div>
-              <h3>{{ $s.Title }}</h3>
-              <p>{{ $s.Description }}</p>
-              <div class="card-foot">
-                <span class="count">{{ len $s.RegularPages }} POST{{ if ne (len $s.RegularPages) 1 }}S{{ end }}</span>
-                <span class="arrow">→</span>
-              </div>
-            </a>
-          {{ end }}
-        </div>
       </section>
     {{ end }}
 
