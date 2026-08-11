@@ -1,5 +1,6 @@
 // Hero 3D scene — low-poly coding desk: a MacBook writing code by itself,
-// coffee-shop cup and books alongside, all in a slow spin.
+// a ginger cat watching it work, coffee-shop cup and books alongside, all in
+// a slow spin that tilts gently toward the pointer.
 // Built from Three.js primitives only (no model files). Colors follow the
 // "Plus Ultra Paper" palette in assets/css/main.css. The static logo <img>
 // stays as the fallback and is hidden only after the first successful frame.
@@ -76,8 +77,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
   // ---------- MacBook ----------
   const alu = mat(C.aluminum, { roughness: 0.5, metalness: 0.35 });
   put(world, new THREE.BoxGeometry(1.15, 0.05, 0.75), alu, 0, 1.615, -0.45);
-  put(world, new THREE.BoxGeometry(0.95, 0.015, 0.4), mat(C.keys, { roughness: 0.95 }), 0, 1.645, -0.55);
-  put(world, new THREE.BoxGeometry(0.34, 0.012, 0.2), mat(C.keys, { roughness: 0.6 }), 0, 1.645, -0.2);
+  put(world, new THREE.BoxGeometry(0.95, 0.015, 0.4), mat(C.keys, { roughness: 0.95 }), 0, 1.645, -0.3);
+  put(world, new THREE.BoxGeometry(0.34, 0.012, 0.2), mat(C.keys, { roughness: 0.6 }), 0, 1.645, -0.65);
 
   // Screen half, hinged at the back edge of the base, tilted back like an open laptop.
   const screenGroup = new THREE.Group();
@@ -128,11 +129,35 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
     0, 0.37, -0.021);
   display.rotation.y = Math.PI;
 
-  // Glowing dot on the lid (visible from the front while spinning).
+  // Glowing "PAN" wordmark on the lid (visible from the front while spinning).
+  // Drawn white on a transparent canvas so applyTheme() can tint it via
+  // material.color, same as the old glowing dot.
+  const lidCanvas = document.createElement('canvas');
+  lidCanvas.width = 256;
+  lidCanvas.height = 96;
+  const lctx = lidCanvas.getContext('2d');
+  const lidTex = new THREE.CanvasTexture(lidCanvas);
+  function drawLid() {
+    lctx.clearRect(0, 0, 256, 96);
+    lctx.font = '76px Anton, "Arial Black", sans-serif';
+    lctx.textAlign = 'center';
+    lctx.textBaseline = 'middle';
+    lctx.fillStyle = '#ffffff';
+    lctx.fillText('PAN', 128, 54);
+    lidTex.needsUpdate = true;
+  }
+  drawLid();
   const lidGlow = put(screenGroup,
-    new THREE.CircleGeometry(0.09, 20),
-    new THREE.MeshBasicMaterial({ color: C.cream }),
-    0, 0.4, 0.021);
+    new THREE.PlaneGeometry(0.5, 0.1875),
+    new THREE.MeshBasicMaterial({ map: lidTex, transparent: true, color: C.cream }),
+    0, 0.37, 0.021);
+  // Anton loads async via Google Fonts — redraw once real fonts are in.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      drawLid();
+      if (!running) renderStatic();
+    });
+  }
 
   // ---------- desk props ----------
   // Coffee-shop to-go cup: white cone cup, white lid, green circle badge.
@@ -149,6 +174,54 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
   put(world, new THREE.BoxGeometry(0.55, 0.09, 0.4), mat(C.sky), -1.05, 1.635, 0.3);
   const topBook = put(world, new THREE.BoxGeometry(0.48, 0.09, 0.35), mat(C.greenBright), -1.08, 1.725, 0.28);
   topBook.rotation.y = 0.25;
+
+  // ---------- the cat ----------
+  // Sits on the desk's front-right corner, turned toward the screen, watching
+  // the laptop write its own code. Tail sways in animate().
+  const cat = new THREE.Group();
+  cat.position.set(0.58, 1.59, 0.35);
+  cat.rotation.y = -2.4; // face the laptop display
+  cat.scale.setScalar(1.3);
+  world.add(cat);
+
+  const fur = mat(C.gold);
+  const furDeep = mat(C.goldDeep);
+
+  put(cat, new THREE.CylinderGeometry(0.085, 0.15, 0.26, 10), fur, 0, 0.13, 0);
+  const head = put(cat, new THREE.SphereGeometry(0.105, 9, 7), fur, 0, 0.32, 0.02);
+  head.rotation.y = Math.PI / 9; // slight head turn, keeps the face readable mid-spin
+
+  // ears — 4-sided cones tilted outward
+  const earGeo = new THREE.ConeGeometry(0.04, 0.09, 4);
+  const earL = put(cat, earGeo, furDeep, -0.062, 0.425, 0.005);
+  earL.rotation.z = 0.28;
+  const earR = put(cat, earGeo, furDeep, 0.062, 0.425, 0.005);
+  earR.rotation.z = -0.28;
+
+  // eyes — tiny ink spheres on the front of the head
+  const eyeGeo = new THREE.SphereGeometry(0.016, 6, 5);
+  const eyeMat = new THREE.MeshBasicMaterial({ color: C.ink });
+  put(cat, eyeGeo, eyeMat, -0.04, 0.335, 0.11);
+  put(cat, eyeGeo, eyeMat, 0.045, 0.335, 0.105);
+
+  // front paws
+  const pawGeo = new THREE.BoxGeometry(0.055, 0.06, 0.09);
+  put(cat, pawGeo, fur, -0.052, 0.03, 0.125);
+  put(cat, pawGeo, fur, 0.052, 0.03, 0.125);
+
+  // cream chest patch
+  put(cat, new THREE.SphereGeometry(0.055, 7, 6), mat(C.cream), 0, 0.16, 0.115);
+
+  // tail — a curved tube out the back, in its own group so it can sway
+  const tailGroup = new THREE.Group();
+  tailGroup.position.set(0, 0.04, -0.1);
+  cat.add(tailGroup);
+  const tailCurve = new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(0, 0.02, 0),
+    new THREE.Vector3(0, 0, -0.24),
+    new THREE.Vector3(0, 0.3, -0.22)
+  );
+  tailGroup.add(new THREE.Mesh(new THREE.TubeGeometry(tailCurve, 8, 0.028, 6), furDeep));
 
   // ---------- lights (fixed while the model spins) ----------
   const hemi = new THREE.HemisphereLight(0xfff6e0, 0xcfc4a6, 1.25);
@@ -202,13 +275,30 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
   let rafId = 0;
   let running = false;
 
+  // Pointer parallax — a small tilt toward the cursor, layered on top of the
+  // spin. Targets update on pointermove; the easing lives in animate(), so
+  // under prefers-reduced-motion (where animate never runs) it stays inert.
+  let lookX = 0, lookY = 0;
+  let lookTX = 0, lookTY = 0;
+  window.addEventListener('pointermove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    lookTX = Math.max(-0.5, Math.min(0.5, (e.clientX - (r.left + r.width / 2)) / window.innerWidth));
+    lookTY = Math.max(-0.5, Math.min(0.5, (e.clientY - (r.top + r.height / 2)) / window.innerHeight));
+  }, { passive: true });
+
   function animate(now) {
     rafId = requestAnimationFrame(animate);
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     t += dt;
 
-    root.rotation.y = -0.5 + t * SPIN;
+    const ease = Math.min(1, dt * 4);
+    lookX += (lookTX - lookX) * ease;
+    lookY += (lookTY - lookY) * ease;
+    root.rotation.y = -0.5 + t * SPIN + lookX * 0.35;
+    root.rotation.x = lookY * 0.14;
+
+    tailGroup.rotation.y = Math.sin(t * 1.6) * 0.35;
 
     // new "code line" on screen every so often
     typeTimer += dt;
@@ -232,7 +322,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
   }
 
   function renderStatic() {
-    root.rotation.y = -0.5;
+    root.rotation.set(0, -0.5, 0); // clear any parallax tilt too
     renderer.render(scene, camera);
   }
 
