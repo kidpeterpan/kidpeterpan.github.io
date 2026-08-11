@@ -2,7 +2,7 @@
 title = 'ตอนที่ 3: Making a Commit'
 date = '2026-08-10T00:00:00+07:00'
 draft = false
-description = 'ทำ commit แรกใน Git แบบเข้าใจจริง: ใช้ git status, git add, git commit และ git log พร้อมแยก working directory กับ staging area'
+description = 'สร้าง commit แรกใน Git แบบเข้าใจ: ใช้ git status, git add, git commit และ git log พร้อมแยก working directory กับ staging area'
 tags = ['programming', 'git', 'tutorial']
 +++
 
@@ -17,7 +17,7 @@ tags = ['programming', 'git', 'tutorial']
 
 บทนี้ถึงเวลาถ่ายรูปแรกของบ้าน `rainbow` ลงอัลบั้มกันแล้ว นั่นก็คือการทำ **commit**
 
-แต่ Git มีจังหวะที่ต้องจำให้ขึ้นใจอยู่หนึ่งอย่าง: เราไม่สามารถกระโดดจากไฟล์บนโต๊ะไป commit history ได้ทันที ต้องผ่าน staging area ก่อนเสมอ
+แต่ Git มีจังหวะที่ต้องจำให้ขึ้นใจอยู่หนึ่งอย่าง: เราไม่สามารถกระโดดข้าม step ไป commit history ได้ทันที ต้องผ่าน staging area ก่อนเสมอ
 
 สิ่งที่จะได้ตอนจบบทนี้:
 
@@ -67,7 +67,7 @@ Red is the first color of the rainbow.
 
 ---
 
-## Step 1: ดูสถานะก่อนทำอะไรด้วย `git status`
+## Step 1: ดูสถานะก่อนจะลงมือทำอะไรด้วย `git status`
 
 ก่อนสั่งให้ Git เปลี่ยนแปลงอะไร เราควรดูก่อนว่าตอนนี้ repository อยู่ในสถานะไหน:
 

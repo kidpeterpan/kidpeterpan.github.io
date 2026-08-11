@@ -4,3 +4,4 @@ resources/
 hugo-server.log
 node_modules/
 .DS_Store
+.idea/

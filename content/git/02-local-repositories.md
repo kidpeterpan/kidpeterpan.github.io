@@ -3,7 +3,7 @@ title = 'ตอนที่ 2: Local Repositories'
 date = '2026-08-09T00:00:00+07:00'
 draft = false
 description = 'เปลี่ยนโฟลเดอร์ rainbow ให้เป็น Git repository ด้วย git init และเข้าใจ working directory, staging area, commit history และ .git'
-tags = ['programming', 'git', 'tutorial']
+tags = ['programming', 'git', 'tutorial','verified']
 +++
 
 ---
