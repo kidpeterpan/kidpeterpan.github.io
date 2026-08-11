@@ -3,7 +3,7 @@ title = 'ตอนที่ 1: Git and the Command Line'
 date = '2026-08-08T00:00:00+07:00'
 draft = false
 description = 'เริ่มต้นจากศูนย์ จน เข้าใจ version control, ใช้ command line ในการย้ายโฟลเดอร์, ติดตั้ง Git และตั้งค่า user.name กับ user.email'
-tags = ['programming', 'git', 'tutorial']
+tags = ['programming', 'git', 'tutorial','verified']
 +++
 
 ---
