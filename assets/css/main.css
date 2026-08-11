@@ -412,6 +412,21 @@ html[data-theme="dark"] .hero-art img {
   filter: drop-shadow(8px 10px 0 rgba(0, 0, 0, 0.5));
 }
 
+/* 3D hero scene (hero-cat.js) — replaces the logo once WebGL is up */
+.hero-art canvas.hero-cat {
+  position: relative;
+  width: 360px;
+  height: 310px;
+  max-width: 88%;
+  filter: drop-shadow(8px 10px 0 rgba(15, 33, 27, 0.18));
+}
+
+html[data-theme="dark"] .hero-art canvas.hero-cat {
+  filter: drop-shadow(8px 10px 0 rgba(0, 0, 0, 0.5));
+}
+
+.hero-art.is-3d img { display: none; }
+
 /* ---------- section headers ---------- */
 .section-head {
   display: flex;
@@ -1312,7 +1327,8 @@ html[data-theme="dark"] .hero-art img {
   html.is-loaded .hero-tex .halftone { animation: dots-in 1.3s cubic-bezier(0.16, 0.9, 0.2, 1) both; }
   html.is-loaded .hero-art .ring { animation: ring-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both, ring-spin 34s linear 1s infinite; }
   html.is-loaded .hero-art .burst { animation: burst-in 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) 0.1s both, burst-pulse 5.5s ease-in-out 1.2s infinite; }
-  html.is-loaded .hero-art img { animation: logo-smash 0.75s cubic-bezier(0.18, 1.1, 0.3, 1) 0.15s both; }
+  html.is-loaded .hero-art img,
+  html.is-loaded .hero-art canvas.hero-cat { animation: logo-smash 0.75s cubic-bezier(0.18, 1.1, 0.3, 1) 0.15s both; }
   html.is-loaded .hero h1 .word { animation: word-rise 0.72s cubic-bezier(0.16, 1, 0.3, 1) both; }
   html.is-loaded .hero h1 .word:nth-child(1) { animation-delay: 0.16s; }
   html.is-loaded .hero h1 .word:nth-child(2) { animation-delay: 0.26s; }
@@ -1376,6 +1392,7 @@ html[data-theme="dark"] .hero-art img {
   .hero .wrap { grid-template-columns: 1fr; padding-top: 44px; padding-bottom: 44px; }
   .hero-art { order: -1; }
   .hero-art img { width: 190px; }
+  .hero-art canvas.hero-cat { width: 240px; height: 210px; }
   .hero-art .burst { width: 230px; height: 230px; }
   .hero-art .ring { width: 260px; height: 260px; }
   .article-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
