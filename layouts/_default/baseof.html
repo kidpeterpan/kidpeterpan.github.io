@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ "/favicon.svg" | relURL }}" type="image/svg+xml">
     <title>{{ if .IsHome }}{{ site.Title }} — Notes on books, code, and learning{{ else }}{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}{{ end }}</title>
     <script>
       (function () {
