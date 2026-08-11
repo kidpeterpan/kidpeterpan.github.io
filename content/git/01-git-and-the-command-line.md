@@ -308,26 +308,20 @@ git version
 git config --global --list
 ```
 
-ถ้ายังไม่เคยตั้งค่า อาจเห็น error ประมาณว่าไม่มีไฟล์ `.gitconfig` นั่นไม่ใช่เรื่องน่ากลัว แปลว่ายังไม่มี global config ให้ Git อ่านเท่านั้น
+ถ้ายังไม่เคยตั้งค่า อาจเห็น error ประมาณว่าไม่มีไฟล์ `.gitconfig` นั่นไม่ใช่เรื่องน่ากลัว แปลว่าเรายังไม่มี global config ให้ Git อ่าน
 
-ตั้งชื่อและอีเมลด้วยคำสั่งนี้ โดยเปลี่ยนค่าใน quote เป็นของตัวเอง:
+ตั้งชื่อและอีเมลด้วยคำสั่งต่อไปนี้ โดยเปลี่ยนค่าใน quote เป็นของตัวเอง:
 
 ```sh
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
-จากนั้นตรวจเฉพาะค่าที่สนใจ:
+จากนั้นลอง verify ด้วย:
 
 ```sh
 git config --global --get user.name
 git config --global --get user.email
-```
-
-หรือดูทั้งหมดอีกครั้ง:
-
-```sh
-git config --global --list
 ```
 
 ### Global กับ local ต่างกันอย่างไร?
@@ -369,8 +363,6 @@ code .
 
 ## แบบฝึกหัด
 
-ลองทำโดยไม่เปิดเฉลยก่อน:
-
 1. รัน `git version` และจด version ของ Git ในเครื่อง จากนั้นตรวจว่า version ใหม่พอสำหรับบทถัด ๆ ไปหรือไม่
 2. ใช้ `pwd`, `ls`, `ls -a`, `cd`, `cd ..` เดินจาก home เข้า `rainbow` แล้วกลับออกมา โดยพิมพ์ `pwd` ยืนยันทุกครั้งว่าอยู่ที่ไหน
 3. สร้างโฟลเดอร์ `rainbow-copy` ใน home ด้วย `mkdir` แล้วใช้ `ls` ตรวจว่ามีจริง จากนั้นลบโฟลเดอร์นี้ด้วย GUI ของ filesystem อย่าเพิ่งใช้คำสั่งลบถ้ายังไม่คุ้น
@@ -399,7 +391,7 @@ code .
 2. commit คือ snapshot ของโปรเจกต์ ณ เวลาหนึ่ง ใช้ย้อนดูและเทียบเวอร์ชันได้
 3. GUI ใช้ง่ายและเห็นภาพ ส่วน command line ทำซ้ำได้และเข้าถึง option ของ Git ได้ละเอียด
 4. ทุกครั้งที่เปิด terminal เราจะอยู่ใน current directory หนึ่งเสมอ
-5. ใช้ `pwd` ดูตำแหน่ง, `ls` ดูไฟล์, `ls -a` ดู hidden files, `cd` เดินทาง และ `mkdir` สร้างโฟลเดอร์
+5. ใช้ `pwd` ดูตำแหน่ง, `ls` ดูไฟล์, `ls -a` ดู hidden files, `cd` เข้า/ออก และ `mkdir` สร้างโฟลเดอร์
 6. อ่าน command anatomy ให้เป็น: command ทำอะไร, option ปรับอย่างไร, argument คือค่าอะไร
 7. ตรวจ Git ด้วย `git version` และใช้ Git รุ่นใหม่กว่า 2.28 เพื่อให้เข้ากับบทถัด ๆ ไป
 8. ตั้ง `user.name` กับ `user.email` ด้วย `git config --global` ก่อนเริ่ม commit
