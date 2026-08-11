@@ -1,6 +1,6 @@
 // Hero 3D scene — low-poly coding desk: a MacBook writing code by itself,
-// a ginger cat watching it work, coffee-shop cup and books alongside, all in
-// a slow spin that tilts gently toward the pointer.
+// a ginger cat watching it work, a black cat lounging by the books, coffee-shop
+// cup alongside, all in a slow spin that tilts gently toward the pointer.
 // Built from Three.js primitives only (no model files). Colors follow the
 // "Plus Ultra Paper" palette in assets/css/main.css. The static logo <img>
 // stays as the fallback and is hidden only after the first successful frame.
@@ -45,6 +45,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
     pink: 0xe8938c,
     aluminum: 0xb9bdc4,
     keys: 0x3a4148,
+    black: 0x26262b,
+    blackDeep: 0x151517,
   };
 
   function mat(color, opts) {
@@ -175,53 +177,72 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
   const topBook = put(world, new THREE.BoxGeometry(0.48, 0.09, 0.35), mat(C.greenBright), -1.08, 1.725, 0.28);
   topBook.rotation.y = 0.25;
 
-  // ---------- the cat ----------
-  // Sits on the desk's front-right corner, turned toward the screen, watching
-  // the laptop write its own code. Tail sways in animate().
-  const cat = new THREE.Group();
-  cat.position.set(0.58, 1.59, 0.35);
-  cat.rotation.y = -2.4; // face the laptop display
-  cat.scale.setScalar(1.3);
-  world.add(cat);
+  // ---------- cats ----------
+  // Shared build for every cat on the desk: body, head, ears, eyes, paws,
+  // chest patch, and a tail (in its own group so animate() can sway it).
+  // Returns the tail group; the cat's own group only needs positioning here.
+  function buildCat({ furColor, deepColor, eyeColor, position, rotationY = 0, scale = 1 }) {
+    const cat = new THREE.Group();
+    cat.position.set(position[0], position[1], position[2]);
+    cat.rotation.y = rotationY;
+    cat.scale.setScalar(scale);
+    world.add(cat);
 
-  const fur = mat(C.gold);
-  const furDeep = mat(C.goldDeep);
+    const fur = mat(furColor);
+    const furDeep = mat(deepColor);
 
-  put(cat, new THREE.CylinderGeometry(0.085, 0.15, 0.26, 10), fur, 0, 0.13, 0);
-  const head = put(cat, new THREE.SphereGeometry(0.105, 9, 7), fur, 0, 0.32, 0.02);
-  head.rotation.y = Math.PI / 9; // slight head turn, keeps the face readable mid-spin
+    put(cat, new THREE.CylinderGeometry(0.085, 0.15, 0.26, 10), fur, 0, 0.13, 0);
+    const head = put(cat, new THREE.SphereGeometry(0.105, 9, 7), fur, 0, 0.32, 0.02);
+    head.rotation.y = Math.PI / 9; // slight head turn, keeps the face readable mid-spin
 
-  // ears — 4-sided cones tilted outward
-  const earGeo = new THREE.ConeGeometry(0.04, 0.09, 4);
-  const earL = put(cat, earGeo, furDeep, -0.062, 0.425, 0.005);
-  earL.rotation.z = 0.28;
-  const earR = put(cat, earGeo, furDeep, 0.062, 0.425, 0.005);
-  earR.rotation.z = -0.28;
+    // ears — 4-sided cones tilted outward
+    const earGeo = new THREE.ConeGeometry(0.04, 0.09, 4);
+    const earL = put(cat, earGeo, furDeep, -0.062, 0.425, 0.005);
+    earL.rotation.z = 0.28;
+    const earR = put(cat, earGeo, furDeep, 0.062, 0.425, 0.005);
+    earR.rotation.z = -0.28;
 
-  // eyes — tiny ink spheres on the front of the head
-  const eyeGeo = new THREE.SphereGeometry(0.016, 6, 5);
-  const eyeMat = new THREE.MeshBasicMaterial({ color: C.ink });
-  put(cat, eyeGeo, eyeMat, -0.04, 0.335, 0.11);
-  put(cat, eyeGeo, eyeMat, 0.045, 0.335, 0.105);
+    // eyes — tiny self-lit spheres on the front of the head
+    const eyeGeo = new THREE.SphereGeometry(0.016, 6, 5);
+    const eyeMat = new THREE.MeshBasicMaterial({ color: eyeColor });
+    put(cat, eyeGeo, eyeMat, -0.04, 0.335, 0.11);
+    put(cat, eyeGeo, eyeMat, 0.045, 0.335, 0.105);
 
-  // front paws
-  const pawGeo = new THREE.BoxGeometry(0.055, 0.06, 0.09);
-  put(cat, pawGeo, fur, -0.052, 0.03, 0.125);
-  put(cat, pawGeo, fur, 0.052, 0.03, 0.125);
+    // front paws
+    const pawGeo = new THREE.BoxGeometry(0.055, 0.06, 0.09);
+    put(cat, pawGeo, fur, -0.052, 0.03, 0.125);
+    put(cat, pawGeo, fur, 0.052, 0.03, 0.125);
 
-  // cream chest patch
-  put(cat, new THREE.SphereGeometry(0.055, 7, 6), mat(C.cream), 0, 0.16, 0.115);
+    // cream chest patch
+    put(cat, new THREE.SphereGeometry(0.055, 7, 6), mat(C.cream), 0, 0.16, 0.115);
 
-  // tail — a curved tube out the back, in its own group so it can sway
-  const tailGroup = new THREE.Group();
-  tailGroup.position.set(0, 0.04, -0.1);
-  cat.add(tailGroup);
-  const tailCurve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(0, 0.02, 0),
-    new THREE.Vector3(0, 0, -0.24),
-    new THREE.Vector3(0, 0.3, -0.22)
-  );
-  tailGroup.add(new THREE.Mesh(new THREE.TubeGeometry(tailCurve, 8, 0.028, 6), furDeep));
+    // tail — a curved tube out the back, in its own group so it can sway
+    const tailGroup = new THREE.Group();
+    tailGroup.position.set(0, 0.04, -0.1);
+    cat.add(tailGroup);
+    const tailCurve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(0, 0.02, 0),
+      new THREE.Vector3(0, 0, -0.24),
+      new THREE.Vector3(0, 0.3, -0.22)
+    );
+    tailGroup.add(new THREE.Mesh(new THREE.TubeGeometry(tailCurve, 8, 0.028, 6), furDeep));
+
+    return tailGroup;
+  }
+
+  // Ginger cat: front-right corner, turned toward the screen, watching the
+  // laptop write its own code.
+  const gingerTail = buildCat({
+    furColor: C.gold, deepColor: C.goldDeep, eyeColor: C.ink,
+    position: [0.58, 1.59, 0.35], rotationY: -2.4, scale: 1.3,
+  });
+  // Black cat: front-left, by the books, turned out toward the viewer. Blue
+  // self-lit eyes keep it reading clearly against dark fur in both themes.
+  const blackTail = buildCat({
+    furColor: C.black, deepColor: C.blackDeep, eyeColor: C.sky,
+    position: [-0.35, 1.59, 0.62], rotationY: 0.5, scale: 1.1,
+  });
+  const catTails = [gingerTail, blackTail];
 
   // ---------- lights (fixed while the model spins) ----------
   const hemi = new THREE.HemisphereLight(0xfff6e0, 0xcfc4a6, 1.25);
@@ -298,7 +319,9 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
     root.rotation.y = -0.5 + t * SPIN + lookX * 0.35;
     root.rotation.x = lookY * 0.14;
 
-    tailGroup.rotation.y = Math.sin(t * 1.6) * 0.35;
+    catTails.forEach((tailGroup, i) => {
+      tailGroup.rotation.y = Math.sin(t * 1.6 + i * 2.1) * 0.35;
+    });
 
     // new "code line" on screen every so often
     typeTimer += dt;
