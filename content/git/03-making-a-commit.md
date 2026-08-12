@@ -3,7 +3,7 @@ title = 'ตอนที่ 3: Making a Commit'
 date = '2026-08-10T00:00:00+07:00'
 draft = false
 description = 'สร้าง commit แรกใน Git แบบเข้าใจ: ใช้ git status, git add, git commit และ git log พร้อมแยก working directory กับ staging area'
-tags = ['programming', 'git', 'tutorial']
+tags = ['programming', 'git', 'tutorial','verified']
 +++
 
 ---
@@ -13,9 +13,9 @@ tags = ['programming', 'git', 'tutorial']
 - working directory — ที่ที่เราแก้ไฟล์จริง
 - staging area — จุดเตรียมไฟล์ว่าจะบันทึกอะไร
 - commit history — ประวัติ snapshot ที่บันทึกแล้ว
-- local repository — กล่องใหญ่ใน `.git` ที่เก็บข้อมูลของ Git
+- local repository — พื้นที่ใน `.git` ที่เป็นที่เก็บข้อมูลของ Git
 
-บทนี้ถึงเวลาถ่ายรูปแรกของบ้าน `rainbow` ลงอัลบั้มกันแล้ว นั่นก็คือการทำ **commit**
+บทนี้ถึงเวลาเก็บภาพแรกของบ้าน `rainbow` ลงอัลบั้มกันแล้ว นั่นก็คือการทำ **commit**
 
 แต่ Git มีจังหวะที่ต้องจำให้ขึ้นใจอยู่หนึ่งอย่าง: เราไม่สามารถกระโดดข้าม step ไป commit history ได้ทันที ต้องผ่าน staging area ก่อนเสมอ
 
@@ -41,7 +41,7 @@ graph LR
 
 ## วิธีทำตามบทนี้
 
-บทนี้ต่อจากตอนที่ 2 โดยสมมติว่าเราอยู่ใน `rainbow` ที่มี `.git` แล้ว และมีไฟล์ `rainbowcolors.txt` ที่ยังไม่ถูก track:
+ตอนนี้ต่อจากตอนที่ 2 โดยสมมติว่าเราอยู่ใน `rainbow` ที่มี `.git` แล้ว และมีไฟล์ `rainbowcolors.txt` ที่ยังไม่ถูก track:
 
 ```sh
 cd ~/rainbow
@@ -117,7 +117,7 @@ git status --short
 
 ## Step 2: เลือกไฟล์เข้า staging area ด้วย `git add`
 
-ตอนนี้ Git รู้แล้วว่ามีไฟล์ใหม่ แต่ยังไม่ได้บอกว่าเราต้องการเก็บไฟล์นี้ไว้ใน commit ถัดไป ให้ add ไฟล์:
+ตอนนี้ Git รู้แล้วว่ามีไฟล์ใหม่ แต่ยังไม่ได้บอกว่าเราต้องการเก็บไฟล์นี้ไว้ใน commit ถัดไป ให้เรา add ไฟล์ด้วย:
 
 ```sh
 git add rainbowcolors.txt
@@ -180,7 +180,7 @@ git add -A
 
 ---
 
-## Step 3: ตรวจสิ่งที่จะ commit ก่อนปิดผนึก
+## Step 3: ตรวจสิ่งที่จะ commit ก่อนเสมอ
 
 หลัง add แล้ว อย่าเพิ่งรีบ commit แบบหลับตากด เราตรวจรายละเอียดของสิ่งที่อยู่ใน staging area ได้ด้วย:
 
@@ -203,7 +203,7 @@ new file mode 100644
 
 - ไฟล์ที่กำลังจะ commit ใช่ไฟล์ที่เราตั้งใจหรือไม่
 - เนื้อหาที่กำลังจะบันทึกครบหรือมี secret หลุดมาหรือไม่
-- มีไฟล์ชั่วคราวหรือไฟล์ build ปนมาหรือไม่
+- มีไฟล์ที่ไม่ได้ใช้ (พวก tmp ไฟล์) หรือไฟล์ build ปนมาหรือไม่
 - การเปลี่ยนแปลงทั้งหมดเกี่ยวข้องกับ commit เดียวกันหรือเปล่า
 
 ถ้าดูแล้วพบว่า add ผิดไฟล์ เรายกไฟล์ออกจาก staging area ได้โดยไม่ลบไฟล์จริง:
@@ -214,7 +214,7 @@ git restore --staged rainbowcolors.txt
 
 จากนั้น `rainbowcolors.txt` จะกลับไปเป็น untracked แต่ไฟล์ยังอยู่ในโฟลเดอร์ `rainbow` ไม่ได้หายไปไหน
 
-คำสั่งนี้เป็นเหตุผลหนึ่งที่ staging area มีประโยชน์มาก เราแก้ไฟล์ได้หลายอย่าง แต่เลือกส่งขึ้น commit แค่ส่วนที่พร้อมก่อน
+คำสั่งนี้เป็นเหตุผลหนึ่งที่ staging area มีประโยชน์มาก เราแก้ไฟล์ได้ทั้งหมด แต่เลือกส่งขึ้น commit แค่ส่วนที่พร้อมก่อน
 
 ---
 
@@ -257,7 +257,7 @@ nothing to commit, working tree clean
 
 ### ทำไม commit ถึงเป็นสองขั้น?
 
-เพราะ Git ตั้งใจให้เราแยก “กำลังแก้อะไรอยู่” ออกจาก “อะไรพร้อมบันทึกแล้ว”:
+เพราะ Git ตั้งใจให้เราแยก “กำลังแก้อะไรอยู่” ออกจาก “อะไรพร้อมที่จะบันทึก”:
 
 ```text
 working directory --git add--> staging area --git commit--> commit history
@@ -386,7 +386,7 @@ update
 fix
 changes
 asdf
-งานวันนี้
+completed today work
 ```
 
 ถ้าทำงานคนเดียว เรามีอิสระมากขึ้น แต่ถ้าทำงานเป็นทีมควรดู convention ของทีมก่อน บางทีมใช้รูปแบบอย่าง `feat:`, `fix:` หรือกำหนดให้ message ขึ้นต้นด้วย issue key
@@ -440,7 +440,7 @@ asdf
 2. การทำ commit มีสองขั้นหลัก: `git add` แล้วตามด้วย `git commit -m`
 3. `git add` คัดลอกการเปลี่ยนแปลงเข้า staging area ไม่ได้ย้ายไฟล์ออกจาก working directory
 4. staging area ทำให้เราเลือกได้ว่าไฟล์ไหนพร้อมเข้า commit ถัดไป
-5. `git diff --cached` ใช้ review สิ่งที่กำลังจะ commit ก่อนปิดผนึก
+5. `git diff --cached` ใช้ review สิ่งที่กำลังจะ commit
 6. `git commit -m "message"` สร้าง snapshot ใหม่และผูก commit message ไว้ด้วย
 7. หลังไฟล์ถูก add และ commit แล้ว สถานะจาก untracked จะกลายเป็น tracked
 8. `git log` แสดง hash, author, date และ message ของ commit ในลำดับใหม่สุดก่อน
