@@ -43,7 +43,7 @@ flowchart LR
 - `main` ชี้ไปที่ commit `orange`
 - `feature` ชี้ไปที่ commit `yellow`
 - ตอนนี้เราอยู่บน `feature`
-- working tree clean ไม่มีงานที่แก้ค้างอยู่
+- `working tree` clean และไม่มีงานที่แก้ค้างอยู่
 
 เข้าไปใน repository และตรวจสถานะก่อน:
 
@@ -64,7 +64,7 @@ fc8139c (HEAD -> feature) yellow
 abc1234 red
 ```
 
-hash ในเครื่องของเราจะไม่เหมือนตัวอย่าง ไม่เป็นไร ขอแค่เห็นว่า `feature` อยู่ข้างหน้า `main` และ working tree clean ก็พอ
+hash ในเครื่องของเราจะไม่เหมือนตัวอย่าง ไม่เป็นไร ขอแค่เห็นว่า `feature` อยู่ข้างหน้า `main` และ `working tree` clean ก็พอ
 
 ถ้าตอนนี้อยู่บน `main` ให้รัน `git switch feature` ก่อนทำตามบท หรือถ้ายังไม่มี commit `yellow` ก็กลับไปทำตอนที่ 4 ให้ครบก่อน
 
@@ -74,7 +74,7 @@ hash ในเครื่องของเราจะไม่เหมือ
 
 ## Step 1: Merge คืออะไร และใครเป็นคนถูกแก้?
 
-**Merge** คือการนำการเปลี่ยนแปลงจาก branch หนึ่งเข้าไปในอีก branch หนึ่ง แต่ก่อนสั่ง ต้องแยกบทบาทของ branch ให้ชัด เพราะมีเพียง branch ฝั่งรับเท่านั้นที่ถูกเปลี่ยนจาก operation นี้
+**Merge** คือการนำการเปลี่ยนแปลงจาก branch หนึ่งเข้าไปในอีก branch หนึ่ง แต่ก่อนสั่งต้องแยกบทบาทของ branch ให้ชัด เพราะ branch ฝั่งรับเท่านั้นที่จะถูกเปลี่ยนแปลง
 
 | บทบาท | ความหมาย | ถูกเปลี่ยนไหม? |
 |---|---|---|
@@ -141,7 +141,7 @@ red  <--  orange  <--  yellow
 
 ถ้าไล่ parent link จาก `yellow` ย้อนกลับ จะเจอ `orange` แล้วจึงเจอ `red` อีกที แปลว่า commit ที่ `main` ชี้อยู่ยังอยู่ในเส้นทางของ `feature`
 
-ในกรณีนี้สองสายยัง **ไม่ diverge** กัน Git ไม่ต้องสร้าง commit ใหม่ แค่เลื่อน pointer ของ `main` จาก `orange` ไปชี้ `yellow`:
+ในกรณีนี้สองสายยัง **ไม่ diverge** Git ไม่ต้องสร้าง commit ใหม่ แค่เลื่อน pointer ของ `main` จาก `orange` ไปชี้ `yellow`:
 
 ```text
 red  <--  orange  <--  yellow
@@ -178,7 +178,7 @@ Git จึงสร้าง commit ใหม่ เช่น `M` ให้ม�
                                       (feature ยังชี้ J)
 ```
 
-commit `M` นี้เรียกว่า **merge commit** เพราะมันมี parent มากกว่าหนึ่งตัว โดย three-way merge ต้องพิจารณา commit สามจุด:
+commit `M` นี้เรียกว่า **merge commit** เพราะมันมี parent มากกว่าหนึ่งตัว โดย three-way merge จะพิจารณา commit สามจุด:
 
 - ปลายสายของ `feature` คือ `J`
 - ปลายสายของ `main` คือ `L`
@@ -188,12 +188,12 @@ commit `M` นี้เรียกว่า **merge commit** เพราะม
 
 | | Fast-forward merge | Three-way merge |
 |---|---|---|
-| เงื่อนไข | histories ยังไม่ diverge | histories diverge กันแล้ว |
+| เงื่อนไข | history ของสองสายยังไม่ diverge | history ของสองสาย diverge กันแล้ว |
 | สิ่งที่ Git ทำ | เลื่อน target pointer ไปข้างหน้า | สร้าง merge commit แล้วเลื่อน target ไปชี้ commit ใหม่ |
 | มี commit ใหม่ไหม? | ไม่มี | มี merge commit ที่มี 2 parents |
 | มีโอกาสเจอ conflict ไหม? | ไม่มีจากการ merge รูปแบบนี้ | มี ถ้าการเปลี่ยนแปลงชนกัน |
 
-three-way merge เป็นจุดที่อาจเกิด **merge conflict** ได้ เช่นสอง branch แก้ส่วนเดียวกันของไฟล์เดียวกันคนละแบบ หรือ branch หนึ่งลบไฟล์ในขณะที่อีก branch แก้ไฟล์นั้นอยู่ รายละเอียดของ three-way merge และการแก้ merge conflict จะอธิบายให้ละเอียดในตอนถัด ๆ ไป
+three-way merge อาจเกิด **merge conflict** ได้ เช่น เมื่อสอง branch แก้ส่วนเดียวกันของไฟล์เดียวกันคนละแบบ หรือ branch หนึ่งลบไฟล์ในขณะที่อีก branch แก้ไฟล์นั้นอยู่ รายละเอียดของ three-way merge และการแก้ merge conflict จะอธิบายให้ละเอียดในตอนถัด ๆ ไป
 
 > ถ้าไล่ parent link จาก source แล้วย้อนกลับไปเจอ commit ที่ target ชี้อยู่ ให้คาดไว้ก่อนว่าเป็น fast-forward; ถ้าไม่เจอ ให้เตรียมรับมือกับ three-way merge
 
@@ -201,7 +201,7 @@ three-way merge เป็นจุดที่อาจเกิด **merge conf
 
 ## Step 3: ตรวจงานค้างก่อนสลับไป target
 
-ก่อนจะไปอยู่บน `main` เราต้องตรวจว่าไม่มีการแก้ไฟล์ที่ยังไม่ได้ commit ค้างอยู่:
+ก่อนสลับไป `main` เราต้องตรวจว่าไม่มีการแก้ไฟล์ที่ยังไม่ได้ commit ค้างอยู่:
 
 ```sh
 git status
@@ -218,7 +218,7 @@ nothing to commit, working tree clean
 
 ### ลองดูกรณีที่ Git ป้องกันงานให้
 
-ส่วนนี้เป็นการทดลองที่แก้ไฟล์ใน `rainbow` จริง ถ้าจะทำตาม ให้เปิด `rainbowcolors.txt` ตอนอยู่บน `feature` เพิ่มบรรทัดนี้ต่อท้าย แล้ว **เซฟไฟล์**:
+ส่วนนี้เป็นการทดลองที่ต้องแก้ไฟล์ใน `rainbow` จริง ถ้าจะทำตาม ให้เปิด `rainbowcolors.txt` ตอนอยู่บน `feature` เพิ่มบรรทัดนี้ต่อท้าย แล้ว **เซฟไฟล์**:
 
 ```text
 Green is the fourth color of the rainbow.
@@ -268,15 +268,15 @@ On branch feature
 nothing to commit, working tree clean
 ```
 
-> Git จะเห็นเฉพาะการแก้ไขที่ถูกเซฟลงดิสก์แล้ว ถ้าแก้ข้อความค้างไว้ใน editor แต่ยังไม่กด save Git อาจมองไฟล์เป็น unmodified และไม่สามารถปกป้องข้อความใน editor ให้เราได้
+> Git จะเห็นเฉพาะการแก้ไขที่ถูกเซฟลงดิสก์แล้ว ถ้าแก้ข้อความค้างไว้ใน editor แต่ยังไม่กดเซฟ Git อาจมองไฟล์เป็น unmodified และไม่สามารถปกป้องข้อความใน editor ให้เราได้
 
-Git ไม่ได้หยุดทุกครั้งที่มี uncommitted changes ถ้าการสลับ branch ไม่ทำให้ไฟล์ที่แก้ถูกทับ มันอาจสลับให้และพาการแก้ค้างนั้นไปต่อได้ ดังนั้นทางที่ง่ายที่สุดก่อนสลับคือทำให้ working tree clean
+Git ไม่ได้หยุดทุกครั้งที่มี uncommitted changes ถ้าการสลับ branch ไม่ทำให้ไฟล์ที่แก้ถูกทับ Git อาจยอมสลับและพาการแก้ค้างนั้นไปต่อได้ ดังนั้นทางที่ง่ายที่สุดก่อนสลับคือทำให้ `working tree` clean
 
 ---
 
 ## Step 4: สลับ branch แล้วดูไฟล์เปลี่ยนตาม snapshot
 
-ตอนนี้ working tree clean แล้ว จึงสลับไป target branch ด้วย:
+ตอนนี้ `working tree` clean แล้ว จึงสลับไป target branch ด้วย:
 
 ```sh
 git switch main
@@ -337,14 +337,14 @@ Orange is the second color of the rainbow.
 git log --oneline --decorate
 ```
 
-ผลลัพธ์ยังมองเห็นเฉพาะสายของ `main`:
+ผลลัพธ์ยังแสดงเฉพาะ commit ในสายของ `main`:
 
 ```text
 7acb333 (HEAD -> main) orange
 abc1234 red
 ```
 
-ถ้าต้องการดู commit จากทุก branch ที่ยังมี pointer อ้างถึง ให้เติม `--all`:
+ถ้าต้องการดู commit ที่เข้าถึงได้จากทุก reference ที่ Git รู้จัก ให้เติม `--all`:
 
 ```sh
 git log --oneline --decorate --all
@@ -360,7 +360,7 @@ abc1234 red
 
 `--all` ช่วยให้เราเห็น `yellow` แม้ตอนนี้ `HEAD` จะอยู่บน `main` และ `main` ยังไล่ parent link ไปไม่ถึง commit นั้น
 
-ถ้าอยากได้ชื่อคำสั่งแบบสั้นตามที่มักเห็นในเอกสาร ก็ใช้ได้เช่นกัน:
+ถ้าอยากดูรายละเอียดเต็มของ commit ก็ใช้คำสั่งนี้ได้เช่นกัน:
 
 ```sh
 git log --all
@@ -372,7 +372,7 @@ git log --all
 
 ## Step 6: รวม `feature` เข้า `main` ด้วย `git merge`
 
-ตอนนี้เราอยู่บน target ถูกตัวแล้ว คือ `main` และจาก history เรารู้ว่า `main` เป็นบรรพบุรุษของ `feature` ดังนั้น merge ครั้งนี้ควรเป็น fast-forward
+ตอนนี้เราอยู่บน target ถูกตัวแล้ว คือ `main` และจาก history เรารู้ว่า commit ที่ `main` ชี้อยู่เป็นบรรพบุรุษของ commit ที่ `feature` ชี้อยู่ ดังนั้น merge ครั้งนี้ควรเป็น fast-forward
 
 สั่ง merge โดยระบุ source branch:
 
@@ -391,9 +391,9 @@ Fast-forward
 
 hash และจำนวนบรรทัดอาจต่างจากตัวอย่างตามสถานะในเครื่อง จุดที่ต้องสังเกตคือ:
 
-- `Updating ...` บอกว่า pointer ของ `main` กำลังเลื่อนจาก commit เดิมไป commit ของ `feature`
+- `Updating ...` บอกว่า pointer ของ `main` เลื่อนจาก commit เดิมไป commit ของ `feature`
 - `Fast-forward` ยืนยันว่า Git ไม่ต้องสร้าง merge commit
-- `rainbowcolors.txt` ใน working directory ถูกปรับเป็น snapshot ของ `yellow`
+- `rainbowcolors.txt` ใน working directory เปลี่ยนมาเป็น snapshot ของ `yellow`
 
 ตรวจผลลัพธ์ด้วย:
 
@@ -436,7 +436,7 @@ Yellow is the third color of the rainbow.
 
 ## Step 7: ดู commit เก่าด้วย `git checkout`
 
-หลัง merge ตอนนี้ทั้ง `main` และ `feature` ชี้ `yellow` แล้ว แต่บางครั้งเราอยากเปิดดูว่าโปรเจกต์หน้าตาเป็นอย่างไรใน commit เก่า เช่นอยากตรวจ snapshot ของ `orange`
+หลัง merge ตอนนี้ทั้ง `main` และ `feature` ชี้ `yellow` แล้ว แต่บางครั้งเราอยากเปิดดูว่าโปรเจกต์หน้าตาเป็นอย่างไรใน commit เก่า เช่น ต้องการตรวจ snapshot ของ `orange`
 
 ถ้าไม่มี branch ไหนชี้ `orange` อยู่โดยตรง เราสลับด้วยชื่อ branch ไม่ได้ ต้องใช้ commit hash:
 
@@ -491,7 +491,7 @@ Orange is the second color of the rainbow.
 
 ### ทำไมไม่ควรทำงานต่อใน detached HEAD?
 
-เรายังเปิดดูไฟล์และสร้าง commit ได้ แต่ commit ที่สร้างจะไม่มี branch คอยชี้จำไว้ ถ้าสลับไป branch อื่นในภายหลัง เราอาจหา commit นั้นยากและไม่รู้ว่าควรกลับไปทางไหน
+เรายังเปิดดูไฟล์และสร้าง commit ได้ แต่ commit ที่สร้างจะไม่มี branch คอยชี้อยู่ พอเราสลับไป branch อื่นในภายหลัง เราอาจหา commit นั้นยากและไม่รู้ว่าควรกลับไปทางไหน
 
 ถ้าตั้งใจจะเริ่มงานใหม่จาก commit เก่า ให้สร้าง branch ที่มีชื่อไว้ก่อน:
 
@@ -578,12 +578,12 @@ branch ใหม่จะยังอยู่ แต่เราไม่ได
 
 ## แบบฝึกหัด
 
-ทำโจทย์ต่อไปนี้ใน `rainbow` โดยเริ่มจากสถานะที่ `main` และ `feature` ชี้ commit `yellow` เดียวกัน และ working tree clean:
+ทำโจทย์ต่อไปนี้ใน `rainbow` โดยเริ่มจากสถานะที่ `main` และ `feature` ชี้ไปที่ commit `yellow` เดียวกัน และ `working tree` clean:
 
 1. ใช้ `git log --oneline --decorate --all` ตรวจว่า `main` กับ `feature` ชี้ commit เดียวกัน และใช้ `git status` ยืนยันว่าไม่มีงานค้าง
 2. หา hash ของ `orange` จาก `git log --all --oneline` แล้วใช้ `git checkout <orange_hash>` เปิด `rainbowcolors.txt` ตรวจว่ามี `red` กับ `orange` แต่ยังไม่มี `yellow`
 3. ขณะอยู่ใน detached HEAD ให้รัน `git status` และอธิบายจาก output ว่า `HEAD` ชี้อะไรอยู่ จากนั้น **อย่าแก้ไฟล์และอย่าสร้าง commit** ในสถานะนี้
-4. รัน `git switch main` เพื่อกลับออกจาก detached HEAD แล้วเปิดไฟล์เดิมตรวจว่า `yellow` กลับมา จากนั้นใช้ `git status` ยืนยันว่า working tree ยัง clean
+4. รัน `git switch main` เพื่อกลับออกจาก detached HEAD แล้วเปิดไฟล์เดิมตรวจว่า `yellow` กลับมา จากนั้นใช้ `git status` ยืนยันว่า `working tree` ยัง clean
 5. สร้าง branch ใหม่จาก `main` ด้วย `git switch -c merge-practice` แล้วใช้ `git branch` และ `git status` ตรวจว่า `*` กับ `HEAD` อยู่บน `merge-practice`
 6. สลับกลับ `main` แล้วใช้ `git log --oneline --decorate --all` อธิบายว่า branch `merge-practice` ยังอยู่ แม้เราไม่ได้ทำ commit ใหม่บนมัน
 
@@ -611,8 +611,8 @@ branch ใหม่จะยังอยู่ แต่เราไม่ได
 - **อยู่บน source แล้วสั่ง merge ผิดทิศ** — ก่อนใช้ `git merge <source>` ให้รัน `git switch <target>` และตรวจ `git status` ก่อน
 - **คิดว่า merge สร้าง commit ใหม่ทุกครั้ง** — fast-forward merge แค่เลื่อน target pointer จึงไม่มี commit ใหม่
 - **คิดว่า `git switch` เปลี่ยนแค่ชื่อ branch** — ถ้า branch ชี้คนละ commit เนื้อหาใน staging area และ working directory ก็อาจเปลี่ยนตาม
-- **สลับ branch ทั้งที่มีงานที่เซฟแล้วค้างอยู่** — ถ้าการสลับอาจทับไฟล์ Git จะหยุดและให้ commit หรือ stash ก่อน
-- **คิดว่า Git ปกป้องข้อความที่ยังไม่เซฟใน editor** — Git เห็นเฉพาะไฟล์ที่เซฟลงดิสก์แล้ว กด save ก่อนสลับ branch
+- **สลับ branch ทั้งที่มีการแก้ไขที่เซฟแล้วแต่ยังไม่ commit ค้างอยู่** — ถ้าการสลับอาจทับไฟล์ Git จะหยุดและให้ commit หรือ stash ก่อน
+- **คิดว่า Git ปกป้องข้อความที่ยังไม่เซฟใน editor** — Git เห็นเฉพาะไฟล์ที่เซฟลงดิสก์แล้ว กดเซฟก่อนสลับ branch
 - **นึกว่า `git log` แสดงทุก commit ใน local repository** — มันเริ่มจาก commit ปัจจุบันและไล่ตาม parent link ถ้าต้องการดูทุก branch ใช้ `git log --all`
 - **คิดว่า merge แล้ว `feature` หายไป** — merge ไม่ลบ source branch อัตโนมัติ หลัง merge branch ทั้งสองอาจชี้ commit เดียวกัน
 - **แก้ไฟล์ต่อใน detached HEAD โดยไม่สร้าง branch** — ถ้าจะทำงานต่อ ให้ใช้ `git switch -c <new_branch_name>` ก่อนสร้าง commit
@@ -624,7 +624,7 @@ branch ใหม่จะยังอยู่ แต่เราไม่ได
 
 1. Merge คือการนำการเปลี่ยนแปลงจาก source branch เข้า target branch และ target เป็น branch ที่ถูกเปลี่ยน
 2. ลำดับพื้นฐานคือ `git switch <target>` แล้วตามด้วย `git merge <source>`
-3. ถ้าไล่ parent link จาก source แล้วย้อนกลับไปเจอ commit ที่ target ชี้อยู่ histories ยังไม่ diverge และ merge มักเป็น fast-forward
+3. ถ้าไล่ parent link จาก source แล้วย้อนกลับไปเจอ commit ที่ target ชี้อยู่ history ของสองสายยังไม่ diverge และ merge มักเป็น fast-forward
 4. Fast-forward merge แค่เลื่อน target pointer ไปข้างหน้า จึงไม่สร้าง commit ใหม่
 5. ถ้าสองสาย diverge กัน Git ต้องใช้ three-way merge และสร้าง merge commit ที่มี parent มากกว่าหนึ่งตัว
 6. ตรวจ `git status` ก่อนสลับ branch เพื่อไม่ให้ไฟล์ที่แก้และเซฟแล้วถูกทับ
@@ -644,13 +644,13 @@ branch ใหม่จะยังอยู่ แต่เราไม่ได
 ## Glossary
 
 - **Merge** — การนำการเปลี่ยนแปลงจาก branch หนึ่งเข้าอีก branch หนึ่ง
-- **Source branch** — branch ที่มีการเปลี่ยนแปลงและถูกนำเข้าไป โดยตัวมันเองไม่ถูกแก้จาก merge นั้น
-- **Target branch** — branch ที่รับการเปลี่ยนแปลงและเป็น branch ที่ถูกเลื่อนหรือสร้าง merge commit
+- **Source branch** — branch ที่มีการเปลี่ยนแปลงและถูกนำเข้าไป โดย branch นี้ไม่ถูกเปลี่ยนจากการ merge ครั้งนั้น
+- **Target branch** — branch ที่รับการเปลี่ยนแปลง โดย pointer ของ branch นี้จะถูกเลื่อนหรือชี้ไปยัง merge commit
 - **Fast-forward merge** — merge ที่ target อยู่บนเส้นทาง parent ของ source จึงเลื่อน target pointer ไปข้างหน้าได้โดยไม่สร้าง commit ใหม่
-- **Three-way merge** — merge ที่ใช้ปลายสายสองฝั่งกับ common ancestor เพื่อสร้าง merge commit เมื่อ histories diverge
-- **Diverge** — สอง development history แยกออกจากกันจนปลายสายของ target ไม่อยู่ในเส้นทาง parent ของ source
+- **Three-way merge** — merge ที่ใช้ปลายสายสองฝั่งกับ common ancestor เพื่อสร้าง merge commit เมื่อ history ของสองสาย diverge
+- **Diverge** — history ของสองสายแยกออกจากกันจนปลายสายของ target ไม่อยู่ในเส้นทาง parent ของ source
 - **Merge commit** — commit ที่มี parent มากกว่าหนึ่งตัวและใช้ผูกสองสายเข้าด้วยกัน
-- **Common ancestor** — commit บรรพบุรุษร่วมของ development history สองสาย
+- **Common ancestor** — commit บรรพบุรุษร่วมของ history สองสาย
 - **Parent link** — ความสัมพันธ์ที่ commit ใหม่ชี้ย้อนกลับไปยัง commit ก่อนหน้า
 - **`git merge`** — คำสั่งนำการเปลี่ยนแปลงจาก source branch เข้า branch ปัจจุบัน
 - **`git log --all`** — คำสั่งแสดง commit ที่เข้าถึงได้จากทุก reference ของ local repository
