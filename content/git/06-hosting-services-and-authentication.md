@@ -117,11 +117,11 @@ hash และจำนวน commit ในเครื่องเราอา�
 3. จำชื่อ username หรืออีเมลของบัญชีไว้ เพราะจะใช้ตอน Git ถามหา username
 4. ยังไม่ต้องสร้าง remote repository ในบทนี้ เราจะสร้างและเชื่อม `rainbow` ในตอนถัดไป
 
-ถ้ามีบัญชีและตั้งค่า authentication สำหรับ Git ไว้แล้วเรียบร้อย สามารถข้ามไปตอนที่ 7 ได้เลย แต่ถ้ายังไม่แน่ใจว่าตั้งค่าครบหรือยัง ให้ทำต่อในบทนี้
+ถ้ามีบัญชีและตั้งค่า authentication สำหรับ Git ไว้ครบแล้ว สามารถข้ามไปตอนที่ 7 ได้เลย แต่ถ้ายังไม่แน่ใจว่าตั้งค่าครบหรือยัง ให้ทำต่อในบทนี้
 
 ### บัญชีเว็บกับ credential ของ Git เหมือนกันไหม?
 
-เวลาเราเปิด GitHub ใน browser เราล็อกอินผ่านหน้าเว็บได้ด้วย username หรืออีเมลกับรหัสผ่าน แต่ตอนที่ Git จาก terminal ต้องส่งข้อมูลไปยัง remote มันต้องใช้ credential ของโปรโตคอลที่เราเลือกอีกชั้นหนึ่ง
+เวลาเราเปิด GitHub ใน browser เราล็อกอินผ่านหน้าเว็บได้ด้วย username หรืออีเมลกับรหัสผ่าน แต่ตอนที่ Git ใน terminal ต้องส่งข้อมูลไปยัง remote มันต้องใช้ credential ของโปรโตคอลที่เราเลือกอีกชั้นหนึ่ง
 
 ดังนั้น ล็อกอินหน้าเว็บได้แล้วไม่ได้แปลว่า `git push` จะพร้อมใช้งานทันที
 
@@ -198,7 +198,7 @@ https://github.com/your-username/rainbow.git
 
 บรรทัดนี้เป็นรูปแบบ URL ตัวอย่าง ไม่ต้องรัน และให้เปลี่ยน `your-username` เป็น username จริงของเราเมื่อสร้าง remote
 
-ถ้าใช้ GitLab หรือ Bitbucket ให้เปลี่ยน host เป็นของ service นั้น ส่วนหลักการเหมือนกัน: URL ต้องขึ้นต้นด้วย `https://` และตอน Git ถาม password ให้ใช้ credential ที่สร้างไว้ ไม่ใช่ account password แบบเดาสุ่ม
+ถ้าใช้ GitLab หรือ Bitbucket ให้เปลี่ยน host เป็นของ service นั้น ส่วนหลักการเหมือนกัน: URL ต้องขึ้นต้นด้วย `https://` และตอน Git ถาม password ให้ใช้ credential ที่สร้างไว้ ไม่ใช่ account password ที่ใช้ล็อกอินหน้าเว็บ
 
 ---
 
@@ -343,7 +343,7 @@ Hi your-username! You've successfully authenticated, but GitHub does not provide
 2. เลือก HTTPS หรือ SSH เพียงหนึ่งแบบ แล้วเขียน URL รูปแบบที่คาดว่าจะใช้กับ `rainbow` เช่น `https://github.com/your-username/rainbow.git` หรือ `git@github.com:your-username/rainbow.git`
 3. ถ้าเลือก HTTPS ให้สร้าง credential ชื่อ `learning-git` และตรวจว่าคัดลอกค่าไปเก็บใน password manager แล้ว โดยห้ามใส่ค่าจริงลงในไฟล์หรือ commit
 4. ถ้าเลือก SSH ให้รัน `ssh-keygen` ด้วยชื่อไฟล์ `id_ed25519_learning_git` จากนั้นรัน `ssh-add` และ `cat` เฉพาะไฟล์ `.pub`
-5. เพิ่ม public key เข้า hosting service แล้วรันคำสั่ง `ssh -T` ของ service ที่เลือก ผลลัพธ์ต้องยืนยันบัญชีได้ ถ้าเจอ `Permission denied (publickey)` ให้ตรวจว่าเพิ่ม public key ครบทั้งบรรทัดและใช้ key ที่เพิ่มเข้า agent ถูกไฟล์
+5. เพิ่ม public key เข้า hosting service แล้วรันคำสั่ง `ssh -T` ของ service ที่เลือก ผลลัพธ์ต้องยืนยันบัญชีได้ ถ้าเจอ `Permission denied (publickey)` ให้ตรวจว่าเพิ่ม public key ครบทั้งบรรทัดและ key ที่เพิ่มเข้า agent เป็นไฟล์ที่ถูกต้อง
 6. รัน `cd ~/rainbow` และ `git status` ตรวจว่า repository เดิมยังอยู่และ working tree ยัง clean การตั้ง authentication ไม่ควรแก้ไฟล์หรือสร้าง commit ใด ๆ
 
 ตรวจตัวเองให้ครบ:
