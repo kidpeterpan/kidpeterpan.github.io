@@ -3,7 +3,7 @@ title = 'ตอนที่ 4: Branches'
 date = '2026-08-11T00:00:00+07:00'
 draft = false
 description = 'สร้าง Git branch แยกงานใหม่โดยไม่กระทบ main พร้อมทำความเข้าใจ HEAD และ branch pointer'
-tags = ['programming', 'git', 'tutorial', '333']
+tags = ['programming', 'git', 'tutorial', 'verified']
 +++
 
 ---

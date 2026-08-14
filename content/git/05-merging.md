@@ -3,7 +3,7 @@ title = 'ตอนที่ 5: Merging'
 date = '2026-08-12T00:00:00+07:00'
 draft = false
 description = 'รวมงานจาก feature เข้า main ด้วย git merge พร้อมทำความเข้าใจ source branch, target branch, fast-forward merge และ detached HEAD แบบลงมือทำจริง'
-tags = ['programming', 'git', 'tutorial']
+tags = ['programming', 'git', 'tutorial', 'verified']
 +++
 
 ---

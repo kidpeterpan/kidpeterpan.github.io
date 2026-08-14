@@ -3,7 +3,7 @@ title = 'ตอนที่ 6: Hosting Services and Authentication'
 date = '2026-08-13T00:00:00+07:00'
 draft = false
 description = 'เลือก hosting service และเตรียม authentication ผ่าน HTTPS หรือ SSH ก่อนเชื่อม local repository เข้ากับ remote repository'
-tags = ['programming', 'git', 'tutorial']
+tags = ['programming', 'git', 'tutorial', 'verified']
 +++
 
 ---
