@@ -1,9 +1,9 @@
 +++
-+++ title = 'ตอนที่ 7: Creating and Pushing to a Remote Repository'
-+++ date = '2026-08-14T00:00:00+07:00'
-+++ draft = false
-+++ description = 'สร้าง remote repository บน hosting service เชื่อมด้วย git remote add แล้ว push branch ขึ้น remote พร้อมแยก local branch, remote branch และ remote-tracking branch'
-+++ tags = ['programming', 'git', 'tutorial']
+title = 'ตอนที่ 7: Creating and Pushing to a Remote Repository'
+date = '2026-08-14T00:00:00+07:00'
+draft = false
+description = 'สร้าง remote repository บน hosting service เชื่อมด้วย git remote add แล้ว push branch ขึ้น remote พร้อมแยก local branch, remote branch และ remote-tracking branch'
+tags = ['programming', 'git', 'tutorial']
 +++
 
 ---
