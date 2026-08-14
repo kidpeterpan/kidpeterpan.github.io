@@ -2,7 +2,7 @@
 title = 'ตอนที่ 5: Merging'
 date = '2026-08-12T00:00:00+07:00'
 draft = false
-description = 'รวมงานจาก feature เข้า main ด้วย git merge เข้าใจ source branch, target branch, fast-forward merge และ detached HEAD แบบลงมือทำจริง'
+description = 'รวมงานจาก feature เข้า main ด้วย git merge พร้อมทำความเข้าใจ source branch, target branch, fast-forward merge และ detached HEAD แบบลงมือทำจริง'
 tags = ['programming', 'git', 'tutorial']
 +++
 
@@ -16,7 +16,7 @@ tags = ['programming', 'git', 'tutorial']
 
 สิ่งที่จะได้ตอนจบบทนี้:
 
-- แยก source branch กับ target branch ก่อนสั่ง merge
+- แยกได้ว่า branch ไหนคือ source และ branch ไหนคือ target ก่อนสั่ง merge
 - ทำนายได้ว่า merge จะเป็น fast-forward หรือ three-way จาก commit history
 - สลับไป target branch อย่างปลอดภัยและรู้ว่า Git จะหยุดเมื่อใด
 - ใช้ `git merge feature` รวมงาน `feature` เข้า `main`
@@ -26,7 +26,7 @@ tags = ['programming', 'git', 'tutorial']
 
 {{< mermaid >}}
 flowchart LR
-  A["feature = source<br/>main = target"] --> B{"histories diverge ไหม?"}
+  A["feature = source<br/>main = target"] --> B{"สองสาย diverge ไหม?"}
   B -->|"ไม่ diverge"| C["Fast-forward<br/>เลื่อน target pointer"]
   B -->|"diverge แล้ว"| D["Three-way<br/>สร้าง merge commit"]
   C --> E["git log --all<br/>ดูทุก branch"]
@@ -64,9 +64,9 @@ fc8139c (HEAD -> feature) yellow
 abc1234 red
 ```
 
-hash ในเครื่องของเราจะไม่เหมือนตัวอย่าง ไม่เป็นไร ขอให้เห็นความสัมพันธ์ว่า `feature` อยู่ข้างหน้า `main` และ working tree clean ก็พอ
+hash ในเครื่องของเราจะไม่เหมือนตัวอย่าง ไม่เป็นไร ขอแค่เห็นว่า `feature` อยู่ข้างหน้า `main` และ working tree clean ก็พอ
 
-ถ้าตอนนี้อยู่บน `main` ให้รัน `git switch feature` ก่อนทำตามบท หรือถ้ายังไม่มี commit `yellow` ให้กลับไปทำตอนที่ 4 ให้ครบก่อน
+ถ้าตอนนี้อยู่บน `main` ให้รัน `git switch feature` ก่อนทำตามบท หรือถ้ายังไม่มี commit `yellow` ก็กลับไปทำตอนที่ 4 ให้ครบก่อน
 
 เครื่องหมาย `$` ในตัวอย่างเป็นเพียง command prompt ไม่ต้องพิมพ์ตามไปด้วย
 
@@ -74,7 +74,7 @@ hash ในเครื่องของเราจะไม่เหมือ
 
 ## Step 1: Merge คืออะไร และใครเป็นคนถูกแก้?
 
-**Merge** คือการนำการเปลี่ยนแปลงจาก branch หนึ่งเข้าไปในอีก branch หนึ่ง แต่ก่อนสั่งต้องแยกบทบาทของ branch ให้ชัดก่อน เพราะมีเพียง branch ฝั่งรับเท่านั้นที่ถูกเปลี่ยนจาก operation นี้
+**Merge** คือการนำการเปลี่ยนแปลงจาก branch หนึ่งเข้าไปในอีก branch หนึ่ง แต่ก่อนสั่ง ต้องแยกบทบาทของ branch ให้ชัด เพราะมีเพียง branch ฝั่งรับเท่านั้นที่ถูกเปลี่ยนจาก operation นี้
 
 | บทบาท | ความหมาย | ถูกเปลี่ยนไหม? |
 |---|---|---|
@@ -86,7 +86,7 @@ hash ในเครื่องของเราจะไม่เหมือ
 - `feature` เป็น **source** เพราะมี commit `yellow` ที่ต้องการนำเข้า
 - `main` เป็น **target** เพราะเราต้องการให้สายหลักมีงานของ `yellow`
 
-### ทำไมต้องแยก source กับ target? (Why)
+### ทำไมต้องแยกบทบาทของ source กับ target? (Why)
 
 คำสั่งนี้:
 
@@ -116,7 +116,7 @@ git merge feature
 
 เรายังไม่รัน `git merge` ทันที จะขอดู commit history ก่อนว่า Git น่าจะเลือก merge แบบไหน
 
-> Merge เปลี่ยน target branch ไม่ได้เปลี่ยน source branch — จำประโยคนี้ไว้ก่อน แล้วคำสั่งจะสับสนน้อยลงเยอะ
+> Merge เปลี่ยน target branch ไม่ได้เปลี่ยน source branch — จำประโยคนี้ไว้ก่อน แล้วตอนสั่ง merge จะสับสนน้อยลงเยอะ
 
 ---
 
@@ -188,12 +188,12 @@ commit `M` นี้เรียกว่า **merge commit** เพราะม
 
 | | Fast-forward merge | Three-way merge |
 |---|---|---|
-| เงื่อนไข | histories ยังไม่ diverge | histories diverged แล้ว |
+| เงื่อนไข | histories ยังไม่ diverge | histories diverge กันแล้ว |
 | สิ่งที่ Git ทำ | เลื่อน target pointer ไปข้างหน้า | สร้าง merge commit แล้วเลื่อน target ไปชี้ commit ใหม่ |
 | มี commit ใหม่ไหม? | ไม่มี | มี merge commit ที่มี 2 parents |
 | มีโอกาสเจอ conflict ไหม? | ไม่มีจากการ merge รูปแบบนี้ | มี ถ้าการเปลี่ยนแปลงชนกัน |
 
-three-way merge เป็นจุดที่อาจเกิด **merge conflict** ได้ เช่นสอง branch แก้ส่วนเดียวกันของไฟล์เดียวกันคนละแบบ หรือ branch หนึ่งลบไฟล์ในขณะที่อีก branch แก้ไฟล์นั้นอยู่ รายละเอียดของ three-way merge และการแก้ merge conflict จะลงลึกในตอนถัด ๆ ไป
+three-way merge เป็นจุดที่อาจเกิด **merge conflict** ได้ เช่นสอง branch แก้ส่วนเดียวกันของไฟล์เดียวกันคนละแบบ หรือ branch หนึ่งลบไฟล์ในขณะที่อีก branch แก้ไฟล์นั้นอยู่ รายละเอียดของ three-way merge และการแก้ merge conflict จะอธิบายให้ละเอียดในตอนถัด ๆ ไป
 
 > ถ้าไล่ parent link จาก source แล้วย้อนกลับไปเจอ commit ที่ target ชี้อยู่ ให้คาดไว้ก่อนว่าเป็น fast-forward; ถ้าไม่เจอ ให้เตรียมรับมือกับ three-way merge
 
@@ -270,7 +270,7 @@ nothing to commit, working tree clean
 
 > Git จะเห็นเฉพาะการแก้ไขที่ถูกเซฟลงดิสก์แล้ว ถ้าแก้ข้อความค้างไว้ใน editor แต่ยังไม่กด save Git อาจมองไฟล์เป็น unmodified และไม่สามารถปกป้องข้อความใน editor ให้เราได้
 
-Git ไม่ได้หยุดทุกครั้งที่มี uncommitted changes ถ้าการสลับ branch ไม่ทำให้ไฟล์ที่แก้ถูกทับ มันอาจสลับให้และพาการแก้ค้างนั้นไปต่อได้ ดังนั้นทางที่อ่านง่ายที่สุดก่อนสลับคือทำให้ working tree clean
+Git ไม่ได้หยุดทุกครั้งที่มี uncommitted changes ถ้าการสลับ branch ไม่ทำให้ไฟล์ที่แก้ถูกทับ มันอาจสลับให้และพาการแก้ค้างนั้นไปต่อได้ ดังนั้นทางที่ง่ายที่สุดก่อนสลับคือทำให้ working tree clean
 
 ---
 
@@ -300,7 +300,7 @@ nothing to commit, working tree clean
 abc1234 red
 ```
 
-สังเกตว่า `git log` ตอนอยู่บน `main` เห็น `orange` กับ `red` แต่ยังไม่เห็น `yellow` เพราะ `yellow` อยู่ข้างหน้าสายที่ `main` ชี้อยู่ และไม่ใช่ commit ที่ไล่ parent link ย้อนกลับมาจาก `orange` ได้
+สังเกตว่า `git log` ตอนอยู่บน `main` เห็น `orange` กับ `red` แต่ยังไม่เห็น `yellow` เพราะ `yellow` อยู่ข้างหน้าสายที่ `main` ชี้อยู่ ไล่ parent link ย้อนกลับจาก `orange` ไปไม่ถึง
 
 ลองอ่านไฟล์ใน working directory:
 
@@ -493,7 +493,7 @@ Orange is the second color of the rainbow.
 
 เรายังเปิดดูไฟล์และสร้าง commit ได้ แต่ commit ที่สร้างจะไม่มี branch คอยชี้จำไว้ ถ้าสลับไป branch อื่นในภายหลัง เราอาจหา commit นั้นยากและไม่รู้ว่าควรกลับไปทางไหน
 
-ถ้าตั้งใจจะเริ่มงานใหม่จาก commit เก่า ให้สร้าง branch ให้มันมีชื่อก่อน:
+ถ้าตั้งใจจะเริ่มงานใหม่จาก commit เก่า ให้สร้าง branch ที่มีชื่อไว้ก่อน:
 
 ```sh
 git switch -c experiment-from-orange
@@ -564,7 +564,7 @@ nothing to commit, working tree clean
 git checkout -b another-experiment
 ```
 
-`git checkout` ยังใช้ได้ แต่ทำได้หลายหน้าที่ ทั้งสลับ branch และ check out commit ส่วน `git switch` ตั้งชื่อและหน้าที่ให้ชัดกว่า จึงเหมาะกับการสลับ branch ในบทเรียนนี้
+`git checkout` ยังใช้ได้ แต่ทำได้หลายหน้าที่ ทั้งสลับ branch และ check out commit ส่วน `git switch` ชื่อและหน้าที่ชัดกว่า จึงเหมาะกับการสลับ branch ในบทเรียนนี้
 
 ถ้าสร้าง branch เพื่อทดลองคำสั่งใน Step นี้เสร็จแล้ว ให้กลับไป `main` ก่อน:
 
@@ -589,7 +589,7 @@ branch ใหม่จะยังอยู่ แต่เราไม่ได
 
 ### ทดลองสถานการณ์ที่ Git หยุดป้องกันงาน
 
-ทำส่วนนี้ก่อน merge ในครั้งถัดไป หรือสร้าง repository ฝึกใหม่ถ้าไม่อยากแตะสถานะหลักของ `rainbow`:
+ทำส่วนนี้ก่อน merge ในครั้งถัดไป หรือสร้าง repository ใหม่สำหรับฝึก ถ้าไม่อยากยุ่งกับสถานะหลักของ `rainbow`:
 
 1. ให้ `main` ชี้ `orange` และ `feature` ชี้ `yellow` โดยอยู่บน `feature`
 2. เพิ่มบรรทัด `Green is the fourth color of the rainbow.` ใน `rainbowcolors.txt` แล้วเซฟ แต่ยังไม่ต้อง `git add` หรือ `git commit`
