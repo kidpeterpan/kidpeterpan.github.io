@@ -1281,6 +1281,76 @@ html[data-theme="dark"] .hero-art canvas.hero-cat {
   min-height: 1em;
 }
 
+/* episode navigation (ordered course sections) */
+.episode-nav {
+  margin-top: 44px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.episode-next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 16px;
+  padding: 16px 20px;
+  border: 2px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-pop-sm);
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.episode-next .episode-dir { grid-column: 1; }
+.episode-next .episode-title { grid-column: 1; }
+
+.episode-next .episode-arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 22px;
+  color: var(--accent-deep);
+}
+
+.episode-next:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--sky); }
+.episode-next:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--sky); }
+.episode-next:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+
+.episode-dir {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--green);
+}
+
+.episode-title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.episode-prev {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 2px 0;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.episode-prev .episode-title { font-size: 14px; color: var(--muted); }
+.episode-prev .episode-arrow { transition: transform 0.18s ease; }
+.episode-prev:hover { color: var(--green); }
+.episode-prev:hover .episode-title { color: var(--green); }
+.episode-prev:hover .episode-arrow { transform: translateX(-4px); }
+.episode-prev:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+
 /* article footer */
 .article-foot {
   margin-top: 56px;

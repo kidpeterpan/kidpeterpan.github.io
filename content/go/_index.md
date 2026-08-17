@@ -4,4 +4,5 @@ description = 'บันทึกการเรียนรู้ Go ตั้�
 [params]
 kicker = 'LEARNING GO'
 image = '/images/sections/go-gopher.jpg'
+ordered = true
 +++

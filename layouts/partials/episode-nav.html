@@ -1,0 +1,50 @@
+{{- /*
+  Previous/next navigation for an episode of an ordered course.
+  Renders nothing — not even whitespace — for notes outside such a course.
+
+  Neighbours come from ordered-pages.html rather than from .PrevInSection /
+  .NextInSection: those walk the section in date order, so across Go episodes
+  07 and 08 — which share a date — they point the wrong way.
+*/ -}}
+{{- $section := .Parent -}}
+{{- if $section.Params.ordered -}}
+  {{- $episodes := partial "ordered-pages.html" $section -}}
+  {{- $idx := -1 -}}
+  {{- range $i, $e := $episodes -}}
+    {{- if eq $e.RelPermalink $.RelPermalink -}}
+      {{- $idx = $i -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $prev := false -}}
+  {{- $next := false -}}
+  {{- if gt $idx 0 -}}
+    {{- $prev = index $episodes (sub $idx 1) -}}
+  {{- end -}}
+  {{- if and (ge $idx 0) (lt $idx (sub (len $episodes) 1)) -}}
+    {{- $next = index $episodes (add $idx 1) -}}
+  {{- end -}}
+
+  {{- if or $prev $next }}
+    {{/* This block sits inside <article data-pagefind-body>. Pagefind skips <nav>
+         by default, so the element alone keeps neighbour titles out of the search
+         index; measured as a <div> instead, all 19 episodes got polluted.
+         data-pagefind-ignore is belt-and-braces should this ever stop being a <nav>. */}}
+    <nav class="episode-nav" data-pagefind-ignore aria-label="Episode navigation">
+      {{- with $next }}
+        <a class="episode-next" href="{{ .RelPermalink }}">
+          <span class="episode-dir">NEXT EPISODE</span>
+          <span class="episode-title">{{ .Title }}</span>
+          <span class="episode-arrow" aria-hidden="true">→</span>
+        </a>
+      {{- end }}
+      {{- with $prev }}
+        <a class="episode-prev" href="{{ .RelPermalink }}">
+          <span class="episode-arrow" aria-hidden="true">←</span>
+          <span class="episode-dir">PREV EPISODE</span>
+          <span class="episode-title">{{ .Title }}</span>
+        </a>
+      {{- end }}
+    </nav>
+  {{- end -}}
+{{- end -}}

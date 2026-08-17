@@ -1,0 +1,19 @@
+{{/*
+  Returns a section's pages in reading order. Takes a section page as context.
+
+  Ordered courses sort ascending by filename, so the two-digit episode prefix
+  decides the order. Publication dates cannot: Go episodes 07 and 08 share a
+  date, and Hugo's date-ordered helpers put them the wrong way round.
+
+  Both the section listing and the episode navigation resolve pages through
+  here. Were they to sort separately, navigation could link to a page the
+  listing omits (FR-014).
+
+  Hugo allows a partial only one return, as its final statement — hence the
+  reassignment rather than an early return.
+*/}}
+{{ $pages := .Pages.ByDate.Reverse }}
+{{ if .Params.ordered }}
+  {{ $pages = sort .RegularPages "File.BaseFileName" }}
+{{ end }}
+{{ return $pages }}

@@ -4,4 +4,5 @@ description = 'บันทึกการเรียนรู้ Git ตั้
 [params]
 kicker = 'LEARNING GIT'
 image = '/images/sections/git-branch.jpg'
+ordered = true
 +++

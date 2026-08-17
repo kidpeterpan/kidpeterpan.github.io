@@ -8,7 +8,7 @@
       {{ end }}
     </header>
 
-    {{ with .Pages.ByDate.Reverse }}
+    {{ with partial "ordered-pages.html" . }}
       <section class="reveal d1" style="margin-top: 34px;">
         <div class="section-head">
           <div class="rule"></div>
