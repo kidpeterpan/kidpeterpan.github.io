@@ -1,0 +1,39 @@
+{{- $title := .Title | default site.Title -}}
+{{- if .IsHome -}}
+  {{- $title = site.Params.siteTitleFull | default site.Title -}}
+{{- end -}}
+{{- $title = $title | plainify -}}
+
+{{- $maxChars := 28 -}}
+{{- $maxLines := 3 -}}
+
+{{- $lines := slice -}}
+{{- $cur := "" -}}
+{{- range split $title " " -}}
+  {{- range findRE (printf ".{1,%d}" $maxChars) . -}}
+    {{- if and (ne $cur "") (gt (countrunes (printf "%s %s" $cur .)) $maxChars) -}}
+      {{- $lines = $lines | append $cur -}}
+      {{- $cur = . -}}
+    {{- else -}}
+      {{- $cur = strings.TrimPrefix " " (printf "%s %s" $cur .) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if ne $cur "" -}}{{- $lines = $lines | append $cur -}}{{- end -}}
+
+{{- $truncated := false -}}
+{{- if gt (len $lines) $maxLines -}}
+  {{- $truncated = true -}}
+  {{- $lines = first $maxLines $lines -}}
+{{- end -}}
+{{- $text := delimit $lines "\n" -}}
+{{- if $truncated -}}{{- $text = printf "%s…" $text -}}{{- end -}}
+
+{{- $out := "" -}}
+{{- with resources.Get "images/og-base.png" -}}
+  {{- $font := resources.Get "fonts/IBMPlexSansThai-Bold.ttf" -}}
+  {{- $t1 := images.Text $text (dict "font" $font "size" 54 "linespacing" 22 "color" "#0F211B" "x" 72 "y" 150) -}}
+  {{- $t2 := images.Text "kidpeterpan.github.io" (dict "font" $font "size" 30 "color" "#1C5C49" "x" 72 "y" 522) -}}
+  {{- $out = .Filter $t1 $t2 -}}
+{{- end -}}
+{{- return $out -}}

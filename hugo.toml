@@ -1,8 +1,9 @@
 baseURL = 'https://kidpeterpan.github.io/'
 defaultContentLanguage = 'th'
 locale = 'th-TH'
-title = 'kidpeterpan.github.io'
+title = 'kidpeterpan'
 enableRobotsTXT = true
+enableGitInfo = true
 
 [markup]
   [markup.goldmark.renderer]
@@ -18,6 +19,7 @@ enableRobotsTXT = true
 
 [params]
 author = 'kidpeterpan'
+siteTitleFull = 'kidpeterpan — บันทึกเรียนรู้ Go, Software Engineering & AI'
 description = 'บันทึกการเรียนรู้ภาษา Go, software engineering, AI และหนังสือ โดย kidpeterpan'
 googleAnalytics = 'G-LT3TCEMESB'
 

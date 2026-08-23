@@ -1,13 +1,25 @@
 {{- $desc := .Description | default .Summary | default site.Params.description | plainify | truncate 160 -}}
 {{- $title := .Title | default site.Title -}}
 {{- if .IsHome -}}
-  {{- $title = printf "%s — Notes on books, code, and learning" site.Title -}}
+  {{- $title = site.Params.siteTitleFull | default site.Title -}}
 {{- end -}}
 {{- $author := site.Params.author | default site.Title -}}
 {{- $siteURL := site.Home.Permalink -}}
 {{- $languageCode := site.Language.Locale | default site.Language.Lang -}}
 {{- $ogLocale := replace $languageCode "-" "_" -}}
-{{- $image := "/images/logo.png" | absURL -}}
+
+{{/* Social image: front matter `images` wins; otherwise a generated 1200x630 card */}}
+{{- $imgRes := "" -}}
+{{- $image := "" -}}
+{{- with .Params.images -}}
+  {{- $v := index . 0 -}}
+  {{- if reflect.IsMap $v -}}{{- $v = index $v "url" -}}{{- end -}}
+  {{- if not (urls.Parse $v).IsAbs -}}{{- $v = $v | absURL -}}{{- end -}}
+  {{- $image = $v -}}
+{{- else -}}
+  {{- $imgRes = partialCached "og-image.html" . .Permalink -}}
+  {{- with $imgRes -}}{{- $image = .Permalink -}}{{- end -}}
+{{- end -}}
 
 {{/* Search metadata */}}
 <meta name="description" content="{{ $desc }}">
@@ -22,10 +34,12 @@
 <meta property="og:locale" content="{{ $ogLocale }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:image" content="{{ $image }}">
-<meta property="og:image:alt" content="{{ site.Title }} logo">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="405">
-<meta property="og:image:height" content="616">
+<meta property="og:image:alt" content="{{ $title }} — {{ site.Title }}">
+{{- with $imgRes }}
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="{{ .Width }}">
+  <meta property="og:image:height" content="{{ .Height }}">
+{{ end }}
 {{ if .IsPage }}
   <meta property="og:type" content="article">
   {{ if not .PublishDate.IsZero }}
@@ -45,11 +59,11 @@
 {{ end }}
 
 {{/* Twitter Card */}}
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $desc }}">
 <meta name="twitter:image" content="{{ $image }}">
-<meta name="twitter:image:alt" content="{{ site.Title }} logo">
+<meta name="twitter:image:alt" content="{{ $title }} — {{ site.Title }}">
 
 {{/* JSON-LD */}}
 {{- $schema := dict
