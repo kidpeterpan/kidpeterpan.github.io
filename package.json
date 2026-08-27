@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.0",
     "pagefind": "1.5.2",

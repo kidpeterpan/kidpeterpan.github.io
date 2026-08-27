@@ -1,0 +1,29 @@
+{{ define "main" }}
+  <div class="wrap">
+    <article class="reveal app-shell" data-pagefind-body>
+      <a href="{{ "/apps/" | relURL }}" class="back-link"><span class="arr">←</span> APPS</a>
+
+      <header class="article-head">
+        <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
+        <h1>{{ .Title }}</h1>
+        {{ with .Description }}
+          <p class="desc" style="margin: 10px 0 0;">{{ . }}</p>
+        {{ end }}
+        <div class="article-rule"></div>
+      </header>
+
+      {{ with .Content }}
+        <div class="prose app-intro">{{ . }}</div>
+      {{ end }}
+
+      <div id="app-root" class="app-root"></div>
+
+      {{ with .Params.app_core_js }}
+        <script src="{{ "/js/apps/" | relURL }}{{ . }}" defer></script>
+      {{ end }}
+      {{ with .Params.app_js }}
+        <script src="{{ "/js/apps/" | relURL }}{{ . }}" defer></script>
+      {{ end }}
+    </article>
+  </div>
+{{ end }}

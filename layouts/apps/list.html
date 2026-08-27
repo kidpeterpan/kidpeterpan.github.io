@@ -1,0 +1,30 @@
+{{ define "main" }}
+  <main class="wrap list-body">
+    <header class="list-head reveal">
+      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}
+        <p class="desc">{{ . }}</p>
+      {{ end }}
+    </header>
+
+    <section class="reveal d1" style="margin-top: 34px;">
+      <div class="section-head">
+        <div class="rule"></div>
+        <span class="count">{{ len .RegularPages }} APP{{ if ne (len .RegularPages) 1 }}S{{ end }}</span>
+      </div>
+      <div class="app-grid">
+        {{ range sort .RegularPages "Params.order" }}
+          <a class="app-card" href="{{ .RelPermalink }}">
+            <span class="app-icon" aria-hidden="true">{{ .Params.icon | default "🔧" }}</span>
+            <h3>{{ .Title }}</h3>
+            <p>{{ .Description }}</p>
+            <span class="card-foot">
+              <span class="arrow">→</span>
+            </span>
+          </a>
+        {{ end }}
+      </div>
+    </section>
+  </main>
+{{ end }}

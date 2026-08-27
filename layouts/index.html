@@ -13,7 +13,7 @@
           {{ with site.Sections }}
             <a class="btn" href="{{ (index . 0).RelPermalink }}">READ THE NOTES →</a>
           {{ end }}
-          {{ with site.RegularPages.ByDate.Reverse }}
+          {{ with where site.RegularPages.ByDate.Reverse "Section" "ne" "apps" }}
             <a class="btn secondary" href="{{ (index . 0).RelPermalink }}">LATEST POST</a>
           {{ end }}
         </div>
@@ -54,7 +54,7 @@
       </section>
     {{ end }}
 
-    {{ with site.RegularPages.ByDate.Reverse }}
+    {{ with where site.RegularPages.ByDate.Reverse "Section" "ne" "apps" }}
       <section style="margin-top: 64px;" class="reveal d2">
         <div class="section-head">
           <h2>All notes</h2>
@@ -70,7 +70,7 @@
             </button>
             <div class="dd-menu" role="listbox">
               <button class="dd-item" type="button" role="option" data-cat="all" aria-selected="true"><span class="dd-name">All</span><span class="dd-count">{{ len . }}</span></button>
-              {{ range site.Sections }}
+              {{ range where site.Sections "Section" "ne" "apps" }}
                 <button class="dd-item" type="button" role="option" data-cat="{{ .Section }}" aria-selected="false"{{ if eq (len .RegularPages) 0 }} data-empty="true"{{ end }}><span class="dd-name">{{ .Title }}</span><span class="dd-count">{{ len .RegularPages }}</span></button>
               {{ end }}
             </div>
