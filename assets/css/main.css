@@ -1983,17 +1983,35 @@ html[data-theme="dark"] .pagefind-ui__result-link {
   .app-form .app-field:nth-child(3) { grid-column: 1 / -1; }
   .app-results { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .app-result { padding: 14px 14px 12px; }
-  .app-result .value { font-size: 19px; min-width: 0; overflow-wrap: anywhere; }
+  .app-result .value { font-size: 19px; min-width: 0; }
   .app-result:last-child { grid-column: 1 / -1; }
+
+  /* Five controls do not fit one phone row — the value field collapsed to
+     54px here, 24px at 320px, and clipped the number being typed. Each
+     period becomes a card of full-width controls. Every child is placed
+     explicitly; the old .rate-row-val rule matched no grid item at all. */
   .rate-row {
-    grid-template-columns: 60px minmax(0, 1fr) minmax(0, 1fr) 40px;
-    row-gap: 6px;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    row-gap: 9px;
+    padding: 12px;
+    border: 2px solid var(--line-strong);
+    background: var(--bg);
   }
-  .rate-row .rate-row-type { grid-column: 2; }
-  .rate-row .rate-row-val { grid-column: 3; }
-  .rate-row .rate-row-eff { grid-column: 2 / 4; grid-row: 2; text-align: left; }
-  .rate-row .rate-row-del { grid-column: 4; grid-row: 1 / 3; width: 40px; height: 36px; }
-  .rate-row-add { padding: 11px 14px; font-size: 13px; }
+  .rate-row .rate-row-num { grid-column: 1; grid-row: 1; }
+  .rate-row .rate-row-del {
+    grid-column: 2;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+    margin: -6px -4px -6px 0;
+  }
+  .rate-row .rate-row-type { grid-column: 1 / -1; grid-row: 2; min-height: 48px; }
+  .rate-row .rate-row-val-wrap { grid-column: 1 / -1; grid-row: 3; }
+  .rate-row .rate-row-val { font-size: 18px; min-height: 48px; }
+  .rate-row .rate-row-sign { width: 52px; min-height: 48px; padding: 0; }
+  .rate-row .rate-row-eff { grid-column: 1 / -1; grid-row: 4; text-align: left; }
+  .rate-builder { gap: 12px; }
+  .rate-row-add { align-self: stretch; min-height: 48px; padding: 0 14px; font-size: 13px; }
   .app-schedule-row { grid-template-columns: 60px 84px 1fr; }
   .app-schedule-row .schedule-pay { grid-column: 3; }
   .app-table-head { flex-direction: column; align-items: stretch; }
@@ -2013,4 +2031,9 @@ html[data-theme="dark"] .pagefind-ui__result-link {
     background: var(--bg);
     z-index: 2;
   }
+}
+
+/* Two result cards per row break currency figures mid-number this narrow. */
+@media (max-width: 380px) {
+  .app-results { grid-template-columns: 1fr; }
 }
