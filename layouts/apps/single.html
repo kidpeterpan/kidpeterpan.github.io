@@ -19,10 +19,10 @@
       <div id="app-root" class="app-root"></div>
 
       {{ with .Params.app_core_js }}
-        <script src="{{ "/js/apps/" | relURL }}{{ . }}" defer></script>
+        {{ partial "app-script.html" . }}
       {{ end }}
       {{ with .Params.app_js }}
-        <script src="{{ "/js/apps/" | relURL }}{{ . }}" defer></script>
+        {{ partial "app-script.html" . }}
       {{ end }}
     </article>
   </div>

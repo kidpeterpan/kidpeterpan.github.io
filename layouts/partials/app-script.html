@@ -1,0 +1,14 @@
+{{/* Renders one mini-app script from assets/js/apps/.
+     Fingerprinted in production so a fix reaches returning visitors on the
+     next deploy instead of waiting out their cached copy. */}}
+{{ with resources.Get (printf "js/apps/%s" .) }}
+  {{ if hugo.IsDevelopment }}
+    <script src="{{ .RelPermalink }}" defer></script>
+  {{ else }}
+    {{ with . | minify | fingerprint }}
+      <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{ end }}
+  {{ end }}
+{{ else }}
+  {{ warnf "app script not found: assets/js/apps/%s" . }}
+{{ end }}

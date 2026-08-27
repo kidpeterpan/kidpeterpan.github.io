@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import core from '../static/js/apps/mortgage-core.js';
+import core from '../assets/js/apps/mortgage-core.js';
 const { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule } = core;
 
 const BBL = { MRR: 6.5, MLR: 6.35, MOR: 6.5 };
