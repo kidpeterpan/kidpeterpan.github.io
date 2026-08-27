@@ -21,6 +21,40 @@
     return parseFloat(normalizeCommas(latin).replace(/[^\d.-]/g, ''));
   }
 
+  const RATE_TYPES = ['fixed', 'MRR', 'MLR', 'MOR'];
+
+  /* Turn one raw preset (straight from data/mortgage.yaml) into the shape the
+     rate builder edits, or null when a field would break the calculator.
+     A typo in the data file costs that one preset, not the whole app. */
+  function normalizePreset(raw, banks, maxPeriods) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+
+    const id = String(raw.id || '').trim();
+    const label = String(raw.label || '').trim();
+    if (!id || !label) return null;
+    if (!banks || !banks[raw.bank]) return null;
+
+    const amount = parse(raw.amount);
+    const years = parse(raw.years);
+    if (!(amount > 0) || !(years > 0)) return null;
+
+    const rows = raw.periods;
+    if (!Array.isArray(rows) || rows.length === 0 || rows.length > maxPeriods) return null;
+
+    const periods = [];
+    for (let i = 0; i < rows.length; i += 1) {
+      const row = rows[i];
+      if (!row || RATE_TYPES.indexOf(row.type) < 0) return null;
+      /* The builder round-trips these through <input>, so they stay strings —
+         a YAML author writing `val: 2.5` should not get a different type. */
+      const val = String(row.val).trim();
+      if (!Number.isFinite(parse(val))) return null;
+      periods.push({ type: row.type, val });
+    }
+
+    return { id, label, isDefault: raw.default === true, bank: raw.bank, amount, years, periods };
+  }
+
   /* Annual percentage rate for a period; null when the value is invalid. */
   function effectiveRate(type, rates, rawVal) {
     const v = parse(rawVal);
@@ -101,7 +135,7 @@
     return { months: i, totalInt, rows, stages };
   }
 
-  const core = { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule };
+  const core = { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule, normalizePreset };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = core;

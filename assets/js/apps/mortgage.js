@@ -2,7 +2,7 @@
   const root = document.getElementById('app-root');
   if (!root) return;
 
-  const { parse, chargedRate, periodsValid, buildPlan, runSchedule } = window.MortgageCore;
+  const { parse, chargedRate, periodsValid, buildPlan, runSchedule, normalizePreset } = window.MortgageCore;
 
   const BANKS = {
     gsb: { name: 'ออมสิน (GSB)', MRR: 6.045, MLR: 6.025, MOR: 5.695 },
@@ -20,6 +20,18 @@
   /* 50 ปี — เกินกว่านี้ตารางยาวจนเรนเดอร์ไม่ไหว ต้องบอกผู้ใช้ ไม่ใช่ตัดเงียบ */
   const MAX_MONTHS = 600;
 
+  /* ดีลสำเร็จรูปจาก data/mortgage.yaml — ไม่มีไฟล์ ไม่มี preset ที่ผ่านการตรวจ
+     หน้าก็ทำงานเหมือนเดิมทุกอย่าง แค่ไม่มีแถบเลือกดีล */
+  const appData = (() => {
+    const el = document.getElementById('app-data');
+    if (!el) return {};
+    try { return JSON.parse(el.textContent) || {}; } catch (e) { return {}; }
+  })();
+  const PRESETS = (Array.isArray(appData.presets) ? appData.presets : [])
+    .map((raw) => normalizePreset(raw, BANKS, MAX_PERIODS))
+    .filter(Boolean);
+  const CUSTOM = 'custom';
+
   const fmtNum = (v) => new Intl.NumberFormat('th-TH', { maximumFractionDigits: 0 }).format(Math.round(v));
   const fmtCur = (v) => new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', maximumFractionDigits: 0 }).format(Math.round(v));
   const fmtPct3 = (v) => `${new Intl.NumberFormat('th-TH', { maximumFractionDigits: 3 }).format(v)}%`;
@@ -32,6 +44,12 @@
   };
 
   root.innerHTML = `
+    <div class="app-preset" id="mort-preset-bar" hidden>
+      <label for="mort-preset">ดีลที่บันทึกไว้</label>
+      <select id="mort-preset"></select>
+      <button type="button" class="preset-edit" id="mort-preset-edit">ปรับเอง</button>
+    </div>
+
     <form class="app-form" autocomplete="off">
       <div class="app-field">
         <label for="mort-amount">วงเงินกู้ (บาท)</label>
@@ -117,6 +135,9 @@
   const bankSelect = document.getElementById('mort-bank');
   const copyBtn = document.getElementById('mort-copy');
   const exportBtn = document.getElementById('mort-export');
+  const presetBar = document.getElementById('mort-preset-bar');
+  const presetSelect = document.getElementById('mort-preset');
+  const presetEdit = document.getElementById('mort-preset-edit');
 
   let lastSched = null;
 
@@ -197,6 +218,52 @@
     render();
   });
 
+  /* โหมดล็อก: ช่องที่ preset กำหนดไว้จะจางและแก้ไม่ได้ เหลือ "ผ่อนเพิ่มต่อเดือน"
+     ช่องเดียวที่ปรับได้ — กด "ปรับเอง" (หรือเลือก "กำหนดเอง") เพื่อปลดทั้งฟอร์ม */
+  let locked = false;
+
+  function renderPresetSelect() {
+    presetSelect.innerHTML = PRESETS.map((p) => `<option value="${p.id}">${p.label}</option>`).join('') +
+      `<option value="${CUSTOM}">กำหนดเอง</option>`;
+  }
+
+  /* เรียกทุกครั้งหลัง renderBuilder เพราะ builder สร้าง input ชุดใหม่ทั้งหมด
+     สถานะ disabled ของชุดเก่าจึงหายไปกับ DOM เดิม */
+  function applyLock() {
+    [amount, years, bankSelect]
+      .concat(Array.from(builder.querySelectorAll('select, input, button')))
+      .forEach((el) => { el.disabled = locked; });
+    presetEdit.hidden = !locked;
+  }
+
+  function applyPreset(preset) {
+    bank = preset.bank;
+    /* คั่นหลักพันเพราะในโหมดล็อกช่องนี้ทำหน้าที่เป็นตัวเลขให้อ่าน ไม่ใช่ช่องกรอก
+       — parse() อ่านคอมมาได้อยู่แล้ว ค่าจึงยังใช้ต่อได้ตอนกด "ปรับเอง" */
+    amount.value = fmtNum(preset.amount);
+    years.value = String(preset.years);
+    periods = preset.periods.map((p) => ({ type: p.type, val: p.val }));
+    locked = true;
+    presetSelect.value = preset.id;
+    renderBankSelect();
+    renderBuilder();
+    render();
+  }
+
+  function unlock() {
+    locked = false;
+    presetSelect.value = CUSTOM;
+    applyLock();
+  }
+
+  presetSelect.addEventListener('change', (e) => {
+    const chosen = PRESETS.find((p) => p.id === e.target.value);
+    if (chosen) applyPreset(chosen);
+    else unlock();
+  });
+
+  presetEdit.addEventListener('click', unlock);
+
   function renderBuilder() {
     builder.innerHTML = periods.map((p, i) => `
       <div class="rate-row" data-i="${i}">
@@ -257,6 +324,7 @@
         render();
       });
     }
+    applyLock();
   }
 
   function buildPlanLocal(n) {
@@ -338,7 +406,15 @@
   }
 
   [amount, years, extra].forEach((el) => el.addEventListener('input', render));
-  renderBankSelect();
-  renderBuilder();
-  render();
+
+  const initial = PRESETS.find((p) => p.isDefault) || PRESETS[0];
+  if (initial) {
+    presetBar.hidden = false;
+    renderPresetSelect();
+    applyPreset(initial);
+  } else {
+    renderBankSelect();
+    renderBuilder();
+    render();
+  }
 })();

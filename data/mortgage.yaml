@@ -1,0 +1,30 @@
+# ดีลสินเชื่อที่หยิบมาเทียบกันบ่อย ๆ — แก้ตัวเลขที่นี่ที่เดียว ไม่ต้องแตะ JS
+#
+# periods: 1 รายการ = 1 ปี และรายการสุดท้ายใช้ต่อจนครบสัญญา (ตรงกับ rate builder ในหน้าเว็บ)
+#   type: fixed = อัตราคงที่, MRR / MLR / MOR = ส่วนต่างจากอัตราอ้างอิงของธนาคารนั้น
+#   bank: ต้องตรงกับคีย์ในตาราง BANKS ของ assets/js/apps/mortgage.js
+# preset ที่ผิดรูป (ธนาคารไม่มีจริง, ตัวเลขอ่านไม่ออก, เกิน 5 งวด) จะถูกข้ามไปเงียบ ๆ
+# ทั้งหน้ายังใช้ได้ปกติ — ดู normalizePreset ใน mortgage-core.js
+presets:
+  - id: ktb-2m-40y
+    label: 'KTB · 2 ล้าน 40 ปี'
+    default: true
+    bank: ktb
+    amount: 2000000
+    years: 40
+    periods:
+      - { type: fixed, val: '1.33' }
+      - { type: MLR, val: '-3.72' }
+      - { type: MLR, val: '-3' }
+      - { type: MRR, val: '0' }
+
+  - id: ttb-2m-35y
+    label: 'ttb · 2 ล้าน 35 ปี'
+    bank: ttb
+    amount: 2000000
+    years: 35
+    periods:
+      - { type: fixed, val: '2.5' }
+      - { type: fixed, val: '2.5' }
+      - { type: fixed, val: '2.5' }
+      - { type: MRR, val: '-1.130' }

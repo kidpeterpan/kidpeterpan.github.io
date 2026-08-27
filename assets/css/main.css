@@ -1648,10 +1648,74 @@ html[data-theme="dark"] .pagefind-ui__result-link {
 
 .app-root { margin-top: 26px; }
 
+.app-preset {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.app-preset label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.app-preset select {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--line-strong);
+  padding: 9px 10px;
+  min-width: 0;
+  flex: 1 1 220px;
+}
+
+.app-preset select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.preset-edit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--green);
+  background: transparent;
+  border: 1.5px solid var(--green);
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.preset-edit:hover {
+  background: var(--green);
+  color: var(--surface);
+}
+
 .app-form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+}
+
+/* preset ล็อกช่องไว้: ตัวเลขต้องอ่านออกครบ แต่ต้องดูชัดว่าแก้ไม่ได้จนกว่าจะกด "ปรับเอง"
+   pointer-events ปิดไว้เพราะปุ่มแต่ละตัวมีสี :hover ของตัวเอง — ปล่อยไว้จะดูเหมือนกดได้ */
+.app-form input:disabled,
+.app-form select:disabled,
+.app-form button:disabled {
+  opacity: 0.55;
+  background: var(--bg);
+  pointer-events: none;
 }
 
 .app-field {

@@ -1,0 +1,10 @@
+{{/* Hands one file from data/ to a mini app as JSON.
+     Called with the data key, e.g. `app_data = 'mortgage'` reads data/mortgage.yaml.
+     safeJS is what stops html/template from JSON-encoding the JSON a second
+     time inside <script>; jsonify still escapes < > & as < … so a stray
+     "</script>" in the data cannot break out of the tag. */}}
+{{ with index hugo.Data . }}
+  <script type="application/json" id="app-data">{{ . | jsonify | safeJS }}</script>
+{{ else }}
+  {{ warnf "app data not found: data/%s.*" . }}
+{{ end }}

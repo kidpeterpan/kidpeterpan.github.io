@@ -18,6 +18,9 @@
 
       <div id="app-root" class="app-root"></div>
 
+      {{ with .Params.app_data }}
+        {{ partial "app-data.html" . }}
+      {{ end }}
       {{ with .Params.app_core_js }}
         {{ partial "app-script.html" . }}
       {{ end }}

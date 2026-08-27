@@ -7,6 +7,7 @@ tags = ['tools', 'finance']
 [params]
 order = 1
 icon = '🏠'
+app_data = 'mortgage'
 app_core_js = 'mortgage-core.js'
 app_js = 'mortgage.js'
 +++

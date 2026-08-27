@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import core from '../assets/js/apps/mortgage-core.js';
-const { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule } = core;
+const { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule, normalizePreset } = core;
 
 const BBL = { MRR: 6.5, MLR: 6.35, MOR: 6.5 };
 const SCB = { MRR: 6.575, MLR: 6.35, MOR: 6.275 };
@@ -169,4 +169,59 @@ test('a term past 600 months still amortizes to zero', () => {
   assert.equal(s.months, n);
   close(s.rows[s.rows.length - 1].balance, 0, 1);
   close(s.rows.reduce((acc, r) => acc + r.pPaid, 0), P, 1);
+});
+
+const KTB = { MRR: 6.845, MLR: 6.3, MOR: 6.27 };
+const BANKS = { ktb: KTB, ttb: { MRR: 7.105, MLR: 6.95, MOR: 6.6 } };
+const ktbPreset = () => ({
+  id: 'ktb-2m-40y',
+  label: 'KTB · บ้าน 2 ล้าน 40 ปี',
+  default: true,
+  bank: 'ktb',
+  amount: 2000000,
+  years: 40,
+  periods: [
+    { type: 'fixed', val: '1.33' },
+    { type: 'MLR', val: '-3.72' },
+  ],
+});
+
+test('normalizePreset accepts a well-formed preset', () => {
+  const p = normalizePreset(ktbPreset(), BANKS, 5);
+  assert.equal(p.id, 'ktb-2m-40y');
+  assert.equal(p.bank, 'ktb');
+  assert.equal(p.amount, 2000000);
+  assert.equal(p.years, 40);
+  assert.equal(p.isDefault, true);
+  assert.deepEqual(p.periods, [
+    { type: 'fixed', val: '1.33' },
+    { type: 'MLR', val: '-3.72' },
+  ]);
+});
+
+test('normalizePreset reads numbers written the Thai way', () => {
+  const raw = { ...ktbPreset(), amount: '2,000,000', years: '๔๐' };
+  const p = normalizePreset(raw, BANKS, 5);
+  assert.equal(p.amount, 2000000);
+  assert.equal(p.years, 40);
+});
+
+test('normalizePreset keeps period values as strings the builder can edit', () => {
+  const raw = { ...ktbPreset(), periods: [{ type: 'fixed', val: 2.5 }] };
+  assert.deepEqual(normalizePreset(raw, BANKS, 5).periods, [{ type: 'fixed', val: '2.5' }]);
+});
+
+test('normalizePreset rejects anything the app could not render', () => {
+  const bad = (over) => normalizePreset({ ...ktbPreset(), ...over }, BANKS, 5);
+  assert.equal(bad({ bank: 'nonexistent' }), null, 'unknown bank');
+  assert.equal(bad({ id: '' }), null, 'missing id');
+  assert.equal(bad({ label: '   ' }), null, 'blank label');
+  assert.equal(bad({ amount: 0 }), null, 'zero amount');
+  assert.equal(bad({ years: 'ห้า' }), null, 'unparsable years');
+  assert.equal(bad({ periods: [] }), null, 'no periods');
+  assert.equal(bad({ periods: [{ type: 'PRIME', val: '1' }] }), null, 'unknown rate type');
+  assert.equal(bad({ periods: [{ type: 'fixed', val: 'x' }] }), null, 'unparsable rate');
+  assert.equal(bad({ periods: Array(6).fill({ type: 'fixed', val: '1' }) }), null, 'over max periods');
+  assert.equal(normalizePreset(null, BANKS, 5), null, 'nothing at all');
+  assert.equal(normalizePreset('ktb', BANKS, 5), null, 'not an object');
 });
