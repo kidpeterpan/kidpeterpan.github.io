@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import core from '../static/js/apps/mortgage-core.js';
-const { parse, effectiveRate, buildPlan, runSchedule } = core;
+const { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule } = core;
 
 const BBL = { MRR: 6.5, MLR: 6.35, MOR: 6.5 };
 const SCB = { MRR: 6.575, MLR: 6.35, MOR: 6.275 };
@@ -122,4 +122,51 @@ test('runSchedule: extra payment larger than the minimum closes the loan quickly
   assert.ok(s.months < 12);
   assert.equal(s.rows[0].i, 1);
   close(s.rows[s.rows.length - 1].balance, 0, 1);
+});
+
+test('parse tells a thousands comma from a decimal comma', () => {
+  assert.equal(parse('2,500,000'), 2500000);
+  assert.equal(parse('1,5'), 1.5);
+  assert.equal(parse('6,25'), 6.25);
+  assert.equal(parse('1,234'), 1234);
+  assert.equal(parse('1,234.56'), 1234.56);
+});
+
+test('chargedRate floors a negative result at zero', () => {
+  close(chargedRate('fixed', BBL, '2.50'), 2.5);
+  assert.equal(chargedRate('fixed', BBL, '-2.50'), 0);
+  assert.equal(chargedRate('MLR', BBL, '-9'), 0);
+  assert.equal(chargedRate('MLR', BBL, ''), null);
+});
+
+test('periodsValid rejects a half-typed row instead of guessing', () => {
+  const ok = [{ type: 'fixed', val: '2.50' }, { type: 'MLR', val: '-2.25' }];
+  assert.equal(periodsValid(ok, BBL), true);
+  assert.equal(periodsValid([{ type: 'fixed', val: '2.50' }, { type: 'MLR', val: '' }], BBL), false);
+  assert.equal(periodsValid([{ type: 'fixed', val: 'x' }], BBL), false);
+  assert.equal(periodsValid([], BBL), false);
+});
+
+test('plan rows carry the annual rate next to the monthly one', () => {
+  const plan = buildPlan(480, [{ type: 'fixed', val: '2.50' }, { type: 'MLR', val: '-2.25' }], BBL);
+  close(plan[0].annualPct, 2.5);
+  close(plan[1].annualPct, 4.1);
+  plan.forEach((st) => close(st.rate * 1200, st.annualPct));
+
+  const s = runSchedule(2000000, 480, plan, 0);
+  close(s.stages[0].annualPct, 2.5);
+  close(s.stages[1].annualPct, 4.1);
+  close(s.rows[0].annualPct, 2.5);
+  close(s.rows[s.rows.length - 1].annualPct, 4.1);
+});
+
+test('a term past 600 months still amortizes to zero', () => {
+  const P = 2000000;
+  const n = 720;
+  const plan = buildPlan(n, [{ type: 'fixed', val: '2.50' }, { type: 'MLR', val: '-2.25' }], BBL);
+  const s = runSchedule(P, n, plan, 0);
+
+  assert.equal(s.months, n);
+  close(s.rows[s.rows.length - 1].balance, 0, 1);
+  close(s.rows.reduce((acc, r) => acc + r.pPaid, 0), P, 1);
 });

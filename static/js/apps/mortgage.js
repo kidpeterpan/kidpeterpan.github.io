@@ -2,7 +2,7 @@
   const root = document.getElementById('app-root');
   if (!root) return;
 
-  const { parse, effectiveRate, buildPlan, runSchedule } = window.MortgageCore;
+  const { parse, chargedRate, periodsValid, buildPlan, runSchedule } = window.MortgageCore;
 
   const BANKS = {
     gsb: { name: 'ออมสิน (GSB)', MRR: 6.045, MLR: 6.025, MOR: 5.695 },
@@ -17,11 +17,19 @@
   let bank = 'ttb';
   const ref = () => BANKS[bank];
   const MAX_PERIODS = 5;
+  /* 50 ปี — เกินกว่านี้ตารางยาวจนเรนเดอร์ไม่ไหว ต้องบอกผู้ใช้ ไม่ใช่ตัดเงียบ */
+  const MAX_MONTHS = 600;
 
   const fmtNum = (v) => new Intl.NumberFormat('th-TH', { maximumFractionDigits: 0 }).format(Math.round(v));
   const fmtCur = (v) => new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', maximumFractionDigits: 0 }).format(Math.round(v));
-  const fmtPct = (v) => `${new Intl.NumberFormat('th-TH', { maximumFractionDigits: 2 }).format(v)}%`;
   const fmtPct3 = (v) => `${new Intl.NumberFormat('th-TH', { maximumFractionDigits: 3 }).format(v)}%`;
+  const fmtDur = (months) => {
+    const y = Math.floor(months / 12);
+    const m = months % 12;
+    if (y === 0) return `${fmtNum(m)} เดือน`;
+    if (m === 0) return `${fmtNum(y)} ปี`;
+    return `${fmtNum(y)} ปี ${fmtNum(m)} เดือน`;
+  };
 
   root.innerHTML = `
     <form class="app-form" autocomplete="off">
@@ -32,6 +40,7 @@
       <div class="app-field">
         <label for="mort-years">ระยะเวลาผ่อน (ปี)</label>
         <input id="mort-years" inputmode="decimal" placeholder="เช่น 30" value="40" />
+        <p class="rate-hint" id="mort-note" hidden></p>
       </div>
       <div class="app-field">
         <label for="mort-extra">ผ่อนเพิ่มต่อเดือน (บาท) <span class="opt">ไม่บังคับ</span></label>
@@ -63,11 +72,11 @@
     <div class="app-results app-bonus" id="mort-bonus" hidden>
       <div class="app-result">
         <span class="value" id="mort-actual">—</span>
-        <span class="label">จ่ายจริงต่อเดือน</span>
+        <span class="label" id="mort-actual-label">จ่ายจริงต่อเดือน</span>
       </div>
       <div class="app-result">
         <span class="value" id="mort-payoff">—</span>
-        <span class="label">จ่ายหมดไวขึ้น</span>
+        <span class="label" id="mort-payoff-label">ผ่อนหมดใน</span>
       </div>
       <div class="app-result">
         <span class="value" id="mort-saved">—</span>
@@ -99,6 +108,9 @@
   const actual = document.getElementById('mort-actual');
   const payoff = document.getElementById('mort-payoff');
   const saved = document.getElementById('mort-saved');
+  const note = document.getElementById('mort-note');
+  const actualLabel = document.getElementById('mort-actual-label');
+  const payoffLabel = document.getElementById('mort-payoff-label');
   const schedule = document.getElementById('mort-schedule');
   const table = document.getElementById('mort-table');
   const builder = document.getElementById('rate-builder');
@@ -116,10 +128,9 @@
   ];
 
   function effLabel(p) {
-    const r = effectiveRate(p.type, ref(), p.val);
+    const r = chargedRate(p.type, ref(), p.val);
     if (r === null) return '—';
-    if (p.type === 'fixed') return fmtPct3(r);
-    return `≈ ${fmtPct3(Math.max(r, 0))}`;
+    return p.type === 'fixed' ? fmtPct3(r) : `≈ ${fmtPct3(r)}`;
   }
 
   function copyText(t) {
@@ -141,9 +152,9 @@
   copyBtn.addEventListener('click', () => {
     if (!lastSched) return;
     const rows = lastSched.rows.map((r) =>
-      [r.i, (r.rate * 100).toFixed(2), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join('\t')
+      [r.i, r.annualPct.toFixed(3), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join('\t')
     );
-    const tsv = ['งวด\tอัตรา(%)\tเงินต้น\tดอกเบี้ย\tยอดคงเหลือ'].concat(rows).join('\n');
+    const tsv = ['งวด\tอัตราต่อปี(%)\tเงินต้น\tดอกเบี้ย\tยอดคงเหลือ'].concat(rows).join('\n');
     copyText(tsv)
       .then(() => {
         copyBtn.textContent = 'คัดลอกแล้ว ✓';
@@ -159,9 +170,9 @@
   exportBtn.addEventListener('click', () => {
     if (!lastSched) return;
     const rows = lastSched.rows.map((r) =>
-      [r.i, (r.rate * 100).toFixed(2), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join(',')
+      [r.i, r.annualPct.toFixed(3), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join(',')
     );
-    const csv = '\uFEFF' + ['งวด,อัตรา(%),เงินต้น,ดอกเบี้ย,ยอดคงเหลือ'].concat(rows).join('\n');
+    const csv = '\uFEFF' + ['งวด,อัตราต่อปี(%),เงินต้น,ดอกเบี้ย,ยอดคงเหลือ'].concat(rows).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -224,8 +235,8 @@
         render();
       });
       row.querySelector('.rate-row-sign').addEventListener('click', () => {
-        const v = parse(periods[i].val);
-        periods[i].val = Number.isFinite(v) ? String(-v) : '-0';
+        const raw = String(periods[i].val).trim();
+        periods[i].val = raw.startsWith('-') ? raw.slice(1) : `-${raw === '' ? '0' : raw}`;
         row.querySelector('.rate-row-val').value = periods[i].val;
         row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
         render();
@@ -258,8 +269,14 @@
     const extraAmt = parse(extra.value);
     const hasExtra = Number.isFinite(extraAmt) && extraAmt > 0;
 
-    const valid = [P, yrs].every(Number.isFinite) && P > 0 && yrs > 0;
-    const n = valid ? Math.max(1, Math.round(yrs * 12)) : 1;
+    const valid = [P, yrs].every(Number.isFinite) && P > 0 && yrs > 0 &&
+      periodsValid(periods, ref());
+    const wanted = valid ? Math.max(1, Math.round(yrs * 12)) : 1;
+    const n = Math.min(wanted, MAX_MONTHS);
+    note.hidden = wanted <= MAX_MONTHS;
+    if (!note.hidden) {
+      note.textContent = `คำนวณได้สูงสุด ${MAX_MONTHS / 12} ปี · ผลลัพธ์ด้านล่างคิดที่ ${MAX_MONTHS / 12} ปี`;
+    }
     const plan = valid ? buildPlanLocal(n) : [];
 
     if (!valid || plan.length === 0) {
@@ -285,7 +302,7 @@
     schedule.innerHTML = '<p class="app-table-title">ช่วงอัตรา</p>' + base.stages.map((st, idx) => `
       <div class="app-schedule-row">
         <span class="rate-row-num">ปีที่ ${idx + 1}</span>
-        <span class="rate-row-eff">${fmtPct(st.rate * 100)}</span>
+        <span class="rate-row-eff">${fmtPct3(st.annualPct)}</span>
         <span class="schedule-months">${st.months > 12 ? `ปีที่ ${idx + 1} เป็นต้นไป` : `ปีที่ ${idx + 1}`}</span>
         <span class="schedule-pay">ค่างวด ${fmtCur(st.payment)}</span>
       </div>
@@ -293,20 +310,25 @@
 
     if (hasExtra) {
       bonus.hidden = false;
-      actual.textContent = fmtCur(base.stages[0].payment + extraAmt);
-      const y = Math.floor(sched.months / 12);
-      const m = sched.months % 12;
-      payoff.textContent = `${fmtNum(y)} ปี ${fmtNum(m)} เดือน`;
+      const pays = sched.stages.map((st) => st.payment);
+      const peak = Math.max(...pays);
+      actual.textContent = fmtCur(pays[0]);
+      actualLabel.textContent = peak - pays[0] > 1
+        ? `จ่ายจริงต่อเดือน · ช่วงแรก (สูงสุด ${fmtCur(peak)})`
+        : 'จ่ายจริงต่อเดือน';
+      payoff.textContent = fmtDur(sched.months);
+      const faster = base.months - sched.months;
+      payoffLabel.textContent = faster > 0 ? `ผ่อนหมดใน · เร็วขึ้น ${fmtDur(faster)}` : 'ผ่อนหมดใน';
       saved.textContent = fmtCur(base.totalInt - sched.totalInt);
     } else {
       bonus.hidden = true;
     }
 
-    const head = '<tr><th>งวด</th><th>อัตรา</th><th>เงินต้น</th><th>ดอกเบี้ย</th><th>ยอดคงเหลือ</th></tr>';
+    const head = '<tr><th>งวด</th><th>อัตรา/ปี</th><th>เงินต้น</th><th>ดอกเบี้ย</th><th>ยอดคงเหลือ</th></tr>';
     const body = sched.rows.map((row) => `
       <tr>
         ${cell(fmtNum(row.i))}
-        ${cell(fmtPct(row.rate * 100))}
+        ${cell(fmtPct3(row.annualPct))}
         ${cell(fmtCur(row.pPaid))}
         ${cell(fmtCur(row.iPaid))}
         ${cell(fmtCur(row.balance))}
