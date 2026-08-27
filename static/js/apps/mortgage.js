@@ -196,7 +196,10 @@
           <option value="MLR"${p.type === 'MLR' ? ' selected' : ''}>MLR · ${fmtPct3(ref().MLR)}</option>
           <option value="MOR"${p.type === 'MOR' ? ' selected' : ''}>MOR · ${fmtPct3(ref().MOR)}</option>
         </select>
-        <input class="rate-row-val" inputmode="decimal" placeholder="%" value="${p.val}" aria-label="อัตราหรือส่วนต่างงวด ${i + 1}" />
+        <div class="rate-row-val-wrap">
+          <input class="rate-row-val" inputmode="decimal" placeholder="%" value="${p.val}" aria-label="อัตราหรือส่วนต่างงวด ${i + 1}" />
+          <button type="button" class="rate-row-sign" aria-label="สลับบวก/ลบงวด ${i + 1}">±</button>
+        </div>
         <span class="rate-row-eff">${effLabel(p)}</span>
         ${periods.length > 1 ? `<button type="button" class="rate-row-del" aria-label="ลบงวด ${i + 1}">✕</button>` : ''}
       </div>
@@ -217,6 +220,13 @@
       });
       row.querySelector('.rate-row-val').addEventListener('input', (e) => {
         periods[i].val = e.target.value;
+        row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
+        render();
+      });
+      row.querySelector('.rate-row-sign').addEventListener('click', () => {
+        const v = parse(periods[i].val);
+        periods[i].val = Number.isFinite(v) ? String(-v) : '-0';
+        row.querySelector('.rate-row-val').value = periods[i].val;
         row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
         render();
       });

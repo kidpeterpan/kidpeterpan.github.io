@@ -1750,6 +1750,35 @@ html[data-theme="dark"] .pagefind-ui__result-link {
   white-space: nowrap;
 }
 
+.rate-row-val-wrap {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rate-row-val-wrap .rate-row-val {
+  flex: 1;
+  min-width: 0;
+}
+
+.rate-row-sign {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--green);
+  background: transparent;
+  border: 2px solid var(--line-strong);
+  padding: 0 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.rate-row-sign:hover {
+  background: var(--green);
+  color: var(--surface);
+}
+
 .rate-row-del {
   font-family: var(--font-mono);
   font-size: 12px;
