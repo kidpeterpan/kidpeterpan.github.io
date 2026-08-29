@@ -190,3 +190,44 @@ herdr --remote workbox
 ```
 
 ---
+
+## Agents
+
+Herdr รู้ได้ยังไงว่า Agent ตัวไหนกำลังรอเราอยู่
+ถ้าเปิด coding agent พร้อมกันหลายตัวจนงงว่าตัวไหนทำงานเสร็จ ตัวไหนติดรออนุมัติอยู่
+นี่คือ core feature ของ Herdr เลยครับ มันเก็บแต่ละ agent ไว้ใน pane จริงๆ 
+แล้วคอย track state ของแต่ละตัว rollup ขึ้นไปที่ tab และ workspace 
+ให้เราเห็นได้จาก sidebar โดยไม่ต้องไล่เปิดดูทีละหน้าต่าง
+
+### รู้จัก agent ได้ยังไง
+
+Herdr detect agent ยอดนิยมได้อัตโนมัติ (Claude Code, Codex, Cursor Agent CLI, Copilot CLI, Gemini CLI ฯลฯ) ด้วย 2 วิธี: 
+(1) agent ที่มี **lifecycle hooks/plugin** ให้ install เพิ่ม (เช่น Claude, OMP, OpenCode) ซึ่งจะแม่นสุดเพราะรายงาน state ตรงๆ ส่วน agent ที่ไม่มี hook (2)
+Herdr จะอ่าน **screen manifest** คือสแกนข้อความที่แสดงอยู่ท้าย buffer ของ pane สด ๆ แล้วเทียบกับ pattern ที่รู้จัก เพื่อตัดสินว่า idle, working หรือ blocked
+
+### Blocked state
+
+ระบบจะ mark ว่า blocked ก็ต่อเมื่อจอตรงกับ UI ขออนุมัติ/คำถามที่รู้จักจริงๆ เท่านั้น ถ้าไม่ตรง rule ไหนเลยจะ fallback เป็น idle ไปก่อน 
+(เช็คเหตุผลได้ด้วย `herdr agent explain <target>`) 
+
+### Manifest อัปเดตเองได้
+
+Pattern พวกนี้ (เรียกว่า manifest) ฝังมากับตัว Herdr อยู่แล้ว แต่ก็ดึงอัปเดตจาก herdr.dev มา apply แบบ hot-reload ได้
+โดยไม่ต้อง restart ถ้าอยากปรับเอง วาง local override ไว้ที่ `~/.config/herdr/agent-detection/<agent>.toml` ได้เลย 
+(local จะ win เสมอ) ส่วนถ้าอยาก force reload ทันทีก็รัน `herdr server update-agent-manifests`
+
+### คำสั่งที่ใช้บ่อย
+
+- ติดตั้ง integration ให้ agent ตัวไหน: `herdr integration install claude` แล้วเช็คด้วย `herdr integration status`
+- ตั้งชื่อ agent เอง (ใช้แทน pane ID ยาวๆ): `herdr agent rename w1:p1 reviewer`
+- แนบ terminal ปัจจุบันเข้าไปคุยกับ agent ตัวเดียวตรงๆ (ไม่ต้องผ่าน UI เต็ม): `herdr agent attach reviewer` 
+— detach ด้วย `ctrl+b q`, ถ้ามีคนอื่น attach อยู่ก่อนใช้ `--takeover` แย่งสิทธิ์ input ได้
+
+### สำหรับ workflow แปลกๆ
+
+ถ้ารัน agent ผ่าน sandbox wrapper (เช่น fence, nono) ที่บัง process จริงไว้ ให้ตั้ง `HERDR_AGENT=<agent>` เพื่อบอก Herdr ว่าใช้ manifest ตัวไหนตรวจ 
+ส่วนถ้า Linux runtime บาง sandbox ไม่โชว์ foreground process group ให้เปิด `HERDR_PROCESS_DETECTION=child-groups` ตอน start server (ต้อง restart server เพื่อให้มีผล)
+
+ทั้งหมดนี้ออกแบบมาเพื่อให้ workflow เดียว เปิดหลาย agent พร้อมกัน ปล่อยให้มันทำงาน แล้วดูจาก sidebar ว่าตัวไหนต้องการเราตัดสินใจ ตัวไหนยังรันอยู่ ตัวไหนพร้อมให้ review แล้ว
+
+---
