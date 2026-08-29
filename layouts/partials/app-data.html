@@ -3,7 +3,7 @@
      safeJS is what stops html/template from JSON-encoding the JSON a second
      time inside <script>; jsonify still escapes < > & as < … so a stray
      "</script>" in the data cannot break out of the tag. */}}
-{{ with index hugo.Data . }}
+{{ with index site.Data . }}
   <script type="application/json" id="app-data">{{ . | jsonify | safeJS }}</script>
 {{ else }}
   {{ warnf "app data not found: data/%s.*" . }}

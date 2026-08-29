@@ -5,7 +5,7 @@
 {{- end -}}
 {{- $author := site.Params.author | default site.Title -}}
 {{- $siteURL := site.Home.Permalink -}}
-{{- $languageCode := site.Language.Locale | default site.Language.Lang -}}
+{{- $languageCode := site.Language.LanguageCode | default site.Language.Lang -}}
 {{- $ogLocale := replace $languageCode "-" "_" -}}
 
 {{/* Social image: front matter `images` wins; otherwise a generated 1200x630 card */}}
