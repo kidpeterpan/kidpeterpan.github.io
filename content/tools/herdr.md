@@ -28,6 +28,7 @@ curl -fsSL https://herdr.dev/install.sh | sh
 ---
 
 ## Why Herdr?
+
 - เห็นสถานะ agent ได้ในที่เดียว
 - จำ  session ของ terminal 
 - ใช้งานง่าย (mouse-first native)
@@ -104,5 +105,88 @@ Herdr มีโหมดการทำงาน 3 แบบ คือ
 
 terminal mode จะส่งปุ่มที่กดไปยัง pane ที่ focus อยู่ prefix mode จะรอ action ของ Herdr หนึ่งคำสั่งหลังจากกด prefix key ส่วน navigate mode คือหน้าจอสำหรับ navigate ไปมาระหว่าง workspace ที่แสดงอยู่ตลอดเวลา
 กด prefix key (ค่า default คือ ctrl+b) แล้วตามด้วย action key เช่น c เพื่อสร้าง tab ใหม่ หรือ w เพื่อ navigate ไปยัง workspace อื่น ดูรายละเอียดเพิ่มเติมได้ที่หน้า Keyboard หากยังไม่คุ้นเคยกับแนวคิดเรื่อง prefix
+
+---
+
+## วิธีใช้งาน Herdr 
+
+พื้นฐานที่ต้องเข้าใจก่อนคือ Herdr แยกเป็นสองส่วน: 
+
+- **server** ที่รันอยู่เบื้องหลัง คอย hold pane ทุกอันไว้ให้ทำงานต่อเนื่อง 
+- **client** ที่เป็นแค่หน้าต่าง terminal ที่เรา attach เข้าไปดู ปิด client ได้ตลอด และงานด้านในไม่ได้หยุดทำงาน
+
+---
+
+### ทำงานบนเครื่องตัวเอง (Local)
+
+ง่ายสุดครับ แค่ cd เข้าไปที่โปรเจกต์แล้วรัน
+
+```sh
+herdr
+```
+
+มันจะ start หรือ attach เข้า session ที่มีอยู่ให้อัตโนมัติ ไม่ต้องไปยุ่งกับเรื่อง socket เอง จะรัน shell, server, test, หรือ agent ข้างในแต่ละ pane ก็ทำได้ตามปกติ
+กด `ctrl+b q` เพื่อ detach — pane ทุกอันยังรันต่อ กลับมาทีหลังก็แค่พิมพ์ `herdr` ใหม่ ส่วนถ้าอยากปิดทุกอย่างจริงๆ ให้หยุด server ด้วย:
+
+```sh
+herdr server stop
+```
+
+---
+
+### ทำงานบนเครื่อง remote ผ่าน SSH
+
+SSH ไปที่เครื่องที่มีโค้ดกับ credential แล้วรัน herdr ที่นั่นเลย:
+
+```sh
+ssh you@server
+herdr
+```
+
+พฤติกรรมจะเหมือน terminal multiplexer ทั่วไป คือ shell, server, agent ทุกอย่างรันอยู่บนเครื่อง remote ทั้งหมด กด `ctrl+b q` เพื่อ detach แล้ว disconnect ได้เลย พอกลับมา SSH ใหม่แล้วรัน `herdr` อีกครั้งก็เจอ session เดิม
+วิธีนี้เหมาะกับคนที่ปกติอยู่ใน SSH shell อยู่แล้ว, ใช้มือถือ/แท็บเล็ตต่อผ่าน SSH client, หรืออยากได้ setup ที่ง่ายที่สุด
+
+---
+
+### ทำงานจากมือถือ
+
+ไม่ต้องมีแอปหรือ dashboard เฉพาะ แค่ลง SSH client ตัวไหนก็ได้ แล้ว SSH เข้าเครื่องที่ agent รันอยู่:
+
+```sh
+ssh you@server
+herdr
+```
+
+Session เดิมที่เคย persist ไว้จะเปิดขึ้นมาในมือถือทันที ตัว TUI ปรับ layout ให้เข้ากับหน้าจอแคบได้เอง ดู agent, สลับ workspace, เช็ก pane ได้โดยไม่ต้องออกจาก SSH เลย
+บน iPhone ใน doc บอกว่าได้ใช้ดีกับแอพ moshi
+
+---
+
+### ทำงาน remote จาก terminal เครื่องตัวเอง
+
+ถ้าไม่อยาก SSH เข้าไปเปิด shell ก่อน ให้ attach ผ่านโหมด thin client แทน:
+
+```sh
+herdr --remote workbox
+herdr --remote ssh://you@server:2222
+```
+
+ตัว Herdr บนเครื่องเราจะทำหน้าที่เป็น client บางๆ ต่อผ่าน SSH ไป start/attach server บน remote แล้ว stream UI กลับมาแสดงในเครื่องเรา
+จุดต่างสำคัญคือ วิธีนี้ client รันอยู่บนเครื่อง local จริงๆ เลยเชื่อม feature ของ desktop เราได้ เช่น paste รูปจาก clipboard ส่งไปยัง remote server ได้ด้วย
+ต่างจากถ้า SSH เข้าไปรัน herdr บนฝั่ง server ตรงๆ ซึ่งจะอ่าน clipboard ของเครื่องเราไม่ได้เลย
+ถ้าต้อง connect เครื่องเดิมบ่อยๆ ใส่ config ไว้ใน SSH config ให้เลย:
+
+```sh
+Host workbox
+HostName server.example.com
+User you
+Port 2222
+```
+
+แล้วก็ attach สั้นๆ ด้วย:
+
+```sh
+herdr --remote workbox
+```
 
 ---
