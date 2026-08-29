@@ -231,3 +231,56 @@ Pattern พวกนี้ (เรียกว่า manifest) ฝังมา�
 ทั้งหมดนี้ออกแบบมาเพื่อให้ workflow เดียว เปิดหลาย agent พร้อมกัน ปล่อยให้มันทำงาน แล้วดูจาก sidebar ว่าตัวไหนต้องการเราตัดสินใจ ตัวไหนยังรันอยู่ ตัวไหนพร้อมให้ review แล้ว
 
 ---
+
+## Agent Automation
+
+ถ้าอยากเขียนสคริปต์คุม coding agent เอง หรือให้ agent ตัวหนึ่งสั่งงาน agent ตัวอื่นแล้วรอผลลัพธ์ 
+Herdr เปิด CLI/socket API ให้ทำแบบนั้นได้เลย 
+
+**3 primitive ที่ต้องรู้จัก**
+
+- **Layout** (workspace/tab/pane) — สร้างและจัดตำแหน่ง terminal
+- **Pane** — คุม terminal ดิบๆ: รันคำสั่ง, ส่ง input, อ่าน output, รอ output
+- **Agent** — คุม agent ที่ Herdr รู้จักโดยเรียกผ่านชื่อหรือ pane พร้อมรู้จัก lifecycle state ของมัน
+
+จำง่ายๆ: pane มีอยู่ได้โดยไม่ต้องมี agent ข้างใน ส่วน agent คือ process ที่ Herdr recognize ว่ากำลังรันอยู่ใน pane นั้น ดังนั้น `agent start` ต้องมี shell pane อยู่ก่อนแล้วเสมอ ไม่ได้สร้าง layout ให้เอง
+
+คำสั่งสร้างต่างๆ (`workspace create`, `tab create`, `pane split`) จะ return เป็น JSON ให้เรา capture ID จาก response แทนการเดาเอง เช่น
+
+```sh
+created=$(herdr workspace create --cwd ~/project --label api --no-focus)
+pane_id=$(printf '%s\n' "$created" | jq -r '.result.root_pane.pane_id')
+```
+
+### ตั้งชื่อ agent ไว้ให้เรียกง่ายๆ
+
+pane ID อย่าง `w1:p2` คือที่อยู่ของ terminal ส่วนชื่อ agent เช่น `reviewer` คือ alias ชั่วคราวที่ผูกกับ agent ตัวที่กำลังรันอยู่ใน pane นั้น (พอ agent exit ชื่อก็หลุดไปด้วย) 
+ตอน start ต้องระบุ `--kind` ว่าเป็น agent ตัวไหน (claude, codex, gemini ฯลฯ) และต้องเป็น pane ที่ว่างอยู่ที่ prompt เปล่าๆ เท่านั้น
+
+### เลือกคำสั่งให้ตรงงาน
+
+ถ้าแค่รันคำสั่ง shell ธรรมดาใช้กลุ่ม `pane run` / `pane send-text` / `pane wait-output` แต่ถ้าจะคุย/สั่งงาน agent จริงๆ ใช้กลุ่ม `agent prompt` (ส่ง prompt), `agent send-keys` (กดปุ่มแบบ esc/enter/ctrl+c) และ `agent wait` (รอ lifecycle state)
+
+จุดที่ต้องระวัง: ถ้า agent กำลัง `blocked` อยู่ (รอ approve/ตอบคำถาม) แล้วเรายิง `agent prompt` เข้าไป มันจะไม่ส่ง input ให้ แต่ return `agent_blocked` กลับมาเฉยๆ 
+ต้องไปเช็คหน้าจอแล้วใช้ `agent send-keys` ตอบเองแทน ส่วน `--wait` ที่แนบไปกับ prompt จะรอจน state เข้า idle/done/blocked (กำหนดเองได้ด้วย `--until`)
+
+### อ่าน output ของ full-screen agent
+
+agent อย่าง Claude Code หรือ OpenCode render transcript อยู่ใน alternate screen ของ terminal ถ้า agent ว่าง (idle) แล้วเราขออ่านย้อนหลังเกินจอที่เห็น Herdr จะ auto scroll ไปดึงมาให้
+แล้วเลื่อนกลับลงล่างให้เหมือนเดิม แต่ถ้า agent ยังทำงานอยู่/blocked จะอ่านแบบนี้ไม่ได้ ต้องรอ idle ก่อน หรือใช้ `--source visible` แทน
+
+### ตัวอย่างที่ใช้บ่อย
+
+จะเปิด agent ผู้ช่วยขึ้นมา review diff แล้วรอผล:
+
+```sh
+split=$(herdr pane split --current --direction right --no-focus)
+review_pane=$(printf '%s\n' "$split" | jq -r '.result.pane.pane_id')
+herdr agent start reviewer --kind codex --pane "$review_pane" -- -m gpt-5.4
+herdr agent prompt reviewer "Review the current diff" --wait --timeout 120000
+herdr agent read reviewer --source recent-unwrapped --lines 120
+```
+
+ดู command เต็มๆ ได้ที่ CLI reference: https://herdr.dev/docs/cli-reference/
+
+---
