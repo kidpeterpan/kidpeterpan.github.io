@@ -3,7 +3,7 @@ title = 'ตอนที่ 1: Setting Up Your Go Environment'
 date = '2026-07-30T00:00:00+07:00'
 draft = false
 description = 'มือใหม่ Go? มาเริ่มจากศูนย์: ติดตั้ง toolchain, เขียนโปรแกรมแรก, ใช้ go build/go fmt/go vet และสร้าง Makefile แบบ step by step'
-tags = ['programming', 'go', 'tutorial']
+tags = ['programming', 'go', 'tutorial', 'verified']
 +++
 
 ตอนแรกของซีรีส์ Go เราจะเริ่มตั้งค่า environment ตั้งแต่ศูนย์ ตั้งแต่ติดตั้ง Go ไปจนถึงเขียนโปรแกรมแรกและใช้เครื่องมือพื้นฐานที่ควรรู้จัก เช่น `go build`, `go fmt`, `go vet` และ `Makefile`
