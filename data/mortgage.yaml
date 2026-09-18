@@ -6,17 +6,18 @@
 # preset ที่ผิดรูป (ธนาคารไม่มีจริง, ตัวเลขอ่านไม่ออก, เกิน 5 งวด) จะถูกข้ามไปเงียบ ๆ
 # ทั้งหน้ายังใช้ได้ปกติ — ดู normalizePreset ใน mortgage-core.js
 presets:
-  - id: ktb-2m-40y
-    label: 'KTB · 2 ล้าน 40 ปี'
+  # 470 เดือน = 39 ปี 2 เดือน · years 39.17 ปัดเป็น 470 งวดในหน้าเว็บ
+  - id: ktb-2m-470m
+    label: 'KTB · 2 ล้าน 470 เดือน'
     default: true
     bank: ktb
     amount: 2000000
-    years: 40
+    years: 39.17
     periods:
-      - { type: fixed, val: '1.33' }
-      - { type: MLR, val: '-3.72' }
-      - { type: MLR, val: '-3' }
-      - { type: MRR, val: '0' }
+      - { type: fixed, val: '2.3' }
+      - { type: MLR, val: '-4.00' }
+      - { type: MLR, val: '-4.00' }
+      - { type: MLR, val: '-1.00' }
 
   - id: ttb-2m-35y
     label: 'ttb · 2 ล้าน 35 ปี'
@@ -24,7 +25,7 @@ presets:
     amount: 2000000
     years: 35
     periods:
-      - { type: fixed, val: '2.5' }
-      - { type: fixed, val: '2.5' }
-      - { type: fixed, val: '2.5' }
+      - { type: fixed, val: '2.6' }
+      - { type: fixed, val: '2.6' }
+      - { type: fixed, val: '2.6' }
       - { type: MRR, val: '-1.130' }
