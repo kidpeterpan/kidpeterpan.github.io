@@ -6,63 +6,73 @@ description = 'มือใหม่ Go? มาเริ่มจากศูน
 tags = ['programming', 'go', 'tutorial']
 +++
 
----
+ตอนแรกของซีรีส์ Go เราจะเริ่มตั้งค่า environment ตั้งแต่ศูนย์ ตั้งแต่ติดตั้ง Go ไปจนถึงเขียนโปรแกรมแรกและใช้เครื่องมือพื้นฐานที่ควรรู้จัก เช่น `go build`, `go fmt`, `go vet` และ `Makefile`
 
-ตอนที่ 1 ของซีรีส์ Go เราจะตั้งค่า environment ตั้งแต่ศูนย์ — ติดตั้ง Go, เริ่มเขียนโปรแกรมแรก, เรียนรู้เครื่องมือหลักอย่าง `go build`, `go fmt`, `go vet` และสร้าง `Makefile` เพื่อ automate workflow
+เมื่อจบบทนี้ คุณจะสามารถ:
 
-สิ่งที่จะได้ตอนจบบทนี้:
+- ติดตั้ง Go และตรวจสอบว่าใช้งานได้
+- สร้าง Go module และเขียนโปรแกรมแรก
+- Compile โปรแกรมให้เป็น native binary
+- ใช้ `go fmt` และ `go vet` เพื่อตรวจสอบโค้ด
+- สร้าง `Makefile` เพื่อรวม workflow ทั้งหมดไว้ในคำสั่งเดียว
+- นำ workflow แบบนี้ไปใช้กับ Go project อื่นได้
 
-- โปรแกรม Hello World ที่ compile เป็น native binary ได้
-- เข้าใจ `go build`, `go fmt` และ `go vet` และใช้ให้เป็นนิสัย
-- `Makefile` ที่รัน workflow `fmt → vet → build` ใน command เดียว
-- workflow มาตรฐานที่นำไปใช้กับ project อื่น ๆ ได้
+Workflow หลักของเราจะเป็นแบบนี้:
 
 {{< mermaid >}}
-graph TD
-  A["Source code .go"] -->|go fmt| B["Formatted code"]
-  B -->|go vet| C{"Static checks pass?"}
-  C -->|yes| D["go build"]
-  C -->|no| A
+flowchart TD
+  A["Source code (.go)"] --> B["go fmt"]
+  B --> C["go vet"]
+  C -->|ผ่าน| D["go build"]
+  C -->|ไม่ผ่าน| A
   D --> E["Native binary"]
-  E --> F["Deploy / run"]
+  E --> F["Run / Deploy"]
 {{< /mermaid >}}
 
 ---
 
 ## Step 1: ติดตั้ง Go
 
-Go toolchain มีตัวติดตั้งสำหรับทุก platform ให้เลือกตามเครื่องที่ใช้
+Go มีตัวติดตั้งสำหรับหลาย platform ให้เลือกใช้ตามระบบปฏิบัติการของคุณ
 
 ### macOS
 
-**วิธีที่ 1: Homebrew (แนะนำ)**
+#### วิธีที่ 1: Homebrew
 
-```
+ถ้าใช้ Homebrew วิธีนี้ง่ายที่สุด:
+
+```sh
 brew install go
 ```
 
-**วิธีที่ 2: ดาวน์โหลด installer**
+#### วิธีที่ 2: ดาวน์โหลด Installer
 
-ดาวน์โหลดไฟล์ `.pkg` จาก [go.dev/dl](https://go.dev/dl/) ดับเบิลคลิกแล้วทำตามขั้นตอนใน wizard — installer จะติดตั้ง Go และตั้งค่า `PATH` ให้อัตโนมัติ
+ดาวน์โหลดไฟล์ `.pkg` จาก [go.dev/dl](https://go.dev/dl/) แล้วเปิดไฟล์ จากนั้นทำตามขั้นตอนใน installer
+
+โดยปกติ installer จะจัดการ `PATH` ให้ด้วย
 
 ### Windows
 
-**วิธีที่ 1: Chocolatey**
+#### วิธีที่ 1: Chocolatey
 
-```
+```sh
 choco install golang
 ```
 
-**วิธีที่ 2: Installer**
+#### วิธีที่ 2: Installer
 
-ดาวน์โหลดไฟล์ `.msi` จาก [go.dev/dl](https://go.dev/dl/) แล้วรัน — installer จะตั้งค่า `PATH` ให้เช่นกัน
+ดาวน์โหลดไฟล์ `.msi` จาก [go.dev/dl](https://go.dev/dl/) แล้วติดตั้งตามขั้นตอน
+
+Installer จะตั้งค่า `PATH` ให้โดยอัตโนมัติ
 
 ### Linux / BSD
 
-ดาวน์โหลด tarball แล้วแตกไฟล์ไปไว้ที่ `/usr/local`:
+ดาวน์โหลด Go tarball จาก [go.dev/dl](https://go.dev/dl/) แล้วแตกไฟล์ไปที่ `/usr/local`
 
-```
-# ดาวน์โหลด tarball (เช็ค version ล่าสุดที่ go.dev/dl)
+ตัวอย่าง:
+
+```sh
+# ดาวน์โหลด tarball จาก go.dev/dl ก่อน
 tar -C /usr/local -xzf go1.22.0.linux-amd64.tar.gz
 
 # เพิ่ม Go ลงใน PATH
@@ -71,56 +81,86 @@ source $HOME/.bash_profile
 ```
 
 > [!CAUTION]
-> ถ้า `tar` ขึ้น error ให้เติม `sudo` เพราะการเขียนใน `/usr/local` ต้องใช้สิทธิ์ root
+> ถ้า `tar` ขึ้น permission error ให้ใช้ `sudo` เพราะ `/usr/local` ต้องใช้สิทธิ์ root ในหลายระบบ
 
 ---
 
 ### ตรวจสอบการติดตั้ง
 
-เปิด terminal หน้าต่างใหม่ แล้วพิมพ์:
+เปิด terminal ใหม่แล้วรัน:
 
-```
+```sh
 go version
 ```
 
-ถ้าติดตั้งสำเร็จจะเห็น output ประมาณนี้:
+ถ้าติดตั้งสำเร็จ จะเห็น output ประมาณนี้:
 
-```
+```text
 go version go1.22.0 darwin/arm64
 ```
 
-ส่วนประกอบของ output มีดังนี้:
-- **`go1.22.0`** — เวอร์ชันของ Go
-- **`darwin`** — kernel ของ macOS (Linux จะเป็น `linux`, Windows เป็น `windows`)
-- **`arm64`** — สถาปัตยกรรม CPU (Apple Silicon = `arm64`, Intel/AMD = `amd64`)
+ค่าต่าง ๆ หมายถึง:
 
-### ถ้า `go version` ไม่ทำงาน?
+- `go1.22.0` — เวอร์ชันของ Go
+- `darwin` — ระบบปฏิบัติการของเครื่อง ซึ่ง macOS ใช้ `darwin`
+- `arm64` — architecture ของ CPU เช่น Apple Silicon
 
-ปัญหามักจะมาจาก:
+บน Linux จะเห็น `linux` และบน Windows จะเห็น `windows`
 
-1. **`go` ไม่อยู่ใน `PATH`** — ตรวจสอบด้วย `which go` (macOS/Linux) ถ้าไม่แสดงผลลัพธ์ ให้กลับไปแก้ `PATH`
-2. **มีโปรแกรมชื่อ `go` อื่นบดบัง** — `which go` จะบอกว่า binary ที่ถูกเรียกอยู่ที่ไหน
-3. **ติดตั้งผิด architecture** — ลง 64-bit tools บนระบบ 32-bit หรือเลือก chip architecture ไม่ตรงกับเครื่อง (ตรวจสอบด้วย `uname -m` บน Linux)
+สำหรับ architecture ที่พบบ่อย:
+
+- `arm64` — Apple Silicon และ ARM 64-bit
+- `amd64` — Intel/AMD 64-bit
+
+### ถ้า `go version` ใช้งานไม่ได้
+
+ปัญหาที่พบบ่อยมีอยู่ไม่กี่อย่าง:
+
+1. `go` ไม่ได้อยู่ใน `PATH`
+
+   บน macOS/Linux ลอง:
+
+   ```sh
+   which go
+   ```
+
+   ถ้าไม่มี output ให้ตรวจสอบ `PATH`
+
+2. มีโปรแกรมอื่นชื่อ `go` อยู่ก่อนหน้าใน `PATH`
+
+   `which go` จะช่วยบอกว่า shell กำลังเรียก `go` จากที่ไหน
+
+3. ติดตั้ง architecture ไม่ตรงกับเครื่อง
+
+   บน Linux ตรวจสอบได้ด้วย:
+
+   ```sh
+   uname -m
+   ```
 
 ---
 
 ## Step 2: สร้าง Go Module
 
-ให้มองว่าโปรเจกต์ Go ทุกโปรเจกต์คือ "module" ซึ่งระบุด้วยไฟล์ `go.mod` ที่ root ของ project และสร้างด้วยคำสั่ง `go mod init`:
+ใน Go แต่ละ project มักจะถูกจัดการเป็น **module**
 
-```
+module จะมีไฟล์ `go.mod` อยู่ที่ root ของ project
+
+เริ่มจากสร้างโฟลเดอร์:
+
+```sh
 mkdir hello_world
 cd hello_world
 go mod init hello_world
 ```
 
-Output:
+เราจะได้ output ประมาณนี้:
 
-```
+```text
 go: creating new go.mod: module hello_world
 ```
 
-ไฟล์ `go.mod` ที่สร้างขึ้นจะมีหน้าตาประมาณนี้:
+จากนั้นจะมีไฟล์ `go.mod`:
 
 ```go
 module hello_world
@@ -128,16 +168,24 @@ module hello_world
 go 1.22
 ```
 
-ไฟล์นี้ทำหน้าที่คล้าย `package.json` ของ Node.js, `requirements.txt` ของ Python หรือ `Gemfile` ของ Ruby โดยระบุชื่อ module, Go version ขั้นต่ำ และ dependencies ของโปรเจกต์
+ไฟล์นี้ใช้เก็บข้อมูลสำคัญของ project เช่น:
+
+- ชื่อ module
+- Go version
+- dependencies ที่ project ใช้
+
+ถ้าเคยใช้ Node.js ให้คิดว่า `go.mod` มีหน้าที่คล้าย `package.json`
+
+ถ้าเคยใช้ Python ก็มีแนวคิดใกล้เคียงกับไฟล์ที่ใช้ระบุ dependencies ของ project
 
 > [!WARNING]
-> **อย่าแก้ `go.mod` ด้วยมือ** — ให้ใช้ `go get` และ `go mod tidy` แทน รายละเอียดจะอยู่ในตอนต่อไปของซีรีส์
+> พยายามอย่าแก้ dependency ใน `go.mod` ด้วยมือ ให้ใช้คำสั่งของ Go เช่น `go get` และ `go mod tidy` แทน
 
 ---
 
 ## Step 3: เขียนโปรแกรมแรก — Hello World
 
-สร้างไฟล์ `hello.go` ในโฟลเดอร์ `hello_world`:
+สร้างไฟล์ `hello.go` ในโฟลเดอร์ `hello_world`
 
 ```go
 package main
@@ -149,80 +197,86 @@ fmt.Println("Hello, world!")
 }
 ```
 
-สังเกตว่า `fmt.Println` ไม่ได้ indent — **ตั้งใจเขียนแบบนี้** เพื่อสาธิตการทำงานของ `go fmt` ในขั้นถัดไป
+ตอนนี้เราเขียน `fmt.Println` ให้ไม่ตรงรูปแบบ เพื่อให้เห็นว่า `go fmt` ช่วยจัด format ให้เราอย่างไรในขั้นตอนถัดไป
 
 ### โครงสร้างของไฟล์ Go
 
-| ส่วน | คำอธิบาย |
-|---|---|
-| `package main` | **Package declaration** — บอกว่าไฟล์นี้อยู่ใน package ชื่อ `main` ซึ่งเป็น package พิเศษที่มี entry point ของโปรแกรม |
-| `import "fmt"` | **Import declaration** — นำเข้า package `fmt` สำหรับ format และ print output Go import ได้ทั้ง package เท่านั้น — ไม่สามารถ import แค่ type หรือ function เดียวเหมือน Python |
-| `func main()` | **Entry point** — ทุกโปรแกรม Go เริ่มที่ `func main()` ใน `package main` |
-| `fmt.Println(...)` | เรียกใช้ function `Println` จาก package `fmt` เพื่อแสดงข้อความออกทางหน้าจอ |
+| ส่วน | ความหมาย |
+| --- | --- |
+| `package main` | บอกว่าไฟล์นี้อยู่ใน package `main` ซึ่งเป็น package สำหรับ executable program |
+| `import "fmt"` | นำ package `fmt` เข้ามาใช้สำหรับแสดงข้อความและจัดรูปแบบ output |
+| `func main()` | จุดเริ่มต้นของโปรแกรม |
+| `fmt.Println(...)` | เรียก `Println` จาก package `fmt` เพื่อแสดงข้อความ |
 
 ---
 
 ## Step 4: Compile ด้วย `go build`
 
-Compile โค้ดให้เป็น native binary ด้วยคำสั่งนี้:
+ใช้ `go build` เพื่อ compile โปรแกรม:
 
-```
+```sh
 go build
 ```
 
-ถ้าไม่มี error จะได้ binary ที่ใช้ชื่อตาม module declaration — ในที่นี้คือ `hello_world` ลองรันด้วยคำสั่งนี้:
+ถ้าไม่มี error Go จะสร้าง binary ให้
 
-```
+ในตัวอย่างนี้ binary จะชื่อ `hello_world` ตามชื่อ module
+
+ลองรัน:
+
+```sh
 ./hello_world
 ```
 
 Output:
 
-```
+```text
 Hello, world!
 ```
 
-### ใช้ flag `-o` เพื่อระบุชื่อ binary เอง
+### ตั้งชื่อ binary เองด้วย `-o`
 
-```
+เราสามารถเลือกชื่อ binary เองได้:
+
+```sh
 go build -o hello
 ./hello
 ```
 
-### `go run` — รันโดยไม่สร้าง binary file
+### `go run` — รันโดยไม่เก็บ binary ไว้
 
-ถ้าต้องการรันโดยไม่สร้าง binary ค้างไว้ในโฟลเดอร์ ให้ใช้ `go run`:
+ถ้าต้องการทดลองโปรแกรมเร็ว ๆ และไม่อยากเก็บ binary ไว้ในโฟลเดอร์ ให้ใช้:
 
-```
+```sh
 go run .
 ```
 
-เหมาะกับ script เล็ก ๆ หรือเวลาที่ต้องการทดสอบโค้ดอย่างรวดเร็ว
+เหมาะมากสำหรับการทดลองโค้ดหรือโปรแกรมเล็ก ๆ
 
 > [!NOTE]
-> **Single native binary** — Go programs compile เป็น binary เดียวและรันแบบ stand-alone ได้ ไม่ต้องติดตั้ง VM หรือ runtime แยก (ต่างจาก Java, Python และ Node.js) ทำให้ deploy ได้ง่ายมาก สำหรับ container สามารถใช้ `scratch` หรือ `distroless` image ได้เลย
+> Go สามารถ compile โปรแกรมเป็น native binary ที่รันได้โดยตรง จึงไม่ต้องติดตั้ง VM หรือ runtime แยกเหมือนบางภาษา ทำให้การ deploy ค่อนข้างตรงไปตรงมา
 
 ---
 
 ## Step 5: Format โค้ดด้วย `go fmt`
 
-หนึ่งในการตัดสินใจที่สำคัญที่สุดของ Go คือ **กำหนด code format ให้เป็นมาตรฐานเดียวกัน** — ไม่มีหลายรูปแบบให้ต้องถกเถียงกัน
+Go มีแนวคิดสำคัญอย่างหนึ่งคือ **ทุกคนควรใช้ code format แบบเดียวกัน**
 
-Go ใช้ tab indent และวาง `{` ไว้บรรทัดเดียวกับ declaration — ทุกคนจึงเขียนโค้ดในรูปแบบเดียวกัน
+แทนที่จะเสียเวลาถกกันว่า indent แบบไหนดี หรือ `{` ควรอยู่ตรงไหน Go จึงมี formatter มาให้ในตัว
 
-รัน `go fmt` เพื่อ format ไฟล์ทั้งหมดใน project:
+ใช้คำสั่งนี้เพื่อ format ทุก package ใน project:
 
-```
+```sh
 go fmt ./...
 ```
 
-Output:
+Output อาจเป็น:
 
-```
+```text
 hello.go
 ```
 
-เปิด `hello.go` ดู จะเห็นว่า `fmt.Println` ถูก indent ด้วย tab ให้อัตโนมัติแล้ว:
+หลังจากนั้นลองเปิด `hello.go` อีกครั้ง:
 
 ```go
 package main
@@ -234,27 +288,36 @@ func main() {
 }
 ```
 
-`./...` คือการบอกให้ Go ทำงานกับทุก package ในโฟลเดอร์ปัจจุบันและ subdirectory ทั้งหมด — pattern นี้ใช้บ่อยใน Go tooling
+สังเกตว่า `fmt.Println` ถูก indent ให้เรียบร้อยแล้ว
+
+### `./...` หมายถึงอะไร?
+
+`./...` หมายถึง:
+
+> ทุก package ตั้งแต่ directory ปัจจุบัน รวมไปถึง subdirectory ต่าง ๆ
+
+pattern นี้พบได้บ่อยมากใน Go commands
 
 ### ทำไม `{` ต้องอยู่บรรทัดเดียวกับ `func`?
 
-Go มีกฎที่เรียกว่า **Semicolon Insertion Rule** — compiler จะเติม `;` ท้ายทุก statement ให้อัตโนมัติ หาก token สุดท้ายก่อน newline เป็น:
+Go มีสิ่งที่เรียกว่า **semicolon insertion**
 
-- identifier (เช่น `int`, `float64`)
-- literal (number, string)
-- keyword/token: `break`, `continue`, `fallthrough`, `return`, `++`, `--`, `)`, `}`
+Compiler จะเติม `;` ให้บางตำแหน่งโดยอัตโนมัติเมื่อเจอ newline
 
-ดังนั้นถ้าเขียนแบบนี้:
+ดังนั้นรูปแบบนี้:
 
 ```go
-// ❌ ผิด — compile ไม่ผ่าน
 func main()
 {
 	fmt.Println("Hello, world!")
 }
 ```
 
-Compiler เห็น `)` ท้ายบรรทัด `func main()` แล้วแทรก `;` กลายเป็น:
+จะไม่สามารถ compile ได้
+
+สาเหตุคือ compiler มองว่าหลัง `func main()` จบบรรทัดแล้ว จึงตีความเหมือนมี `;` อยู่ตรงนั้น
+
+แนวคิดโดยประมาณจะกลายเป็น:
 
 ```go
 func main();
@@ -263,18 +326,28 @@ func main();
 };
 ```
 
-ซึ่งไม่ใช่ Go ที่ถูกต้องตาม syntax — กฎที่เรียบง่ายนี้ทำให้ compiler ทำงานเร็วและช่วยบังคับ coding style ไปในตัว
+ซึ่งไม่ใช่ syntax ที่ถูกต้องของ Go
 
-> [!WARNING]
-> **อย่าลืม `go fmt` ก่อน commit** — หากลืมแล้วต้องมา format ภายหลัง ให้แยก commit ที่รัน `go fmt ./...` อย่างเดียวออกจาก logic changes เพื่อให้ diff อ่านง่าย
+เพราะฉะนั้นใน Go จึงต้องเขียนแบบนี้:
+
+```go
+func main() {
+	fmt.Println("Hello, world!")
+}
+```
+
+กฎนี้ไม่ได้เป็นแค่เรื่อง style แต่เป็นส่วนหนึ่งของ syntax ของภาษา
+
+> [!TIP]
+> ก่อน commit ควรรัน `go fmt ./...` เสมอ จะช่วยให้ทุกคนในทีมใช้ format เดียวกัน
 
 ---
 
 ## Step 6: ตรวจสอบโค้ดด้วย `go vet`
 
-`go vet` ช่วยหา bug ในโค้ดที่ **syntax ถูกต้อง แต่ semantic น่าจะผิด** — ตัวอย่างที่ชัดเจนคือ `fmt.Printf` ที่ template มี placeholder แต่ส่ง argument มาไม่ครบ:
+`go vet` ช่วยตรวจหา code ที่ compile ได้ แต่มีโอกาสทำงานผิดจากที่ตั้งใจ
 
-แก้ `hello.go` เป็น:
+ตัวอย่างเช่น:
 
 ```go
 package main
@@ -286,39 +359,57 @@ func main() {
 }
 ```
 
-โค้ดนี้ compile ผ่านและรันได้ แต่ output จะผิด — ลองรัน `go vet`:
+โค้ดนี้ compile ได้ แต่ `%s` ต้องการ argument เพิ่ม ซึ่งเรายังไม่ได้ส่งเข้าไป
 
-```
+ลองรัน:
+
+```sh
 go vet ./...
 ```
 
-Output:
+อาจเห็น error แบบนี้:
 
-```
+```text
 # hello_world
 ./hello.go:6:2: fmt.Printf format %s reads arg #1, but call has 0 args
 ```
 
-`go vet` จับ bug ให้เราได้ จากนั้นแก้ด้วยการส่ง argument ให้ครบ:
+`go vet` ช่วยบอกให้เรารู้ว่ามีปัญหา
+
+แก้โดยส่ง argument เข้าไป:
 
 ```go
 fmt.Printf("Hello, %s!\n", "world")
 ```
 
-รัน `go vet` อีกครั้ง — ถ้าไม่มี output แสดงว่าผ่าน
+จากนั้นรันอีกครั้ง:
+
+```sh
+go vet ./...
+```
+
+ถ้าไม่มี output แสดงว่าผ่านการตรวจสอบแล้ว
 
 > [!TIP]
-> รัน `go vet` ทุกครั้งเช่นเดียวกับ `go fmt` — มันเป็น first line of defense สำหรับหา bug แบบง่าย ๆ ส่วน bug ที่ซับซ้อนกว่านั้นให้ใช้ third-party scanners เพิ่มเติม เช่น `staticcheck` และ `golangci-lint`
+> ควรใช้ `go vet` เป็นขั้นตอนปกติของ development เช่นเดียวกับ `go fmt`
+>
+> สำหรับการตรวจที่ละเอียดขึ้น สามารถใช้เครื่องมือเพิ่มเติม เช่น `staticcheck` หรือ `golangci-lint`
 
 ---
 
 ## Step 7: Automate ทุกอย่างด้วย Makefile
 
-IDE สะดวก แต่ไม่ได้ automate workflow ทั้งหมด — modern software development ต้องมี repeatable build ที่ใครก็รันได้ ไม่ว่าจะอยู่ที่ไหนหรือรันเมื่อใด เพื่อหลีกเลี่ยงปัญหาคลาสสิก "It works on my machine!"
+ตอนนี้เรามี workflow 3 ขั้นตอน:
 
-สร้างไฟล์ `Makefile` ในโฟลเดอร์ `hello_world`:
-
+```text
+fmt → vet → build
 ```
+
+เราสามารถรวมทั้งหมดไว้ใน `Makefile` เพื่อให้รันด้วยคำสั่งเดียว
+
+สร้างไฟล์ชื่อ `Makefile` ในโฟลเดอร์ project:
+
+```makefile
 .DEFAULT_GOAL := build
 
 .PHONY: fmt vet build
@@ -333,117 +424,240 @@ build: vet
 	go build
 ```
 
-> [!CAUTION]
-> **สำคัญมาก** — บรรทัด recipe (คำสั่งใต้ target) ต้อง indent ด้วย **tab** เท่านั้น หากใช้ space จะ fail และ error ที่ได้อาจไม่ชัดเจน
+ตอนนี้แค่รัน:
 
-### โครงสร้าง Makefile
-
-| Element | ความหมาย |
-|---|---|
-| `fmt`, `vet`, `build` | **Target** — operation ที่สั่งได้ |
-| `.DEFAULT_GOAL` | target ที่รันเมื่อพิมพ์ `make` เฉย ๆ (ไม่ระบุ argument) |
-| `vet: fmt` | **Dependencies** — รัน `fmt` ก่อน แล้วจึงรัน `vet` |
-| `.PHONY` | บอกว่า target เหล่านี้ไม่ใช่ไฟล์จริง เพื่อไม่ให้ `make` สับสน |
-
-รัน `make` ครั้งเดียว — จะทำตามลำดับ `fmt` → `vet` → `build`:
-
-```
+```sh
 make
 ```
 
-Output:
+Make จะทำตามลำดับ:
 
-```
+```text
 go fmt ./...
 go vet ./...
 go build
 ```
 
-จบด้วย command เดียว — ใช้รันทั้ง local และใน CI ได้เหมือนกัน
+### โครงสร้างของ Makefile
 
-> [!NOTE]
-> บน Windows `make` ไม่ได้ติดตั้งมาในตัว ต้องติดตั้งผ่าน Chocolatey ด้วยคำสั่ง `choco install make`
+| Element | ความหมาย |
+| --- | --- |
+| `fmt`, `vet`, `build` | target ที่เราสามารถสั่งให้ Make รันได้ |
+| `.DEFAULT_GOAL` | target ที่จะถูกรันเมื่อพิมพ์ `make` โดยไม่ระบุ target |
+| `vet: fmt` | บอกว่า `fmt` ต้องทำก่อน `vet` |
+| `.PHONY` | บอกว่า target เหล่านี้เป็น command ไม่ใช่ชื่อไฟล์ |
+
+ดังนั้นคำสั่ง:
+
+```sh
+make
+```
+
+จะทำงานเป็น:
+
+{{< mermaid >}}
+flowchart LR
+  make["make"] --> fmt["fmt · go fmt ./..."] --> vet["vet · go vet ./..."] --> build["build · go build"]
+{{< /mermaid >}}
+
+ข้อดีคือทุกคนในทีมสามารถใช้ workflow เดียวกันได้ ทั้งตอนทำงานในเครื่องและตอนรันใน CI
+
+> [!CAUTION]
+> บรรทัด command ใต้ target ใน `Makefile` ต้องขึ้นต้นด้วย **tab**
+>
+> ใช้ space แทน tab แล้ว Make อาจ error
+
+บน Windows `make` อาจไม่ได้ติดตั้งมาให้ สามารถติดตั้งผ่าน Chocolatey:
+
+```sh
+choco install make
+```
 
 ---
 
 ## เลือก IDE
 
-เขียน Go ด้วย text editor และคำสั่ง `go` ก็ได้ แต่โปรเจกต์ใหญ่ควรใช้ IDE ที่มี autoformat-on-save, code completion และ error reporting แบบ real-time
+จริง ๆ แล้ว Go ใช้แค่ text editor กับ command line ก็ได้
 
-### Visual Studio Code (ฟรี)
+แต่ถ้า project ใหญ่ขึ้น IDE จะช่วยได้มาก เช่น:
 
-VS Code เป็น editor ยอดนิยม — แต่ไม่มี Go support ติดมาให้ ต้องลง **Go extension** จาก Marketplace เอง
+- auto-format
+- code completion
+- error checking
+- debugging
+- refactoring
 
-extension นี้จะติดตั้ง third-party tools ให้อัตโนมัติ:
-- **`gopls`** — Go language server ทางการจาก Go team (ให้ code completion, type checking และ find references ขณะพิมพ์)
-- **Delve** — Go debugger
+### Visual Studio Code
 
-> [!NOTE]
-> **Language Server Protocol (LSP)** คือ API spec มาตรฐานที่ทำให้ editor implement code intelligence ได้ โดยไม่ต้องเขียน logic ของแต่ละภาษาไว้ในตัว editor
+VS Code เป็นตัวเลือกยอดนิยมและใช้ฟรี
 
-### GoLand (เสียเงิน)
+ให้ติดตั้ง Go extension จาก VS Code Marketplace
 
-GoLand เป็น IDE จาก JetBrains ที่ทำมาเพื่อ Go โดยเฉพาะ — UI คล้าย IntelliJ/PyCharm มี refactoring, code completion, debugger และ database tools ในตัว ไม่ต้องลง plug-in เพิ่ม
+Go extension จะช่วยติดตั้งและตั้งค่าเครื่องมือที่จำเป็น เช่น:
 
-มี 30-day free trial และ Free License Program สำหรับ student หรือ core open source contributor
+- `gopls` — ช่วยเรื่อง completion, type checking และการค้นหา references
+- Delve — debugger สำหรับ Go
 
-### Go Playground (ออนไลน์)
+#### LSP คืออะไร?
 
-[go.dev/play](https://go.dev/play) คือ web-based sandbox — ใช้ทดลอง snippet เล็ก ๆ โดยไม่ต้องติดตั้ง Go ในเครื่อง ปุ่ม **Run** ใช้รันโค้ด, **Format** ใช้รัน `go fmt` และ **Share** สร้าง unique URL สำหรับแชร์
+`LSP` หรือ **Language Server Protocol** เป็นมาตรฐานที่ช่วยให้ editor ทำงานร่วมกับ language server ของแต่ละภาษาได้
 
+ทำให้ editor ไม่จำเป็นต้องรู้รายละเอียดของทุกภาษาเอง
 
-> [!WARNING]
-> **ข้อจำกัดของ Playground**
-> - ใช้ network ได้แค่ `localhost`
-> - process ที่รันนานหรือใช้ memory เยอะอาจถูก kill
-> - เวลาใน Playground ถูกกำหนดตายตัวไว้ที่ 10 November 2009 (วันเปิดตัว Go)
-> - **ห้ามใส่ข้อมูล sensitive** เด็ดขาด — เมื่อกด Share ข้อมูลจะถูกเก็บไว้บน Google servers และใครก็ตามที่มี URL ก็เข้าถึงได้
+### GoLand
+
+GoLand เป็น IDE จาก JetBrains ที่ออกแบบมาสำหรับ Go โดยเฉพาะ
+
+มีฟีเจอร์อย่าง:
+
+- code completion
+- refactoring
+- debugger
+- database tools
+
+เหมาะกับคนที่ชอบ workflow แบบ IntelliJ หรือ PyCharm
+
+GoLand มีช่วงทดลองใช้งานฟรี และมี license บางประเภทสำหรับนักเรียนและ open-source contributors
+
+### Go Playground
+
+ถ้าแค่ต้องการทดลอง Go แบบเร็ว ๆ โดยไม่ติดตั้งอะไรในเครื่อง สามารถใช้:
+
+[go.dev/play](https://go.dev/play)
+
+Go Playground เป็น sandbox สำหรับทดลอง code snippet ขนาดเล็ก
+
+มีปุ่มหลัก ๆ เช่น:
+
+- **Run** — รันโปรแกรม
+- **Format** — format code
+- **Share** — สร้าง URL สำหรับแชร์โค้ด
+
+#### ข้อจำกัดของ Playground
+
+Go Playground ไม่ได้เหมือน environment จริงทั้งหมด เช่น:
+
+- network access มีข้อจำกัด
+- process ที่ใช้เวลานานหรือใช้ memory มากอาจถูกหยุด
+- เวลาใน Playground ถูกกำหนดไว้ตายตัว
+- ไม่ควรใส่ข้อมูลลับหรือข้อมูล sensitive ลงไป
 
 ---
 
 ## Go Compatibility Promise
 
-Go ออกรุ่นใหม่ประมาณทุก 6 เดือน พร้อม patch releases สำหรับ bug/security fix ตามความจำเป็น
+หนึ่งในจุดเด่นของ Go คือการให้ความสำคัญกับ backward compatibility
 
-Go Compatibility Promise สัญญาว่าจะ **ไม่ทำ backward-breaking change** กับภาษาและ standard library ใน Go 1.x ยกเว้นเมื่อจำเป็นต้องแก้ bug หรือ security issue
+Go มีการ release version ใหม่เป็นระยะ และมี patch release สำหรับ bug และ security fixes
 
-> "I believe that prioritizing compatibility was the most important design decision that we made in Go 1."
-> — Russ Cox, GopherCon 2022
+แนวคิดของ **Go Compatibility Promise** คือ Go 1.x พยายามรักษาความเข้ากันได้ของภาษาและ standard library เพื่อให้โค้ดเดิมยังใช้งานได้เมื่ออัปเกรด Go version
 
+แต่ promise นี้ไม่ได้หมายความว่า command ทุกอย่างรอบ ๆ Go จะไม่มีการเปลี่ยนแปลง
 
-> [!WARNING]
-> Promise นี้ครอบคลุมเฉพาะ **ภาษาและ standard library** — ไม่ครอบคลุม `go` command หาก script CI ใช้ flag ของ `go` command ให้ pin Go version และ test ใหม่เมื่อมีการอัปเดต
+โดยเฉพาะ script หรือ CI ที่พึ่งพา behavior หรือ flag ของ `go` command ควรทดสอบทุกครั้งหลังอัปเดต version
 
 ### อัปเดต Go
 
+วิธีอัปเดตขึ้นอยู่กับวิธีที่ติดตั้ง Go
+
 | Platform | วิธี |
-|---|---|
-| macOS (brew) | `brew upgrade go` |
-| Windows (choco) | `choco upgrade golang` |
-| Installer | ดาวน์โหลด installer ล่าสุดจาก [go.dev/dl](https://go.dev/dl/) แล้วรัน — installer จะลบเวอร์ชันเก่าให้เอง |
-| Linux/BSD | ดาวน์โหลด tarball ใหม่ ย้ายของเก่าไปเก็บสำรองก่อน แล้วค่อยลบ |
+| --- | --- |
+| macOS + Homebrew | `brew upgrade go` |
+| Windows + Chocolatey | `choco upgrade golang` |
+| Installer | ดาวน์โหลด version ใหม่จาก [go.dev/dl](https://go.dev/dl/) |
+| Linux / BSD | ดาวน์โหลด tarball version ใหม่แล้วติดตั้งแทน version เดิม |
 
-ตัวอย่างการ upgrade บน Linux:
+ตัวอย่างบน Linux:
 
-```
+```sh
 mv /usr/local/go /usr/local/old-go
 tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz
 rm -rf /usr/local/old-go
 ```
 
+ก่อนลบ version เก่า ควรตรวจสอบให้แน่ใจก่อนว่า version ใหม่ทำงานได้ตามปกติ
+
 ---
 
 ## แบบฝึกหัด
 
-ลองทำโจทย์ต่อไปนี้โดยสร้าง project ใหม่แยกจาก `hello_world` เพื่อไม่ให้กระทบตัวอย่างในบท:
+ลองสร้าง project ใหม่แยกจาก `hello_world` เพื่อไม่ให้กระทบตัวอย่างในบทนี้
 
-1. สร้าง module ชื่อ `greetings` พร้อมไฟล์ `main.go` ที่ print `Hello from Go!` แล้วรันด้วย `go run .`
-2. เขียน `fmt.Printf("Hello, %s!\n")` ที่ลืมส่ง argument แล้วรัน `go vet ./...` — สังเกต error ที่เจอ จากนั้นแก้ให้ผ่าน
-3. Compile ด้วย `go build -o hello` จากนั้นกลับไปยังโฟลเดอร์แม่ แล้วรัน binary จากไดเรกทอรีอื่นด้วย path เช่น `./hello_world/hello`
-4. เพิ่ม target `run` และ `clean` ใน Makefile ของ `hello_world` โดย `run` รัน `go run .` และ `clean` ลบ binary ทิ้ง — อย่าลืมเพิ่มทั้งสองใน `.PHONY`
-5. ทดลองเขียน `{` คนละบรรทัดกับ `func` แล้วรัน `go build` — อ่าน error ที่ได้ แล้วแก้กลับตาม semicolon insertion rule
+### 1. สร้าง Hello World ใหม่
 
-ตรวจโค้ดหลังทำเสร็จ:
+สร้าง module ชื่อ `greetings`
+
+ให้มี `main.go` ที่แสดง:
+
+```text
+Hello from Go!
+```
+
+แล้วรันด้วย:
+
+```sh
+go run .
+```
+
+### 2. ลองใช้ `go vet`
+
+เขียนโค้ดแบบนี้:
+
+```go
+fmt.Printf("Hello, %s!\n")
+```
+
+แล้วรัน:
+
+```sh
+go vet ./...
+```
+
+ดูว่า error อะไรเกิดขึ้น จากนั้นแก้โค้ดให้ถูกต้อง
+
+### 3. สร้าง binary ชื่อ `hello`
+
+ใช้:
+
+```sh
+go build -o hello
+```
+
+จากนั้นลองกลับไปที่ parent directory แล้วรัน binary ผ่าน path เช่น:
+
+```sh
+./hello_world/hello
+```
+
+### 4. เพิ่ม `run` และ `clean` ใน Makefile
+
+เพิ่ม target:
+
+```text
+run
+clean
+```
+
+โดย:
+
+- `run` ใช้ `go run .`
+- `clean` ใช้ลบ binary
+
+อย่าลืมเพิ่มทั้งสอง target ใน `.PHONY`
+
+### 5. ทดลองเรื่อง `{`
+
+ลองเขียน `{` คนละบรรทัดกับ `func`
+
+จากนั้นรัน:
+
+```sh
+go build
+```
+
+อ่าน error ที่ได้ แล้วแก้กลับมาเป็นรูปแบบที่ถูกต้อง
+
+สุดท้ายตรวจ project ด้วย:
 
 ```sh
 go fmt ./...
@@ -455,29 +669,60 @@ go build
 
 ## Common Pitfalls — ข้อผิดพลาดที่พบบ่อย
 
-- **วาง `{` คนละบรรทัดกับ `func`/`if`/`for`** — semicolon insertion rule จะทำให้ compile ไม่ผ่านแม้ logic จะถูกต้อง
-- **ลืม `go fmt` ก่อน commit** — diff ภายหลังจะเต็มไปด้วย whitespace change จนบดบัง logic change จริง
-- **แก้ `go.mod` ด้วยมือ** — ทำให้ state ของ module ไม่ตรงกับ tool ให้ใช้ `go get` / `go mod tidy` แทน
-- **เชื่อคำแนะนำเก่าเรื่อง `GOROOT` / `GOPATH`** — module system สมัยใหม่ไม่จำเป็นต้องใช้แล้ว วาง project ไว้ที่ไหนก็ได้
-- **Indent `Makefile` ด้วย space** — Makefile รับเฉพาะ tab หากใช้ space จะ fail และ error ที่ได้อาจไม่ชัดเจน
+นี่คือข้อผิดพลาดที่มือใหม่มักเจอ:
+
+### 1. วาง `{` คนละบรรทัด
+
+ตัวอย่างเช่น:
+
+```go
+func main()
+{
+}
+```
+
+จะ compile ไม่ผ่าน เพราะกฎ semicolon insertion ของ Go
+
+### 2. ลืม `go fmt`
+
+ถ้าไม่ format ก่อน commit diff อาจมี whitespace changes เยอะจนมองไม่เห็นการเปลี่ยนแปลงของ logic
+
+### 3. แก้ `go.mod` เองโดยไม่จำเป็น
+
+ใช้ `go get` และ `go mod tidy` ช่วยจัดการ dependencies แทน
+
+### 4. ใช้คำแนะนำเก่าเกี่ยวกับ `GOPATH`
+
+สำหรับ Go modules สมัยใหม่ ไม่จำเป็นต้องวาง project ไว้ใน `GOPATH`
+
+### 5. ใช้ space ใน Makefile
+
+Command ใต้ target ต้องขึ้นต้นด้วย tab
 
 ---
 
 ## สรุป
 
-ในบทนี้เราได้:
+ในบทนี้เราได้ทำสิ่งสำคัญทั้งหมดตั้งแต่เริ่มต้น:
 
-1. ✅ ติดตั้ง Go toolchain และตรวจสอบว่าใช้งานได้
+1. ✅ ติดตั้ง Go และตรวจสอบว่าใช้งานได้
 2. ✅ สร้าง Go module ด้วย `go mod init`
-3. ✅ เขียนโปรแกรมแรก — Hello World
-4. ✅ Compile เป็น native binary ด้วย `go build`
-5. ✅ Format โค้ดด้วย `go fmt` และเข้าใจ semicolon insertion rule
-6. ✅ ตรวจสอบ bug ด้วย `go vet`
-7. ✅ สร้าง `Makefile` เพื่อ automate workflow `fmt → vet → build`
+3. ✅ เขียนโปรแกรม Hello World
+4. ✅ Compile โปรแกรมด้วย `go build`
+5. ✅ Format โค้ดด้วย `go fmt`
+6. ✅ เรียนรู้เรื่อง semicolon insertion
+7. ✅ ตรวจหา code ที่อาจมีปัญหาด้วย `go vet`
+8. ✅ ใช้ `Makefile` เพื่อรวม workflow เป็นคำสั่งเดียว
 
-Workflow `fmt → vet → build` นี้คือ heartbeat ของ Go development — ใช้ได้กับทุก project ไม่ว่าจะใหญ่หรือเล็ก
+สุดท้าย workflow หลักของเราคือ:
 
-> *ใน [ตอนต่อไป](/go/02-predeclared-types-and-declarations/) เราจะเจาะลึก primitive types และการประกาศตัวแปรของ Go — ตัวแปร, constants และ type พื้นฐานต่าง ๆ*
+```text
+fmt → vet → build
+```
+
+นี่เป็น workflow พื้นฐานที่สามารถนำไปใช้กับ Go project ได้แทบทุกขนาด
+
+> *ในตอนต่อไป เราจะเริ่มทำความรู้จักกับ **Predeclared Types and Declarations** เช่น variables, constants และชนิดข้อมูลพื้นฐานของ Go*
 
 ---
 
