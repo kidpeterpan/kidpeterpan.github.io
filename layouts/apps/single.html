@@ -6,8 +6,10 @@
       <header class="article-head">
         <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
         <h1>{{ .Title }}</h1>
-        {{ with .Description }}
-          <p class="desc" style="margin: 10px 0 0;">{{ . }}</p>
+        {{ if not .Params.hide_desc }}
+          {{ with .Description }}
+            <p class="desc" style="margin: 10px 0 0;">{{ . }}</p>
+          {{ end }}
         {{ end }}
         <div class="article-rule"></div>
       </header>
