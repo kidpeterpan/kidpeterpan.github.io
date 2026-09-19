@@ -7,32 +7,32 @@
 #   speed  = ความเร็ว output (tokens/วินาที)
 #   perf   = คะแนนคุณภาพ 0-10 (สังเคราะห์จาก benchmark สาธารณะ)
 #   note   = หมายเหตุสั้น ๆ แสดงใต้ชื่อโมเดล
-updated: '2026-09-16'
+updated: '2026-09-18'
 models:
-  - { name: DeepSeek V4.1 Flash, req_5h: 6500, req_week: 16250, req_month: 32500, speed: 214, perf: 9.1, note: 'โปร ×4 ถึง 20 ก.ย. → 130k req/เดือน' }
-  - { name: DeepSeek V4 Flash, req_5h: 13000, req_week: 32500, req_month: 65000, speed: 215, perf: 7.8 }
-  - { name: DeepSeek V4 Flash Vision Exp, req_5h: 6500, req_week: 16250, req_month: 32500, speed: 217, perf: 7.2 }
-  - { name: DeepSeek V4 Pro, req_5h: 1050, req_week: 2600, req_month: 5200, speed: 94, perf: 9.4 }
-  - { name: GLM-5.1, req_5h: 880, req_week: 2150, req_month: 4300, speed: 54, perf: 6.9 }
+  - { name: DeepSeek V4.1 Flash, req_5h: 6500, req_week: 16250, req_month: 32500, speed: 215, perf: 9.1, note: 'โปร ×4 ถึง 20 ก.ย. → 130k req/เดือน' }
+  - { name: DeepSeek V4 Flash, req_5h: 13000, req_week: 32500, req_month: 65000, speed: 212, perf: 7.8 }
+  - { name: DeepSeek V4 Flash Vision Exp, req_5h: 6500, req_week: 16250, req_month: 32500, speed: 215, perf: 7.2 }
+  - { name: DeepSeek V4 Pro, req_5h: 1050, req_week: 2600, req_month: 5200, speed: 76, perf: 9.4 }
+  - { name: GLM-5.1, req_5h: 880, req_week: 2150, req_month: 4300, speed: 38, perf: 6.9 }
   - { name: GLM-5.2, req_5h: 880, req_week: 2150, req_month: 4300, speed: 71, perf: 8.3 }
-  - { name: GLM-5.3, req_5h: 220, req_week: 540, req_month: 1080, speed: 67, perf: 9.2 }
-  - { name: GLM-5.3-Flash, req_5h: 6320, req_week: 15790, req_month: 31580, speed: 114, perf: 8.0 }
-  - { name: GPT 5.6 Luna, req_5h: 2050, req_week: 5100, req_month: 10250, speed: 115, perf: 8.8 }
-  - { name: Grok 4.6, req_5h: 169, req_week: 423, req_month: 845, speed: 58, perf: 9.3 }
-  - { name: Hy3, req_5h: 4300, req_week: 10750, req_month: 21500, speed: 87, perf: 7.9 }
+  - { name: GLM-5.3, req_5h: 220, req_week: 540, req_month: 1080, speed: 63, perf: 9.2 }
+  - { name: GLM-5.3-Flash, req_5h: 6320, req_week: 15790, req_month: 31580, speed: 98, perf: 8.0 }
+  - { name: GPT 5.6 Luna, req_5h: 2050, req_week: 5100, req_month: 10250, speed: 126, perf: 8.8 }
+  - { name: Grok 4.6, req_5h: 169, req_week: 423, req_month: 845, speed: 60, perf: 9.3 }
+  - { name: Hy3, req_5h: 4300, req_week: 10750, req_month: 21500, speed: 75, perf: 7.9 }
   - { name: Hy4 preview, req_5h: 1350, req_week: 3380, req_month: 6770, speed: 39, perf: 8.7, note: 'preview — ความเร็วช่วงเปิดตัว (OpenRouter)' }
-  - { name: Kimi K2.6, req_5h: 1150, req_week: 2880, req_month: 5750, speed: 37, perf: 7.3 }
-  - { name: Kimi K2.7 Code, req_5h: 1350, req_week: 3380, req_month: 6750, speed: 50, perf: 8.2 }
-  - { name: Kimi K3, req_5h: 110, req_week: 250, req_month: 490, speed: 35, perf: 9.5 }
+  - { name: Kimi K2.6, req_5h: 1150, req_week: 2880, req_month: 5750, speed: 36, perf: 7.3 }
+  - { name: Kimi K2.7 Code, req_5h: 1350, req_week: 3380, req_month: 6750, speed: 61, perf: 8.2 }
+  - { name: Kimi K3, req_5h: 110, req_week: 250, req_month: 490, speed: 37, perf: 9.5 }
   - { name: LongCat-2.0, req_5h: 11400, req_week: 28600, req_month: 57200, speed: 49, perf: 7.7, note: 'ความเร็ววัดผ่าน OpenRouter (AA ยังไม่มีข้อมูล)' }
-  - { name: MiMo-V2.5, req_5h: 30100, req_week: 75200, req_month: 150400, speed: 47, perf: 7.3 }
-  - { name: MiMo-V2.5-Pro, req_5h: 3250, req_week: 8150, req_month: 16300, speed: 38, perf: 8.5 }
+  - { name: MiMo-V2.5, req_5h: 30100, req_week: 75200, req_month: 150400, speed: 32, perf: 7.3 }
+  - { name: MiMo-V2.5-Pro, req_5h: 3250, req_week: 8150, req_month: 16300, speed: 53, perf: 8.5 }
   - { name: MiniMax M2.7, req_5h: 3400, req_week: 8500, req_month: 17000, speed: 58, perf: 7.2 }
-  - { name: MiniMax M3, req_5h: 3200, req_week: 8000, req_month: 16000, speed: 112, perf: 8.0 }
-  - { name: Muse Spark 1.2, req_5h: 45300, req_week: 113300, req_month: 226600, speed: 172, perf: 7.4, note: 'ใช้ข้อมูลเทรนโมเดล · จำกัดบางภูมิภาค' }
-  - { name: Muse Spark 1.3, req_5h: 45300, req_week: 113300, req_month: 226600, speed: 226, perf: 8.6, note: 'ใช้ข้อมูลเทรนโมเดล · จำกัดบางภูมิภาค' }
+  - { name: MiniMax M3, req_5h: 3200, req_week: 8000, req_month: 16000, speed: 167, perf: 8.0 }
+  - { name: Muse Spark 1.2, req_5h: 45300, req_week: 113300, req_month: 226600, speed: 207, perf: 7.4, note: 'ใช้ข้อมูลเทรนโมเดล · จำกัดบางภูมิภาค' }
+  - { name: Muse Spark 1.3, req_5h: 45300, req_week: 113300, req_month: 226600, speed: 223, perf: 8.6, note: 'ใช้ข้อมูลเทรนโมเดล · จำกัดบางภูมิภาค' }
   - { name: Qwen3.6 Plus, req_5h: 3300, req_week: 8200, req_month: 16300, speed: 56, perf: 6.7 }
-  - { name: Qwen3.7 Max, req_5h: 170, req_week: 420, req_month: 840, speed: 195, perf: 7.6 }
-  - { name: Qwen3.7 Plus, req_5h: 4300, req_week: 10800, req_month: 21600, speed: 69, perf: 7.4 }
-  - { name: Qwen3.8 Flash, req_5h: 5400, req_week: 13500, req_month: 27000, speed: 52, perf: 8.2, note: 'ชื่อเต็ม Qwen3.8-Flash-Next' }
-  - { name: Qwen3.8 Max, req_5h: 160, req_week: 400, req_month: 810, speed: 40, perf: 9.2 }
+  - { name: Qwen3.7 Max, req_5h: 170, req_week: 420, req_month: 840, speed: 196, perf: 7.6 }
+  - { name: Qwen3.7 Plus, req_5h: 4300, req_week: 10800, req_month: 21600, speed: 66, perf: 7.4 }
+  - { name: Qwen3.8 Flash, req_5h: 5400, req_week: 13500, req_month: 27000, speed: 56, perf: 8.2, note: 'ชื่อเต็ม Qwen3.8-Flash-Next' }
+  - { name: Qwen3.8 Max, req_5h: 160, req_week: 400, req_month: 810, speed: 38, perf: 9.2 }
