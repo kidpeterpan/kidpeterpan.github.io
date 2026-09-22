@@ -3,20 +3,7 @@
 (function (global) {
   'use strict';
 
-  const TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-
-  /* Columns of the comparison table, in render order. */
-  const COLUMNS = [
-    { key: 'name', label: 'โมเดล' },
-    { key: 'req5h', label: 'req 5 ชม.' },
-    { key: 'reqWeek', label: 'req สัปดาห์' },
-    { key: 'reqMonth', label: 'req เดือน' },
-    { key: 'speed', label: 'tok/s' },
-    { key: 'perf', label: 'คุณภาพ' },
-    { key: 'value', label: 'คุ้มค่า' },
-  ];
-
-  const KEYS = COLUMNS.map((c) => c.key);
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const fmtIntFn = new Intl.NumberFormat('th-TH');
   const fmtPerfFn = new Intl.NumberFormat('th-TH', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -26,13 +13,28 @@
   const fmtPerf = (v) => fmtPerfFn.format(v);
   const fmtValue = (v) => fmtValueFn.format(v);
 
-  /* '2026-09-16' -> '16 ก.ย. 2026'; '' when the value is not a date. */
-  function formatThaiDate(iso) {
+  /* Columns of the comparison table, in render order. `fmt` turns a model into
+     a cell — shared by the on-screen table and the Markdown export so the two
+     never drift. */
+  const COLUMNS = [
+    { key: 'name', label: 'Model', fmt: (m) => m.name },
+    { key: 'req5h', label: 'req 5h', fmt: (m) => fmtInt(m.req5h) },
+    { key: 'reqWeek', label: 'req week', fmt: (m) => fmtInt(m.reqWeek) },
+    { key: 'reqMonth', label: 'req month', fmt: (m) => fmtInt(m.reqMonth) },
+    { key: 'speed', label: 'tok/s', fmt: (m) => fmtInt(m.speed) },
+    { key: 'perf', label: 'Quality', fmt: (m) => fmtPerf(m.perf) },
+    { key: 'value', label: 'Value', fmt: (m) => fmtValue(m.value) },
+  ];
+
+  const KEYS = COLUMNS.map((c) => c.key);
+
+  /* '2026-09-22' -> '22 Sep 2026'; '' when the value is not a date. */
+  function formatDate(iso) {
     const m = typeof iso === 'string' ? iso.match(/^(\d{4})-(\d{2})-(\d{2})/) : null;
     if (!m) return '';
     const month = Number(m[2]);
     if (month < 1 || month > 12) return '';
-    return `${Number(m[3])} ${TH_MONTHS[month - 1]} ${m[1]}`;
+    return `${Number(m[3])} ${MONTHS[month - 1]} ${m[1]}`;
   }
 
   /* Robust number read for values that arrive from YAML as numbers but may be
@@ -106,13 +108,34 @@
     });
   }
 
+  /* Highest-N rows for a numeric column (descending), ties broken by name.
+     The "copy top 10" export always ranks by quality. */
+  function topBy(models, key, n) {
+    return sortModels(models, key, 'desc').slice(0, Math.max(0, n));
+  }
+
+  /* Rows -> GitHub-flavoured Markdown table, using the same labels and value
+     formatting as the on-screen table. Pipes inside a cell are escaped. */
+  function toMarkdownTable(rows, columns) {
+    const cols = Array.isArray(columns) && columns.length > 0 ? columns : COLUMNS;
+    const cell = (text) => String(text).replace(/\|/g, '\\|');
+    const line = (values) => `| ${values.join(' | ')} |`;
+    return [
+      line(cols.map((c) => cell(c.label))),
+      line(cols.map(() => '---')),
+      ...rows.map((m) => line(cols.map((c) => cell(c.fmt(m))))),
+    ].join('\n');
+  }
+
   const core = {
     COLUMNS,
-    formatThaiDate,
+    formatDate,
     normalizeModel,
     normalizeModels,
     valueScores,
     sortModels,
+    topBy,
+    toMarkdownTable,
     fmtInt,
     fmtPerf,
     fmtValue,

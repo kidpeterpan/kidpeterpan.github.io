@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import core from '../assets/js/apps/opencode-go-core.js';
-const { normalizeModel, normalizeModels, valueScores, sortModels, formatThaiDate, fmtInt, fmtPerf, fmtValue, COLUMNS } = core;
+const { normalizeModel, normalizeModels, valueScores, sortModels, topBy, toMarkdownTable, formatDate, fmtInt, fmtPerf, fmtValue, COLUMNS } = core;
 
 const row = (over = {}) => ({
   name: 'GLM-5.3',
@@ -115,16 +115,38 @@ test('sortModels: unknown key falls back to value, input untouched', () => {
 test('COLUMNS lists the seven sortable fields in render order', () => {
   assert.deepEqual(COLUMNS.map((c) => c.key), ['name', 'req5h', 'reqWeek', 'reqMonth', 'speed', 'perf', 'value']);
   assert.ok(COLUMNS.every((c) => c.label));
+  assert.ok(COLUMNS.every((c) => typeof c.fmt === 'function'));
 });
 
-test('formatThaiDate prints a Thai date and blanks out anything else', () => {
-  assert.equal(formatThaiDate('2026-09-16'), '16 ก.ย. 2026');
-  assert.equal(formatThaiDate('2026-01-01'), '1 ม.ค. 2026');
-  assert.equal(formatThaiDate('2026-12-31T10:00:00+07:00'), '31 ธ.ค. 2026');
-  assert.equal(formatThaiDate(''), '');
-  assert.equal(formatThaiDate('16/09/2026'), '');
-  assert.equal(formatThaiDate('2026-13-01'), '');
-  assert.equal(formatThaiDate(null), '');
+test('topBy: highest quality first, ties broken by name, bounded by n', () => {
+  const models = normalizeModels([
+    row({ name: 'B', perf: 8.0 }),
+    row({ name: 'A', perf: 9.0 }),
+    row({ name: 'C', perf: 8.0 }),
+  ]);
+  assert.deepEqual(topBy(models, 'perf', 2).map((m) => m.name), ['A', 'B']);
+  assert.equal(topBy(models, 'perf', 99).length, 3);
+  assert.deepEqual(topBy(models, 'perf', 0), []);
+});
+
+test('toMarkdownTable: header, separator, and formatted cells', () => {
+  const models = valueScores(normalizeModels([
+    row({ name: 'GLM-5.3', req_5h: 220, req_week: 540, req_month: 1080, speed: 67, perf: 9.2 }),
+  ]));
+  const lines = toMarkdownTable(models).split('\n');
+  assert.equal(lines[0], '| Model | req 5h | req week | req month | tok/s | Quality | Value |');
+  assert.equal(lines[1], '| --- | --- | --- | --- | --- | --- | --- |');
+  assert.ok(lines[2].startsWith('| GLM-5.3 | 220 | 540 | 1,080 | 67 | 9.2 | '), lines[2]);
+});
+
+test('formatDate prints an English date and blanks out anything else', () => {
+  assert.equal(formatDate('2026-09-16'), '16 Sep 2026');
+  assert.equal(formatDate('2026-01-01'), '1 Jan 2026');
+  assert.equal(formatDate('2026-12-31T10:00:00+07:00'), '31 Dec 2026');
+  assert.equal(formatDate(''), '');
+  assert.equal(formatDate('16/09/2026'), '');
+  assert.equal(formatDate('2026-13-01'), '');
+  assert.equal(formatDate(null), '');
 });
 
 test('formatters keep Thai digit grouping', () => {

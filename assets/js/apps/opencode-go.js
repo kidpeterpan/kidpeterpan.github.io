@@ -6,8 +6,10 @@
     normalizeModels,
     valueScores,
     sortModels,
+    topBy,
+    toMarkdownTable,
     COLUMNS,
-    formatThaiDate,
+    formatDate,
     fmtInt,
     fmtPerf,
     fmtValue,
@@ -22,7 +24,7 @@
   })();
 
   const models = valueScores(normalizeModels(appData.models));
-  const updated = formatThaiDate(appData.updated);
+  const updated = formatDate(appData.updated);
 
   let sortKey = 'value';
   let sortDir = 'desc';
@@ -30,18 +32,55 @@
   root.innerHTML = `
     <div class="app-table-wrap">
       <div class="app-table-head">
-        <p class="app-table-title">เทียบ ${models.length} โมเดล · กดหัวคอลัมน์เพื่อเรียงลำดับ</p>
-        ${updated ? `<p class="app-updated">อัปเดตล่าสุด ${updated}</p>` : ''}
+        <p class="app-table-title">Comparing ${models.length} models · click a header to sort</p>
+        <div class="app-table-actions">
+          ${updated ? `<p class="app-updated">Updated ${updated}</p>` : ''}
+          <button type="button" class="app-copy-btn" id="ocg-copy">⧉ Copy Top 10 by Quality</button>
+        </div>
       </div>
       <div class="app-table" id="ocg-table"></div>
     </div>
   `;
 
   const table = document.getElementById('ocg-table');
+  const copyBtn = document.getElementById('ocg-copy');
+
+  const COPY_LABEL = '⧉ Copy Top 10 by Quality';
+  const TOP_N = 10;
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
+
+  function copyText(t) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(t);
+    }
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    return ok ? Promise.resolve() : Promise.reject(new Error('copy failed'));
+  }
+
+  copyBtn.addEventListener('click', () => {
+    const md = toMarkdownTable(topBy(models, 'perf', TOP_N));
+    copyText(md)
+      .then(() => {
+        copyBtn.textContent = 'Copied ✓';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.textContent = COPY_LABEL;
+          copyBtn.classList.remove('copied');
+        }, 1500);
+      })
+      .catch(() => { copyBtn.textContent = 'Copy failed'; });
+  });
 
   function render() {
     const rows = sortModels(models, sortKey, sortDir);
@@ -54,7 +93,7 @@
     }).join('');
 
     const body = rows.length === 0
-      ? `<tr class="app-table-ellipsis"><td colspan="${COLUMNS.length}">ไม่มีข้อมูลโมเดล</td></tr>`
+      ? `<tr class="app-table-ellipsis"><td colspan="${COLUMNS.length}">No model data</td></tr>`
       : rows.map((m) => `
         <tr>
           <td class="model-cell">

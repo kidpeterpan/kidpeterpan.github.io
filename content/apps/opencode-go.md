@@ -1,8 +1,8 @@
 +++
-title = 'เทียบโมเดล OpenCode Go'
-date = '2026-09-16T00:00:00+07:00'
+title = 'Compare OpenCode Go Models'
+date = '2026-09-22T00:00:00+07:00'
 draft = false
-description = 'ตารางเทียบโมเดล OpenCode Go — request ต่อ 5 ชม./สัปดาห์/เดือน, ความเร็ว (tok/s), คุณภาพ และคะแนนคุ้มค่า กดหัวตารางเพื่อเรียงลำดับได้'
+description = 'Compare OpenCode Go models — requests per 5h, week and month, speed (tok/s), quality and value score. Click a column header to sort.'
 tags = ['tools', 'ai']
 [params]
 order = 2
@@ -10,5 +10,5 @@ icon = '📊'
 app_data = 'opencode-go'
 app_core_js = 'opencode-go-core.js'
 app_js = 'opencode-go.js'
-hide_desc = true   # หน้าเพจโชว์แค่หัวเรื่อง + ตาราง (คำอธิบายยังอยู่ใน meta/การ์ด /apps/)
+hide_desc = true   # page shows only the heading + table (description stays in meta/card on /apps/)
 +++
