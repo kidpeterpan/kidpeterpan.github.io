@@ -34,5 +34,5 @@ models:
   - { name: Qwen3.6 Plus, req_5h: 3300, req_week: 8200, req_month: 16300, speed: 56, perf: 6.7 }
   - { name: Qwen3.7 Max, req_5h: 170, req_week: 420, req_month: 840, speed: 196, perf: 7.6 }
   - { name: Qwen3.7 Plus, req_5h: 4300, req_week: 10800, req_month: 21600, speed: 66, perf: 7.4 }
-  - { name: Qwen3.8 Flash, req_5h: 5400, req_week: 13500, req_month: 27000, speed: 56, perf: 8.2, note: 'ชื่อเต็ม Qwen3.8-Flash-Next' }
+  - { name: Qwen3.8 Flash, req_5h: 5400, req_week: 13500, req_month: 27000, speed: 56, perf: 8.2, note: 'คนละตัวกับ Qwen3.8-Flash-Next (125B MoE, ~125 tok/s) ที่ยังไม่เข้าแผน' }
   - { name: Qwen3.8 Max, req_5h: 160, req_week: 400, req_month: 810, speed: 38, perf: 9.2 }
