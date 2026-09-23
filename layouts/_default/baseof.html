@@ -83,6 +83,7 @@
     {{ partial "search.html" . }}
     <script src="{{ "/js/theme.js" | relURL }}"></script>
     <script src="{{ "/js/search.js" | relURL }}"></script>
+    <script src="{{ "/js/external-links.js" | relURL }}"></script>
     {{ if .HasShortcode "mermaid" }}
       {{ partial "mermaid-scripts.html" . }}
     {{ end }}
