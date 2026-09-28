@@ -39,6 +39,7 @@
         </div>
       </div>
       <div class="app-table" id="ocg-table"></div>
+      <p class="app-footnote">Quality is a 0–10 score synthesized from public benchmarks (SWE-bench, Terminal-Bench, …) — a rough scale for comparison, not an official ranking. Request counts and speeds are estimates from opencode.ai and Artificial Analysis.</p>
     </div>
   `;
 
