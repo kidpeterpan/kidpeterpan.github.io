@@ -12,13 +12,13 @@
     return s.replace(/,(\d{1,2})(?!\d)/g, '.$1');
   }
 
+  function toLatinDigits(s) {
+    return s.replace(/[๐-๙]/g, (digit) => String(THAI_DIGITS.indexOf(digit)));
+  }
+
   function parse(s) {
     if (!s) return NaN;
-    const latin = String(s).split('').map((c) => {
-      const i = THAI_DIGITS.indexOf(c);
-      return i >= 0 ? String(i) : c;
-    }).join('');
-    return parseFloat(normalizeCommas(latin).replace(/[^\d.-]/g, ''));
+    return parseFloat(normalizeCommas(toLatinDigits(String(s))).replace(/[^\d.-]/g, ''));
   }
 
   const RATE_TYPES = ['fixed', 'MRR', 'MLR', 'MOR'];
@@ -42,8 +42,7 @@
     if (!Array.isArray(rows) || rows.length === 0 || rows.length > maxPeriods) return null;
 
     const periods = [];
-    for (let i = 0; i < rows.length; i += 1) {
-      const row = rows[i];
+    for (const row of rows) {
       if (!row || RATE_TYPES.indexOf(row.type) < 0) return null;
       /* The builder round-trips these through <input>, so they stay strings —
          a YAML author writing `val: 2.5` should not get a different type. */
@@ -80,59 +79,67 @@
      Each row is 1 year (12 months); the last row covers the remainder.
      Rows carry the monthly rate the amortizer needs *and* the annual
      percentage the UI shows, so neither side has to guess the unit. */
-  function buildPlan(n, periods, rates) {
+  function buildPlan(termMonths, periods, rates) {
     const plan = [];
     let elapsed = 0;
-    for (const [idx, p] of periods.entries()) {
-      const annualPct = chargedRate(p.type, rates, p.val);
+    for (const [idx, period] of periods.entries()) {
+      const annualPct = chargedRate(period.type, rates, period.val);
       if (annualPct === null) continue;
-      const isLast = idx === periods.length - 1;
-      const m = Math.min(isLast ? n - elapsed : 12, n - elapsed);
-      if (m <= 0) break;
-      plan.push({ months: m, rate: annualPct / 100 / 12, annualPct });
-      elapsed += m;
-      if (elapsed >= n) break;
+      const isLastPeriod = idx === periods.length - 1;
+      const monthsLeft = termMonths - elapsed;
+      const monthsThisPeriod = isLastPeriod ? monthsLeft : Math.min(12, monthsLeft);
+      if (monthsThisPeriod <= 0) break;
+      plan.push({ months: monthsThisPeriod, rate: annualPct / 100 / 12, annualPct });
+      elapsed += monthsThisPeriod;
+      if (elapsed >= termMonths) break;
     }
-    if (plan.length > 0 && elapsed < n) {
-      plan[plan.length - 1].months += n - elapsed;
+    if (plan.length > 0 && elapsed < termMonths) {
+      plan[plan.length - 1].months += termMonths - elapsed;
     }
     return plan;
   }
 
-  /* Amortize P over n months with the rate plan. Payment is recomputed at
-     each rate change so the loan still ends at month n (plus optional extra
-     monthly payment that shortens the term). */
-  function runSchedule(P, n, plan, extraAmt) {
-    let balance = P;
+  /* Level payment that clears `balance` over `months` at `monthlyRate`.
+     A zero rate is just the balance split evenly. */
+  function monthlyPayment(balance, monthlyRate, months) {
+    if (monthlyRate === 0) return balance / months;
+    const growth = Math.pow(1 + monthlyRate, months);
+    return (balance * monthlyRate * growth) / (growth - 1);
+  }
+
+  /* One month of a level-payment loan: interest owed, and principal paid.
+     The principal is capped at the remaining balance so the last month of
+     an early payoff lands exactly on zero. */
+  function amortizeMonth(balance, monthlyRate, payment) {
+    const interestPaid = balance * monthlyRate;
+    const principalPaid = Math.min(payment - interestPaid, balance);
+    return { interestPaid, principalPaid };
+  }
+
+  /* Amortize `principal` over `termMonths` with the rate plan. Payment is
+     recomputed at each rate change so the loan still ends at month
+     `termMonths` (plus optional extra monthly payment that shortens the term). */
+  function runSchedule(principal, termMonths, plan, extraMonthly) {
+    let balance = principal;
     let elapsed = 0;
     let totalInt = 0;
-    let i = 0;
     const rows = [];
     const stages = [];
     for (const st of plan) {
       if (balance <= 0.5) break;
-      const rem = n - elapsed;
-      const r = st.rate;
-      const M = r === 0 ? balance / rem : (balance * r * Math.pow(1 + r, rem)) / (Math.pow(1 + r, rem) - 1);
-      const payment = M + extraAmt;
-      stages.push({ months: st.months, rate: r, annualPct: st.annualPct, payment, final: elapsed + st.months >= n });
-      /* i < n is a backstop only: the plan's months already sum to n. */
-      for (let k = 0; k < st.months && balance > 0.5 && i < n; k++) {
-        i++;
-        elapsed++;
-        const iPaid = balance * r;
-        let pPaid = payment - iPaid;
-        if (pPaid >= balance) {
-          pPaid = balance;
-          balance = 0;
-        } else {
-          balance -= pPaid;
-        }
-        totalInt += iPaid;
-        rows.push({ i, rate: r, annualPct: st.annualPct, pPaid, iPaid, balance });
+      const remainingMonths = termMonths - elapsed;
+      const payment = monthlyPayment(balance, st.rate, remainingMonths) + extraMonthly;
+      stages.push({ months: st.months, rate: st.rate, annualPct: st.annualPct, payment, final: elapsed + st.months >= termMonths });
+      /* elapsed < termMonths is a backstop only: the plan's months already sum to termMonths. */
+      for (let k = 0; k < st.months && balance > 0.5 && elapsed < termMonths; k++) {
+        elapsed += 1;
+        const { interestPaid, principalPaid } = amortizeMonth(balance, st.rate, payment);
+        balance -= principalPaid;
+        totalInt += interestPaid;
+        rows.push({ i: elapsed, rate: st.rate, annualPct: st.annualPct, pPaid: principalPaid, iPaid: interestPaid, balance });
       }
     }
-    return { months: i, totalInt, rows, stages };
+    return { months: elapsed, totalInt, rows, stages };
   }
 
   const core = { parse, effectiveRate, chargedRate, periodsValid, buildPlan, runSchedule, normalizePreset };

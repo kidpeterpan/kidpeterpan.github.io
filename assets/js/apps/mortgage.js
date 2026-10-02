@@ -170,12 +170,15 @@
     return ok ? Promise.resolve() : Promise.reject(new Error('copy failed'));
   }
 
+  function scheduleDataRows(delimiter) {
+    return lastSched.rows.map((r) =>
+      [r.i, r.annualPct.toFixed(3), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join(delimiter)
+    );
+  }
+
   copyBtn.addEventListener('click', () => {
     if (!lastSched) return;
-    const rows = lastSched.rows.map((r) =>
-      [r.i, r.annualPct.toFixed(3), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join('\t')
-    );
-    const tsv = ['งวด\tอัตราต่อปี(%)\tเงินต้น\tดอกเบี้ย\tยอดคงเหลือ'].concat(rows).join('\n');
+    const tsv = ['งวด\tอัตราต่อปี(%)\tเงินต้น\tดอกเบี้ย\tยอดคงเหลือ'].concat(scheduleDataRows('\t')).join('\n');
     copyText(tsv)
       .then(() => {
         copyBtn.textContent = 'คัดลอกแล้ว ✓';
@@ -190,10 +193,7 @@
 
   exportBtn.addEventListener('click', () => {
     if (!lastSched) return;
-    const rows = lastSched.rows.map((r) =>
-      [r.i, r.annualPct.toFixed(3), r.pPaid.toFixed(2), r.iPaid.toFixed(2), r.balance.toFixed(2)].join(',')
-    );
-    const csv = '\uFEFF' + ['งวด,อัตราต่อปี(%),เงินต้น,ดอกเบี้ย,ยอดคงเหลือ'].concat(rows).join('\n');
+    const csv = '\uFEFF' + ['งวด,อัตราต่อปี(%),เงินต้น,ดอกเบี้ย,ยอดคงเหลือ'].concat(scheduleDataRows(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -264,51 +264,64 @@
 
   presetEdit.addEventListener('click', unlock);
 
-  function renderBuilder() {
-    builder.innerHTML = periods.map((p, i) => `
-      <div class="rate-row" data-i="${i}">
-        <span class="rate-row-num">ปีที่ ${i + 1}</span>
-        <select class="rate-row-type" aria-label="ประเภทอัตรางวด ${i + 1}">
-          <option value="fixed"${p.type === 'fixed' ? ' selected' : ''}>คงที่</option>
-          <option value="MRR"${p.type === 'MRR' ? ' selected' : ''}>MRR · ${fmtPct3(ref().MRR)}</option>
-          <option value="MLR"${p.type === 'MLR' ? ' selected' : ''}>MLR · ${fmtPct3(ref().MLR)}</option>
-          <option value="MOR"${p.type === 'MOR' ? ' selected' : ''}>MOR · ${fmtPct3(ref().MOR)}</option>
+  function buildRateRow(period, index) {
+    const periodNumber = index + 1;
+    return `
+      <div class="rate-row" data-i="${index}">
+        <span class="rate-row-num">ปีที่ ${periodNumber}</span>
+        <select class="rate-row-type" aria-label="ประเภทอัตรางวด ${periodNumber}">
+          <option value="fixed"${period.type === 'fixed' ? ' selected' : ''}>คงที่</option>
+          <option value="MRR"${period.type === 'MRR' ? ' selected' : ''}>MRR · ${fmtPct3(ref().MRR)}</option>
+          <option value="MLR"${period.type === 'MLR' ? ' selected' : ''}>MLR · ${fmtPct3(ref().MLR)}</option>
+          <option value="MOR"${period.type === 'MOR' ? ' selected' : ''}>MOR · ${fmtPct3(ref().MOR)}</option>
         </select>
         <div class="rate-row-val-wrap">
-          <input class="rate-row-val" inputmode="decimal" placeholder="%" value="${p.val}" aria-label="อัตราหรือส่วนต่างงวด ${i + 1}" />
-          <button type="button" class="rate-row-sign" aria-label="สลับบวก/ลบงวด ${i + 1}">±</button>
+          <input class="rate-row-val" inputmode="decimal" placeholder="%" value="${period.val}" aria-label="อัตราหรือส่วนต่างงวด ${periodNumber}" />
+          <button type="button" class="rate-row-sign" aria-label="สลับบวก/ลบงวด ${periodNumber}">±</button>
         </div>
-        <span class="rate-row-eff">${effLabel(p)}</span>
-        ${periods.length > 1 ? `<button type="button" class="rate-row-del" aria-label="ลบงวด ${i + 1}">✕</button>` : ''}
+        <span class="rate-row-eff">${effLabel(period)}</span>
+        ${periods.length > 1 ? `<button type="button" class="rate-row-del" aria-label="ลบงวด ${periodNumber}">✕</button>` : ''}
       </div>
-    `).join('') + (periods.length < MAX_PERIODS
+    `;
+  }
+
+  function bindRateRow(row) {
+    const index = +row.dataset.i;
+    const typeSelect = row.querySelector('.rate-row-type');
+    const valueInput = row.querySelector('.rate-row-val');
+    const effectLabel = row.querySelector('.rate-row-eff');
+
+    function syncPeriod() {
+      effectLabel.textContent = effLabel(periods[index]);
+      render();
+    }
+
+    typeSelect.addEventListener('change', (e) => {
+      periods[index].type = e.target.value;
+      if (periods[index].val === '') {
+        periods[index].val = '0';
+        valueInput.value = '0';
+      }
+      syncPeriod();
+    });
+    valueInput.addEventListener('input', (e) => {
+      periods[index].val = e.target.value;
+      syncPeriod();
+    });
+    row.querySelector('.rate-row-sign').addEventListener('click', () => {
+      const raw = String(periods[index].val).trim();
+      periods[index].val = raw.startsWith('-') ? raw.slice(1) : `-${raw === '' ? '0' : raw}`;
+      valueInput.value = periods[index].val;
+      syncPeriod();
+    });
+  }
+
+  function renderBuilder() {
+    builder.innerHTML = periods.map(buildRateRow).join('') + (periods.length < MAX_PERIODS
       ? '<button type="button" class="rate-row-add">+ เพิ่มงวด</button>'
       : '');
 
-    builder.querySelectorAll('.rate-row').forEach((row) => {
-      const i = +row.dataset.i;
-      row.querySelector('.rate-row-type').addEventListener('change', (e) => {
-        periods[i].type = e.target.value;
-        if (periods[i].val === '') {
-          periods[i].val = '0';
-          row.querySelector('.rate-row-val').value = '0';
-        }
-        row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
-        render();
-      });
-      row.querySelector('.rate-row-val').addEventListener('input', (e) => {
-        periods[i].val = e.target.value;
-        row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
-        render();
-      });
-      row.querySelector('.rate-row-sign').addEventListener('click', () => {
-        const raw = String(periods[i].val).trim();
-        periods[i].val = raw.startsWith('-') ? raw.slice(1) : `-${raw === '' ? '0' : raw}`;
-        row.querySelector('.rate-row-val').value = periods[i].val;
-        row.querySelector('.rate-row-eff').textContent = effLabel(periods[i]);
-        render();
-      });
-    });
+    builder.querySelectorAll('.rate-row').forEach(bindRateRow);
     builder.querySelectorAll('.rate-row-del').forEach((btn) => {
       btn.addEventListener('click', () => {
         periods.splice(+btn.closest('.rate-row').dataset.i, 1);
@@ -327,47 +340,31 @@
     applyLock();
   }
 
-  function buildPlanLocal(n) {
-    return buildPlan(n, periods, ref());
+  function currentInputs() {
+    const principal = parse(amount.value);
+    const yearsValue = parse(years.value);
+    const extraAmount = parse(extra.value);
+    return {
+      principal,
+      yearsValue,
+      extraAmount,
+      hasExtra: Number.isFinite(extraAmount) && extraAmount > 0,
+    };
   }
 
-  function render() {
-    const P = parse(amount.value);
-    const yrs = parse(years.value);
-    const extraAmt = parse(extra.value);
-    const hasExtra = Number.isFinite(extraAmt) && extraAmt > 0;
+  function showEmptyResults() {
+    lastSched = null;
+    first.textContent = '—';
+    interest.textContent = '—';
+    total.textContent = '—';
+    bonus.hidden = true;
+    schedule.hidden = true;
+    table.innerHTML = '<p class="app-table-empty">กรอกวงเงินกู้ ระยะเวลาผ่อน และอัตรารายงวดอย่างน้อย 1 ช่วงก่อน</p>';
+  }
 
-    const valid = [P, yrs].every(Number.isFinite) && P > 0 && yrs > 0 &&
-      periodsValid(periods, ref());
-    const wanted = valid ? Math.max(1, Math.round(yrs * 12)) : 1;
-    const n = Math.min(wanted, MAX_MONTHS);
-    note.hidden = wanted <= MAX_MONTHS;
-    if (!note.hidden) {
-      note.textContent = `คำนวณได้สูงสุด ${MAX_MONTHS / 12} ปี · ผลลัพธ์ด้านล่างคิดที่ ${MAX_MONTHS / 12} ปี`;
-    }
-    const plan = valid ? buildPlanLocal(n) : [];
-
-    if (!valid || plan.length === 0) {
-      lastSched = null;
-      first.textContent = '—';
-      interest.textContent = '—';
-      total.textContent = '—';
-      bonus.hidden = true;
-      schedule.hidden = true;
-      table.innerHTML = '<p class="app-table-empty">กรอกวงเงินกู้ ระยะเวลาผ่อน และอัตรารายงวดอย่างน้อย 1 ช่วงก่อน</p>';
-      return;
-    }
-
-    const base = runSchedule(P, n, plan, 0);
-    const sched = hasExtra ? runSchedule(P, n, plan, extraAmt) : base;
-    lastSched = sched;
-
-    first.textContent = fmtCur(base.stages[0].payment);
-    interest.textContent = fmtCur(sched.totalInt);
-    total.textContent = fmtCur(P + sched.totalInt);
-
+  function renderStages(stages) {
     schedule.hidden = false;
-    schedule.innerHTML = '<p class="app-table-title">ช่วงอัตรา</p>' + base.stages.map((st, idx) => `
+    schedule.innerHTML = '<p class="app-table-title">ช่วงอัตรา</p>' + stages.map((st, idx) => `
       <div class="app-schedule-row">
         <span class="rate-row-num">ปีที่ ${idx + 1}</span>
         <span class="rate-row-eff">${fmtPct3(st.annualPct)}</span>
@@ -375,23 +372,23 @@
         <span class="schedule-pay">ค่างวด ${fmtCur(st.payment)}</span>
       </div>
     `).join('');
+  }
 
-    if (hasExtra) {
-      bonus.hidden = false;
-      const pays = sched.stages.map((st) => st.payment);
-      const peak = Math.max(...pays);
-      actual.textContent = fmtCur(pays[0]);
-      actualLabel.textContent = peak - pays[0] > 1
-        ? `จ่ายจริงต่อเดือน · ช่วงแรก (สูงสุด ${fmtCur(peak)})`
-        : 'จ่ายจริงต่อเดือน';
-      payoff.textContent = fmtDur(sched.months);
-      const faster = base.months - sched.months;
-      payoffLabel.textContent = faster > 0 ? `ผ่อนหมดใน · เร็วขึ้น ${fmtDur(faster)}` : 'ผ่อนหมดใน';
-      saved.textContent = fmtCur(base.totalInt - sched.totalInt);
-    } else {
-      bonus.hidden = true;
-    }
+  function renderBonus(base, sched) {
+    bonus.hidden = false;
+    const pays = sched.stages.map((st) => st.payment);
+    const peak = Math.max(...pays);
+    actual.textContent = fmtCur(pays[0]);
+    actualLabel.textContent = peak - pays[0] > 1
+      ? `จ่ายจริงต่อเดือน · ช่วงแรก (สูงสุด ${fmtCur(peak)})`
+      : 'จ่ายจริงต่อเดือน';
+    payoff.textContent = fmtDur(sched.months);
+    const faster = base.months - sched.months;
+    payoffLabel.textContent = faster > 0 ? `ผ่อนหมดใน · เร็วขึ้น ${fmtDur(faster)}` : 'ผ่อนหมดใน';
+    saved.textContent = fmtCur(base.totalInt - sched.totalInt);
+  }
 
+  function renderTable(sched) {
     const head = '<tr><th>งวด</th><th>อัตรา/ปี</th><th>เงินต้น</th><th>ดอกเบี้ย</th><th>ยอดคงเหลือ</th></tr>';
     const body = sched.rows.map((row) => `
       <tr>
@@ -403,6 +400,41 @@
       </tr>
     `).join('');
     table.innerHTML = `<table>${head}${body}</table>`;
+  }
+
+  function render() {
+    const { principal, yearsValue, extraAmount, hasExtra } = currentInputs();
+
+    const valid = [principal, yearsValue].every(Number.isFinite) && principal > 0 && yearsValue > 0 &&
+      periodsValid(periods, ref());
+    const wantedMonths = valid ? Math.max(1, Math.round(yearsValue * 12)) : 1;
+    const months = Math.min(wantedMonths, MAX_MONTHS);
+    note.hidden = wantedMonths <= MAX_MONTHS;
+    if (!note.hidden) {
+      note.textContent = `คำนวณได้สูงสุด ${MAX_MONTHS / 12} ปี · ผลลัพธ์ด้านล่างคิดที่ ${MAX_MONTHS / 12} ปี`;
+    }
+    const plan = valid ? buildPlan(months, periods, ref()) : [];
+
+    if (!valid || plan.length === 0) {
+      showEmptyResults();
+      return;
+    }
+
+    const base = runSchedule(principal, months, plan, 0);
+    const sched = hasExtra ? runSchedule(principal, months, plan, extraAmount) : base;
+    lastSched = sched;
+
+    first.textContent = fmtCur(base.stages[0].payment);
+    interest.textContent = fmtCur(sched.totalInt);
+    total.textContent = fmtCur(principal + sched.totalInt);
+
+    renderStages(base.stages);
+    if (hasExtra) {
+      renderBonus(base, sched);
+    } else {
+      bonus.hidden = true;
+    }
+    renderTable(sched);
   }
 
   [amount, years, extra].forEach((el) => el.addEventListener('input', render));

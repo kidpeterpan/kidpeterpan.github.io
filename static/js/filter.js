@@ -22,34 +22,43 @@
       trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    function apply(cat) {
+    function showRows(cat) {
       var shown = 0;
       rows.forEach(function (row) {
         var match = cat === 'all' || row.dataset.cat === cat;
         row.hidden = !match;
         row.classList.remove('filtering-in');
-        if (match) {
-          shown++;
-          var idx = row.querySelector('.idx');
-          if (idx) idx.textContent = String(shown).padStart(2, '0');
-          if (!reduced) {
-            // restart the entry animation
-            void row.offsetWidth;
-            row.style.animationDelay = Math.min(shown, 8) * 0.035 + 's';
-            row.classList.add('filtering-in');
-          }
-        }
+        if (!match) return;
+        shown++;
+        var idx = row.querySelector('.idx');
+        if (idx) idx.textContent = String(shown).padStart(2, '0');
+        if (reduced) return;
+        // restart the entry animation
+        void row.offsetWidth;
+        row.style.animationDelay = Math.min(shown, 8) * 0.035 + 's';
+        row.classList.add('filtering-in');
       });
       if (countEl) countEl.textContent = shown;
       if (emptyEl) emptyEl.hidden = shown !== 0;
+    }
+
+    function syncDropdown(cat) {
       items.forEach(function (it) {
         it.setAttribute('aria-selected', it.dataset.cat === cat ? 'true' : 'false');
       });
-      if (valueEl) {
-        var active = items.filter(function (i) { return i.dataset.cat === cat; })[0];
-        valueEl.textContent = active ? active.querySelector('.dd-name').textContent : 'All';
-      }
+      if (!valueEl) return;
+      var active = items.filter(function (i) { return i.dataset.cat === cat; })[0];
+      valueEl.textContent = active ? active.querySelector('.dd-name').textContent : 'All';
+    }
+
+    function updateUrl(cat) {
       try { history.replaceState(null, '', cat === 'all' ? location.pathname : '?cat=' + cat); } catch (e) {}
+    }
+
+    function apply(cat) {
+      showRows(cat);
+      syncDropdown(cat);
+      updateUrl(cat);
     }
 
     trigger.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
@@ -68,32 +77,35 @@
       if (e.key === 'Escape') close();
     });
 
-    var initial = 'all';
-    var fromUrl = false;
-    try {
-      var q = new URLSearchParams(location.search).get('cat');
-      if (q && items.some(function (i) { return i.dataset.cat === q; })) { initial = q; fromUrl = true; }
-    } catch (e) {}
-    apply(initial);
+    function categoryFromUrl() {
+      try {
+        var q = new URLSearchParams(location.search).get('cat');
+        if (q && items.some(function (i) { return i.dataset.cat === q; })) return q;
+      } catch (e) {}
+      return null;
+    }
 
     // Landing on a deep link (?cat=go) applies the filter far below the fold —
     // bring the list into view so the nav link visibly does something.
-    if (fromUrl) {
+    function revealListAfterDeepLink() {
       var bar = document.querySelector('.filter-bar');
-      if (bar) {
-        var target = Math.max(0, bar.offsetTop - 16);
-        var jump = function () {
-          window.scrollTo({ top: target, behavior: 'auto' });
-          if (document.scrollingElement) document.scrollingElement.scrollTop = target;
-        };
-        requestAnimationFrame(jump);
-        window.addEventListener('load', jump, { once: true });
-        // Visible confirmation that the nav link did something, even if the
-        // jump is suppressed (some embedded viewers block programmatic scroll).
-        bar.classList.add('just-filtered');
-        setTimeout(function () { bar.classList.remove('just-filtered'); }, 1400);
-      }
+      if (!bar) return;
+      var target = Math.max(0, bar.offsetTop - 16);
+      var jump = function () {
+        window.scrollTo({ top: target, behavior: 'auto' });
+        if (document.scrollingElement) document.scrollingElement.scrollTop = target;
+      };
+      requestAnimationFrame(jump);
+      window.addEventListener('load', jump, { once: true });
+      // Visible confirmation that the nav link did something, even if the
+      // jump is suppressed (some embedded viewers block programmatic scroll).
+      bar.classList.add('just-filtered');
+      setTimeout(function () { bar.classList.remove('just-filtered'); }, 1400);
     }
+
+    var fromUrl = categoryFromUrl();
+    apply(fromUrl || 'all');
+    if (fromUrl) revealListAfterDeepLink();
   }
 
   /* ---------- scroll reveal ---------- */
