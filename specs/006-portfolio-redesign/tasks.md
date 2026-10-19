@@ -342,12 +342,12 @@ at the same URLs, in the new look.
 schedule) and sort the OpenCode Go table, in both themes and at both widths.
 `npm test` passes.
 
-- [ ] T021 [US4] Update `layouts/apps/single.html` and `layouts/apps/list.html`:
+- [X] T021 [US4] Update `layouts/apps/single.html` and `layouts/apps/list.html`:
   - Keep the structure and class names that the app JS and the CSS expect.
   - In `single.html`, add `lang="{{ . }}"` from `.Params.content_lang` on the
     `<article class="app-shell">`.
   - Make the back link and kicker match the new shell.
-- [ ] T022 [US4] Restyle in place inside the apps block of
+- [X] T022 [US4] Restyle in place inside the apps block of
   `assets/css/main.css`, from the "apps section" comment to the end of the
   file:
   - Replace old-look leftovers: hard offset `--shadow-pop` shadows, the
@@ -356,7 +356,7 @@ schedule) and sort the OpenCode Go table, in both themes and at both widths.
   - Keep every selector and every state rule: locked preset, rate rows, sort
     buttons, and the narrow-width result-card rule near the end of the file.
   - Do not edit `assets/js/apps/*` or `data/*`.
-- [ ] T023 [US4] Verify US4:
+- [X] T023 [US4] Verify US4:
   - Run `npm test` and expect all tests to pass.
   - Run `git diff main --stat -- assets/js/apps data tests` and expect empty
     output.

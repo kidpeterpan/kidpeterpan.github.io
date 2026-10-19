@@ -1,7 +1,7 @@
 {{ define "main" }}
   <main class="wrap list-body">
     <header class="list-head reveal">
-      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
+      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr" aria-hidden="true">←</span> Home</a>
       <h1>{{ .Title }}</h1>
       {{ with .Description }}
         <p class="desc">{{ . }}</p>
@@ -11,17 +11,14 @@
     <section class="reveal d1" style="margin-top: 34px;">
       <div class="section-head">
         <div class="rule"></div>
-        <span class="count">{{ len .RegularPages }} APP{{ if ne (len .RegularPages) 1 }}S{{ end }}</span>
+        <span class="count">{{ len .RegularPages }} app{{ if ne (len .RegularPages) 1 }}s{{ end }}</span>
       </div>
       <div class="app-grid">
         {{ range sort .RegularPages "Params.order" }}
-          <a class="app-card" href="{{ .RelPermalink }}">
+          <a class="app-card" href="{{ .RelPermalink }}"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }}>
             <span class="app-icon" aria-hidden="true">{{ .Params.icon | default "🔧" }}</span>
             <h3>{{ .Title }}</h3>
             <p>{{ .Description }}</p>
-            <span class="card-foot">
-              <span class="arrow">→</span>
-            </span>
           </a>
         {{ end }}
       </div>

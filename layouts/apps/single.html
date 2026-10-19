@@ -1,7 +1,7 @@
 {{ define "main" }}
-  <div class="wrap">
-    <article class="reveal app-shell">
-      <a href="{{ "/apps/" | relURL }}" class="back-link"><span class="arr">←</span> APPS</a>
+  <main class="wrap page-body">
+    <article class="reveal app-shell"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }}>
+      <a href="{{ "/apps/" | relURL }}" class="back-link"><span class="arr" aria-hidden="true">←</span> Mini apps</a>
 
       <header class="article-head">
         <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
@@ -30,5 +30,5 @@
         {{ partial "app-script.html" . }}
       {{ end }}
     </article>
-  </div>
+  </main>
 {{ end }}

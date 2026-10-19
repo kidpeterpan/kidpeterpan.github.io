@@ -74,6 +74,10 @@ body {
 
 a { color: inherit; }
 
+[lang="th"] {
+  font-family: "IBM Plex Sans Thai", var(--font-body);
+}
+
 code {
   font-family: var(--font-mono);
   font-size: 0.88em;
@@ -210,6 +214,8 @@ html[data-theme="dark"] .theme-toggle .moon { display: inline; }
 .nav-mobile summary {
   list-style: none;
 }
+
+.nav-mobile:not([open]) nav { display: none; }
 
 .nav-mobile summary::-webkit-details-marker { display: none; }
 
