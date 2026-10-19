@@ -639,8 +639,12 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 .product-row-pitch {
   color: var(--muted);
   font-size: 18px;
-  margin: 0 0 28px;
+  margin: 0 0 20px;
 }
+
+.product-row .route { margin: 0 0 28px; }
+
+.product-row-shot { display: block; }
 
 .product-row .shot img { box-shadow: var(--shadow-lift); }
 

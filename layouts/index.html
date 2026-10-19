@@ -1,5 +1,55 @@
 {{ define "main" }}
   <main class="wrap">
-    <h1>{{ site.Params.siteTitleFull }}</h1>
+    <section class="home-hero">
+      <h1 class="reveal">Small apps that fix annoying problems.</h1>
+      <p class="reveal d1">Free and open source. Each one does one job well. Find the one that fixes yours.</p>
+    </section>
+
+    {{ $products := sort (where site.RegularPages "Layout" "project") "Params.order" }}
+    <div class="product-rows reveal d2">
+      {{ range $index, $product := $products }}
+        <article class="product-row">
+          <div class="product-row-copy">
+            <p class="eyebrow">{{ .Params.eyebrow }}</p>
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <p class="product-row-pitch">{{ .Params.card_pitch }}</p>
+            {{ partial "route.html" . }}
+            <div class="actions product-row-actions">
+              <a class="btn" href="{{ .Params.cta.url }}">{{ .Params.cta.label }}</a>
+              <a class="text-link" href="{{ .RelPermalink }}">How it works</a>
+            </div>
+          </div>
+          <a class="product-row-shot" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
+            {{ partial "shot.html" (dict
+              "page" .
+              "src" .Params.hero_image
+              "alt" ""
+              "width" 1200
+              "hero" (eq $index 0)
+            ) }}
+          </a>
+        </article>
+      {{ end }}
+    </div>
+
+    {{ with site.GetPage "/apps" }}
+      <section class="mini-apps" aria-labelledby="mini-apps-title">
+        <h2 id="mini-apps-title">{{ .Title }}</h2>
+        <p>{{ .Description }}</p>
+        <ul class="mini-app-list">
+          {{ range sort .RegularPages "Params.order" }}
+            <li>
+              <a href="{{ .RelPermalink }}"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }}>
+                <span class="app-icon" aria-hidden="true">{{ .Params.icon | default "🔧" }}</span>
+                <strong>{{ .Title }}</strong>
+                <span>{{ .Description }}</span>
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+    {{ end }}
+
+    <p class="about-line">Made by kidpeterpan. The code for everything here is on <a class="text-link" href="{{ site.Params.github }}">GitHub</a>.</p>
   </main>
 {{ end }}

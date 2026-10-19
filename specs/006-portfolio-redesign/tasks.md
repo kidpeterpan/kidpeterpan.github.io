@@ -377,7 +377,7 @@ the mini apps.
 **Independent Test**: From `/` alone, you can reach both product pages, both
 get-it destinations, and both mini apps.
 
-- [ ] T024 [US3] Rewrite `layouts/index.html` per contracts/site-urls.md "Homepage anatomy":
+- [X] T024 [US3] Rewrite `layouts/index.html` per contracts/site-urls.md "Homepage anatomy":
   - **Hero**: `<h1>` "Small apps that fix annoying problems." plus one
     sentence.
   - **Product cards**: range over
@@ -391,10 +391,10 @@ get-it destinations, and both mini apps.
   - **Mini apps**: list `(site.GetPage "/apps").RegularPages` sorted by
     `Params.order`, showing the icon, title, and description.
   - **About line**: a short about line with a GitHub link.
-- [ ] T025 [US3] Add the homepage CSS to `assets/css/main.css`: `.home-hero`,
+- [X] T025 [US3] Add the homepage CSS to `assets/css/main.css`: `.home-hero`,
   `.product-cards` (2 columns ≥ 900px, 1 below), `.product-card`, and
   `.mini-apps`. Cards use the tokens and the theme-twinned shots.
-- [ ] T026 [US3] Verify US3: run `hugo server`, open `/` at both widths and in
+- [X] T026 [US3] Verify US3: run `hugo server`, open `/` at both widths and in
   both themes, and click every link. Commit as "feat: portfolio homepage".
 
 ---
