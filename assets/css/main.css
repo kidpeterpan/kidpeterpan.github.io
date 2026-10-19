@@ -469,8 +469,6 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   color: var(--faint);
 }
 
-.card-foot { display: flex; justify-content: flex-end; }
-
 .page-list {
   list-style: none;
   padding: 0;
@@ -976,12 +974,6 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   margin: 0 0 14px;
   font-size: 14.5px;
   color: var(--muted);
-}
-
-.app-card .arrow {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--green);
 }
 
 .app-shell {

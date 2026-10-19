@@ -462,18 +462,18 @@ and see the site's 404 page with 3 working links.
 
 ## Phase 9: Polish and cross-cutting
 
-- [ ] T031 [P] Slim `layouts/_default/single.html` and `layouts/_default/list.html`
+- [X] T031 [P] Slim `layouts/_default/single.html` and `layouts/_default/list.html`
   down to generic fallbacks in the new look: an `article-head` and `.prose` for
   single pages, a title plus a page list for list pages. No TOC, share, or
   episode navigation.
-- [ ] T032 [P] Update `README.md` to describe the new site:
+- [X] T032 [P] Update `README.md` to describe the new site:
   - what it is (a portfolio of apps plus mini apps)
   - how to add or update a product (bundle and front-matter fields;
     bump `params.version` on release)
   - commands: `make start`, `hugo --minify`, `npm test`
 
   Remove the Pagefind instructions and blog wording.
-- [ ] T033 [P] Update `CLAUDE.md`:
+- [X] T033 [P] Update `CLAUDE.md`:
   - Replace the theme description (MHA "Plus Ultra Paper") with the new design
     system and its tokens, including the legacy aliases kept for the mini apps.
   - Replace "Content structure" and "Ordered course sections" with product leaf
@@ -482,7 +482,7 @@ and see the site's 404 page with 3 working links.
   - Remove Pagefind from Commands and the Mermaid section.
   - Keep the Node permission note and `design/mha-redesign/`, described as the
     old theme's mockup.
-- [ ] T034 Delete CSS that nothing uses any more from `assets/css/main.css`.
+- [X] T034 Delete CSS that nothing uses any more from `assets/css/main.css`.
   Grep each top-level class selector against `layouts/` and `assets/js/apps/`,
   and remove the selectors that don't match.
 - [ ] T035 Run the full `quickstart.md`:
