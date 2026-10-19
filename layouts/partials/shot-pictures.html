@@ -2,9 +2,9 @@
 {{- $extension := path.Ext $lightImage.Name -}}
 {{- $darkImageName := printf "%s-dark%s" (strings.TrimSuffix $extension $lightImage.Name) $extension -}}
 {{- $darkImage := .page.Resources.Get $darkImageName -}}
-{{- $pictureOptions := dict "alt" .alt "width" .width "hero" .hero -}}
+{{- $pictureOptions := dict "alt" .alt "width" .width -}}
 
-{{- partial "shot-picture.html" (merge $pictureOptions (dict "image" $lightImage "class" "shot-light")) -}}
+{{- partial "shot-picture.html" (merge $pictureOptions (dict "image" $lightImage "class" "shot-light" "hero" .hero)) -}}
 {{- with $darkImage -}}
-  {{- partial "shot-picture.html" (merge $pictureOptions (dict "image" . "class" "shot-dark")) -}}
+  {{- partial "shot-picture.html" (merge $pictureOptions (dict "image" . "class" "shot-dark" "hero" false)) -}}
 {{- end -}}
