@@ -37,13 +37,13 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
 
 **Purpose**: Strip the blog down to a buildable skeleton and switch the site to English.
 
-- [ ] T001 Delete the removed content and images with `git rm -r`:
+- [X] T001 Delete the removed content and images with `git rm -r`:
   - `content/article`, `content/book`, `content/cheat_sheet`, `content/go`,
     `content/git`, `content/tools`
   - `static/images/herdr`, `static/images/hidden_potential`,
     `static/images/jetbrains-context`, `static/images/sections`,
     `static/images/logo.png`
-- [ ] T002 [P] Delete the removed templates and scripts with `git rm`:
+- [X] T002 [P] Delete the removed templates and scripts with `git rm`:
   - `layouts/partials/ordered-pages.html`, `layouts/partials/episode-nav.html`,
     `layouts/partials/share.html`, `layouts/partials/search.html`,
     `layouts/partials/mermaid-scripts.html`, `layouts/shortcodes/mermaid.html`
@@ -51,7 +51,7 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
     `static/js/search.js`
 
   Keep `layouts/_default/_markup/render-table.html`.
-- [ ] T003 Update `hugo.toml` per data-model.md "Site config":
+- [X] T003 Update `hugo.toml` per data-model.md "Site config":
   - `defaultContentLanguage = 'en'`, `locale = 'en-US'`
   - add `disableKinds = ['taxonomy', 'term', 'rss']`
   - `params.siteTitleFull` = an English portfolio title, and `params.description`
@@ -60,17 +60,17 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
     `params.coffee = 'https://buymeacoffee.com/kidpeterpan'`
   - keep `googleAnalytics`, the markup settings, the security block, and the
     cachebusters
-- [ ] T004 [P] Remove Pagefind:
+- [X] T004 [P] Remove Pagefind:
   - delete the "Index with Pagefind" step from `.github/workflows/deploy.yml`
   - remove `pagefind` from `devDependencies` in `package.json`
   - run `npm install` to refresh `package-lock.json`
   - do not touch `yarn.lock`
-- [ ] T005 [P] Set English front matter in `content/_index.md` (title `Home`,
+- [X] T005 [P] Set English front matter in `content/_index.md` (title `Home`,
   plus an English `description`) and in `content/apps/_index.md` (an English
   `description`, `kicker = 'MINI APPS'`). Add `content_lang = 'th'` under
   `[params]` in `content/apps/mortgage.md`. Do not change anything else in the
   mini-app content files.
-- [ ] T006 Temporarily stub out the deleted partials so the build passes:
+- [X] T006 Temporarily stub out the deleted partials so the build passes:
   - In `layouts/_default/baseof.html`, remove the calls to `search.html`,
     `mermaid-scripts.html`, `search.js`, the search toggle button, and the RSS
     footer link.

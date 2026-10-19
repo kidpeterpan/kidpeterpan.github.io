@@ -1,55 +1,17 @@
 {{ define "main" }}
-  <div class="wrap">
-    <div class="article-layout">
-
-      <article class="reveal" data-pagefind-body>
-        <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
-
-        <header class="article-head">
-          <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
-          <h1>{{ .Title }}</h1>
-          <div class="meta-row">
-            {{ if not .PublishDate.IsZero }}
-              <time class="date" datetime="{{ .PublishDate.Format "2006-01-02" }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time>
-            {{ end }}
-            {{ range .Params.tags }}
-              <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag">{{ . }}</a>
-            {{ end }}
-          </div>
-          <div class="article-rule"></div>
-        </header>
-
-        {{ with .TableOfContents }}
-          <details class="toc-mobile">
-            <summary>On this page</summary>
-            {{ . | replaceRE `id="TableOfContents"` "" | safeHTML }}
-          </details>
+  <main class="wrap page-body">
+    <article class="reveal">
+      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
+      <header class="article-head">
+        <h1>{{ .Title }}</h1>
+        {{ with .Description }}
+          <p class="desc">{{ . }}</p>
         {{ end }}
-
-        <div class="prose">
-          {{ .Content }}
-        </div>
-
-        {{- partial "episode-nav.html" . }}
-
-        {{ partial "share.html" . }}
-
-        <footer class="article-foot">
-          <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
-        </footer>
-      </article>
-
-      <script src="{{ "/js/share.js" | relURL }}"></script>
-
-      {{ with .TableOfContents }}
-        <aside class="toc-aside">
-          <div class="toc">
-            <p class="toc-label">ON THIS PAGE</p>
-            {{ . }}
-          </div>
-        </aside>
-      {{ end }}
-
-    </div>
-  </div>
+        <div class="article-rule"></div>
+      </header>
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </article>
+  </main>
 {{ end }}

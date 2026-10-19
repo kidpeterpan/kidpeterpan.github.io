@@ -1,44 +1,19 @@
 {{ define "main" }}
   <main class="wrap list-body">
     <header class="list-head reveal">
-      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> HOME</a>
+      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
       <h1>{{ .Title }}</h1>
       {{ with .Description }}
         <p class="desc">{{ . }}</p>
       {{ end }}
     </header>
-
-    {{ with partial "ordered-pages.html" . }}
-      <section class="reveal d1" style="margin-top: 34px;">
-        <div class="section-head">
-          <div class="rule"></div>
-          <span class="count">{{ len . }} POST{{ if ne (len .) 1 }}S{{ end }}</span>
-        </div>
-        <ul class="post-list">
-          {{ range $i, $p := . }}
-            <li>
-              <a class="post-row" href="{{ $p.RelPermalink }}">
-                <span class="idx">{{ printf "%02d" (add $i 1) }}</span>
-                <span class="title-group">
-                  <span class="post-title">{{ $p.Title }}</span>
-                  {{ with $p.Params.tags }}
-                    <span class="post-meta">
-                      {{ range . }}
-                        <span class="tag">{{ . }}</span>
-                      {{ end }}
-                    </span>
-                  {{ end }}
-                </span>
-                {{ if not $p.Date.IsZero }}
-                  <time class="date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "Jan 2, 2006" }}</time>
-                {{ end }}
-              </a>
-            </li>
-          {{ end }}
-        </ul>
-      </section>
-    {{ else }}
-      <p class="desc" style="margin-top: 34px;">no posts found.</p>
-    {{ end }}
+    <ul class="page-list reveal d1">
+      {{ range .RegularPages }}
+        <li>
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{ with .Description }}<p>{{ . }}</p>{{ end }}
+        </li>
+      {{ end }}
+    </ul>
   </main>
 {{ end }}

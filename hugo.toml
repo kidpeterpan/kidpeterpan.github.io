@@ -1,9 +1,10 @@
 baseURL = 'https://kidpeterpan.github.io/'
-defaultContentLanguage = 'th'
-locale = 'th-TH'
+defaultContentLanguage = 'en'
+locale = 'en-US'
 title = 'kidpeterpan'
 enableRobotsTXT = true
 enableGitInfo = true
+disableKinds = ['taxonomy', 'term', 'rss']
 
 [markup]
   [markup.goldmark.renderer]
@@ -19,8 +20,10 @@ enableGitInfo = true
 
 [params]
 author = 'kidpeterpan'
-siteTitleFull = 'kidpeterpan — บันทึกเรียนรู้ Go, Software Engineering & AI'
-description = 'บันทึกการเรียนรู้ภาษา Go, software engineering, AI และหนังสือ โดย kidpeterpan'
+siteTitleFull = 'kidpeterpan — small, free apps that fix annoying problems'
+description = 'Free, open source apps by kidpeterpan. open-mtp-client copies files between your Mac and your Android phone. Inkbound turns Obsidian notes into EPUB books for e-readers.'
+github = 'https://github.com/kidpeterpan'
+coffee = 'https://buymeacoffee.com/kidpeterpan'
 googleAnalytics = 'G-LT3TCEMESB'
 
 [build.buildStats]

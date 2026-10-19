@@ -48,9 +48,6 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Index with Pagefind
-        run: npx pagefind --site public
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

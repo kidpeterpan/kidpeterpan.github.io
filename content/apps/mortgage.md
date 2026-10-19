@@ -6,6 +6,7 @@ description = 'คำนวณค่างวดผ่อนบ้าน รอ�
 tags = ['tools', 'finance']
 [params]
 order = 1
+content_lang = 'th'
 icon = '🏠'
 app_data = 'mortgage'
 app_core_js = 'mortgage-core.js'

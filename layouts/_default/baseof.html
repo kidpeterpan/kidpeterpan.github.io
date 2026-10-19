@@ -53,7 +53,6 @@
               {{ end }}
             </nav>
           </details>
-          <button class="search-toggle" id="search-toggle" aria-label="Search" aria-haspopup="dialog" aria-expanded="false">🔍</button>
           <button class="theme-toggle" aria-label="Toggle dark mode">
             <span class="sun">☀</span>
             <span class="moon">☾</span>
@@ -73,19 +72,13 @@
           {{ range site.Sections }}
             <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
           {{ end }}
-          <a href="{{ "/index.xml" | relURL }}">rss</a>
         </nav>
       </div>
     </footer>
 
     <a href="#" class="to-top" aria-label="Scroll to top">↑</a>
 
-    {{ partial "search.html" . }}
     <script src="{{ "/js/theme.js" | relURL }}"></script>
-    <script src="{{ "/js/search.js" | relURL }}"></script>
     <script src="{{ "/js/external-links.js" | relURL }}"></script>
-    {{ if .HasShortcode "mermaid" }}
-      {{ partial "mermaid-scripts.html" . }}
-    {{ end }}
   </body>
 </html>
