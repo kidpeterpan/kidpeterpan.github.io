@@ -485,7 +485,7 @@ and see the site's 404 page with 3 working links.
 - [X] T034 Delete CSS that nothing uses any more from `assets/css/main.css`.
   Grep each top-level class selector against `layouts/` and `assets/js/apps/`,
   and remove the selectors that don't match.
-- [ ] T035 Run the full `quickstart.md`:
+- [X] T035 Run the full `quickstart.md`:
   - **Build and output checks**:
     - §1 clean build with no warnings
     - §2 the exact page inventory and no references to removed paths
@@ -500,7 +500,7 @@ and see the site's 404 page with 3 working links.
     - the `/does-not-exist/` 404
 
   Record anything that fails, fix it, and repeat until everything passes.
-- [ ] T036 Final commit on `portfolio-redesign`, then report to the owner:
+- [X] T036 Final commit on `portfolio-redesign`, then report to the owner:
   - what changed
   - the local preview command
   - the follow-ups: run the Rich Results Test after deploy, `yarn.lock` is
