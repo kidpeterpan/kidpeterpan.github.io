@@ -277,7 +277,7 @@ portrait Boox photos are undistorted, and the README link works.
 - [X] T017 [P] [US2] Create the bundle `content/inkbound/` and download these
   files from `kidpeterpan/inkbound` `docs/images/`: `note-in-obsidian.png`,
   `export-menu.png`, `boox-library.jpg`, `boox-reading.jpg`, `settings.png`.
-- [ ] T018 [US2] Write `content/inkbound/index.md` with the front matter from
+- [X] T018 [US2] Write `content/inkbound/index.md` with the front matter from
   data-model.md:
   - **Release facts**:
     - `layout='project'`, `order=2`, `version='1.15.1'`
@@ -320,11 +320,11 @@ portrait Boox photos are undistorted, and the README link works.
       - an export report
     - A final line linking to the full README for settings and front-matter
       fields.
-- [ ] T019 [US2] Add CSS in `assets/css/main.css` so the two portrait Boox photos sit side by
+- [X] T019 [US2] Add CSS in `assets/css/main.css` so the two portrait Boox photos sit side by
   side at ≥ 640px and stack below that, with no stretching or cropping (e.g. a
   `.prose p:has(> figure + figure)` two-column grid, or a sibling selector).
   This must use only CSS, with no HTML in the Markdown.
-- [ ] T020 [US2] Verify US2: run `hugo server` and open `/inkbound/` at both widths
+- [X] T020 [US2] Verify US2: run `hugo server` and open `/inkbound/` at both widths
   and in both themes. Check every acceptance scenario of US2. Run
   `grep -rn '1\.15\.1' content/inkbound` and expect exactly 1 line. Fix
   anything that fails, then commit as "feat: Inkbound product page".
