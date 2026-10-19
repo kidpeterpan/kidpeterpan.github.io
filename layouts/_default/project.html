@@ -3,6 +3,11 @@
   <main class="wrap">
     <section class="product-hero">
       <div class="product-hero-copy">
+        {{ with $product.icon }}
+          {{ with ($.Resources.Get .).Resize "160x png" }}
+            <img class="app-mark reveal" src="{{ .RelPermalink }}" width="80" height="80" alt="">
+          {{ end }}
+        {{ end }}
         <p class="eyebrow reveal">{{ $product.eyebrow }}</p>
         <h1 class="reveal d1">{{ .Title }}</h1>
         <p class="tagline reveal d1">{{ $product.tagline }}</p>

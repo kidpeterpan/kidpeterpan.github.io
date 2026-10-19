@@ -407,7 +407,7 @@ a problem-led title, and previews with its own screenshot.
 **Independent Test**: Run the quickstart §4 greps on the built HTML, and the
 Schema Markup Validator shows 0 errors on both product pages.
 
-- [ ] T027 [US5] Rewrite `layouts/partials/seo.html` per contracts/structured-data.md:
+- [X] T027 [US5] Rewrite `layouts/partials/seo.html` per contracts/structured-data.md:
   - **Title and description**: `$title` = `.Params.seo_title`, otherwise the
     existing logic. Description ≤ 160 chars.
   - **OG image resolution order**:
@@ -433,7 +433,7 @@ Schema Markup Validator shows 0 errors on both product pages.
     - Other pages → `WebPage` with `inLanguage` from `content_lang`, otherwise
       `en-US`.
   - **404**: when `.Kind == "404"`, emit `<meta name="robots" content="noindex">`.
-- [ ] T028 [US5] Verify US5:
+- [X] T028 [US5] Verify US5:
   - Run `hugo --minify`, then the quickstart §4 commands.
   - `<title>` must be ≤ 65 chars on both product pages.
   - Paste each built product page into https://validator.schema.org and expect
@@ -449,12 +449,12 @@ Schema Markup Validator shows 0 errors on both product pages.
 **Independent Test**: In `hugo server`, open `/go/01-setting-up-your-go-environment/`
 and see the site's 404 page with 3 working links.
 
-- [ ] T029 [US6] Create `layouts/404.html`:
+- [X] T029 [US6] Create `layouts/404.html`:
   - Define `main` with `<h1>Page not found</h1>`.
   - One sentence saying the old blog posts were retired.
   - Links to `/`, `/open-mtp-client/`, and `/inkbound/`.
   - Add the `.not-found` CSS to `assets/css/main.css`.
-- [ ] T030 [US6] Verify US6: run `hugo server`, open the deleted Go URL, and
+- [X] T030 [US6] Verify US6: run `hugo server`, open the deleted Go URL, and
   check that `public/404.html` contains `noindex` after a build. Commit as
   "feat: 404 page".
 

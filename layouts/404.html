@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <main class="wrap">
+    <section class="not-found">
+      <h1>Page not found</h1>
+      <p>This page doesn’t exist any more. The old blog posts were retired when this site became a home for my apps.</p>
+      <div class="actions">
+        <a class="btn" href="{{ "/" | relURL }}">Go to the home page</a>
+        <a class="btn-ghost" href="{{ "/open-mtp-client/" | relURL }}">open-mtp-client</a>
+        <a class="btn-ghost" href="{{ "/inkbound/" | relURL }}">Inkbound</a>
+      </div>
+    </section>
+  </main>
+{{ end }}

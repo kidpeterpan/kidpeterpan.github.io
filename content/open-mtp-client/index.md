@@ -13,6 +13,7 @@ tagline = 'Copy files between your Mac and your Android phone. When it can’t c
 card_pitch = 'Android phone not showing up on your Mac? This app finds it, or tells you why.'
 route_from = 'Android phone'
 route_to = 'Mac'
+icon = 'icon.png'
 hero_image = 'main.png'
 hero_alt = 'open-mtp-client with a phone’s Camera folder full of photos on the right and a Mac Documents folder on the left'
 hero_caption = 'Shown with a virtual phone and sample files.'

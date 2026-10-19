@@ -51,7 +51,8 @@ In order. Each block is driven by the data-model field named.
    - `<h1>{{ title }}</h1>` (the page's only h1)
    - `tagline`
    - a primary button (`cta`) and a GitHub link (`repo_url`)
-   - a meta line: `Free` · `Open source (license)` · `v{{ version }}` · first requirement
+   - the route line (`route_from` ── `route_to`)
+  - a facts list (`<dl>`): Price Free · License · Version · Needs (first requirement)
    - the hero `<figure>` (`hero_image`, light/dark twin, `hero_caption`)
 2. **Notice** (only if `notice`): a callout placed directly under the CTA
    (before the hero figure on narrow screens), titled e.g. "First time you open

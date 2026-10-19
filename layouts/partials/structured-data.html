@@ -1,0 +1,69 @@
+{{- $page := .page -}}
+{{- $homeURL := site.Home.Permalink -}}
+{{- $personID := printf "%s#person" $homeURL -}}
+{{- $websiteID := printf "%s#website" $homeURL -}}
+{{- $language := $page.Params.content_lang | default site.Language.Locale -}}
+
+{{- $person := dict
+  "@type" "Person"
+  "@id" $personID
+  "name" site.Params.author
+  "url" $homeURL
+  "sameAs" (slice site.Params.github)
+-}}
+
+{{- $schema := dict
+  "@context" "https://schema.org"
+  "@type" "WebPage"
+  "name" $page.Title
+  "url" $page.Permalink
+  "description" .description
+  "inLanguage" $language
+  "isPartOf" (dict "@id" $websiteID)
+-}}
+
+{{- if $page.IsHome -}}
+  {{- $schema = dict
+    "@context" "https://schema.org"
+    "@graph" (slice
+      (dict
+        "@type" "WebSite"
+        "@id" $websiteID
+        "name" site.Title
+        "url" $homeURL
+        "description" .description
+        "inLanguage" $language
+        "publisher" (dict "@id" $personID)
+      )
+      $person
+    )
+  -}}
+{{- else if eq $page.Layout "project" -}}
+  {{- $product := $page.Params -}}
+  {{- $schema = dict
+    "@context" "https://schema.org"
+    "@type" "SoftwareApplication"
+    "name" $page.Title
+    "description" .description
+    "url" $page.Permalink
+    "inLanguage" $language
+    "applicationCategory" $product.category
+    "operatingSystem" $product.os
+    "softwareVersion" $product.version
+    "image" .image
+    "license" (printf "%s/blob/main/LICENSE" $product.repo_url)
+    "isAccessibleForFree" true
+    "offers" (dict "@type" "Offer" "price" "0" "priceCurrency" "USD")
+    "author" (dict "@type" "Person" "name" site.Params.author "url" site.Params.github)
+    "sameAs" (slice $product.repo_url)
+  -}}
+  {{- with $page.Resources.Get $product.hero_image -}}
+    {{- $schema = merge $schema (dict "screenshot" .Permalink) -}}
+  {{- end -}}
+  {{- $actionURLKey := cond (eq $product.cta_kind "download") "downloadUrl" "installUrl" -}}
+  {{- $schema = merge $schema (dict $actionURLKey $product.cta.url) -}}
+{{- else if $page.IsSection -}}
+  {{- $schema = merge $schema (dict "@type" "CollectionPage") -}}
+{{- end -}}
+
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>

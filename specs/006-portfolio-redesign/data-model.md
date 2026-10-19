@@ -20,6 +20,9 @@ Two instances: `open-mtp-client` and `inkbound`.
 | `params.eyebrow` | string | yes | Short platform label, e.g. `Free Mac app`, `Obsidian plugin` | hero eyebrow, card |
 | `params.tagline` | string | yes | One sentence, simple English, what it does for you | hero subhead |
 | `params.card_pitch` | string | yes | ≤ 90 chars, problem → fix | homepage card |
+| `params.route_from` / `params.route_to` | string | yes | Short labels for what the app moves between, e.g. `Android phone` → `Mac`. Drawn as the dashed "route" cable. | hero, homepage row |
+| `params.icon` | string | no | Bundle image of the app icon (omc only), shown at 80 px above the eyebrow | hero |
+| `params.cta_kind` | `'download'` \| `'install'` | yes | Chooses JSON-LD `downloadUrl` vs `installUrl` | structured data |
 | `params.hero_image` | string | yes | Bundle image filename. It may have a `-dark` twin. | hero, homepage card |
 | `params.hero_alt` | string | yes | Describes what the screenshot shows | `<img alt>` |
 | `params.hero_caption` | string | no | e.g. "Shown with a virtual phone and sample files." | `<figcaption>` |

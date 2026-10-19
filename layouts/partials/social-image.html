@@ -1,0 +1,26 @@
+{{- $socialImage := dict "url" "" "width" 0 "height" 0 -}}
+{{- $declaredImage := "" -}}
+{{- with .Params.images -}}
+  {{- $declaredImage = index . 0 -}}
+{{- end -}}
+{{- if reflect.IsMap $declaredImage -}}
+  {{- $declaredImage = index $declaredImage "url" -}}
+{{- end -}}
+
+{{- $bundleImage := "" -}}
+{{- with $declaredImage -}}
+  {{- $bundleImage = $.Resources.Get . -}}
+{{- end -}}
+
+{{- if $bundleImage -}}
+  {{- $card := $bundleImage.Fill "1200x630 top" -}}
+  {{- $socialImage = dict "url" $card.Permalink "width" $card.Width "height" $card.Height -}}
+{{- else if $declaredImage -}}
+  {{- $socialImage = dict "url" ($declaredImage | absURL) "width" 0 "height" 0 -}}
+{{- else -}}
+  {{- with partialCached "og-image.html" . .Permalink -}}
+    {{- $socialImage = dict "url" .Permalink "width" .Width "height" .Height -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $socialImage -}}
