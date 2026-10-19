@@ -1,14 +1,19 @@
 <!--
 Sync Impact Report
-- Version change: TEMPLATE → 1.0.0 (initial ratification)
-- Modified principles: n/a (first version)
-- Added sections: Core Principles (5), Technology Constraints, Development Workflow, Governance
+- Version change: 1.0.0 → 2.0.0 (MAJOR: Principle II redefined)
+- Modified principles:
+  - II. "Theme Consistency" (bound to the "Plus Ultra Paper" MHA theme) → "Design System
+    Consistency" (bound to whatever token set currently lives in assets/css/main.css).
+    Reason: owner chose a new clean product-page look for the portfolio redesign
+    (specs/006-portfolio-redesign, 2026-10-19).
+  - I. rationale wording: "personal static blog" → "personal static site".
+- Added sections: none
 - Removed sections: none
 - Templates requiring updates:
-  - ✅ .specify/templates/plan-template.md (Constitution Check gate is generic; no edit needed)
-  - ✅ .specify/templates/spec-template.md (no principle-specific references found)
-  - ✅ .specify/templates/tasks-template.md (no principle-specific references found)
-  - ✅ CLAUDE.md (already reflects Hugo/no-test-suite/Tailwind facts consistent with this constitution)
+  - ✅ .specify/templates/plan-template.md (generic Constitution Check; no edit needed)
+  - ✅ .specify/templates/spec-template.md (no principle-specific references)
+  - ✅ .specify/templates/tasks-template.md (no principle-specific references)
+  - ⚠ CLAUDE.md still describes the MHA theme; updated as part of specs/006-portfolio-redesign
 - Follow-up TODOs: none
 -->
 
@@ -21,14 +26,15 @@ Every change MUST use the simplest mechanism that satisfies the requirement. Do 
 build tooling, JS frameworks, package dependencies, or abstraction layers (helper functions,
 config flags, generic components) beyond what a single feature strictly needs. Prefer plain
 Go templates, vanilla CSS/JS, and Hugo built-ins over new libraries. Rationale: this is a
-personal static blog, not a product with a team maintaining it — every added dependency or
+personal static site, not a product with a team maintaining it — every added dependency or
 abstraction is a durable maintenance cost paid by one person.
 
-### II. Theme Consistency
-All content-facing UI (templates, partials, shortcodes, CSS) MUST match the existing
-"Plus Ultra Paper" design system: the established color tokens, typography, and textures
-in `assets/css/main.css`, and MUST work correctly in both light and dark mode via the
-`data-theme` attribute toggled by `static/js/theme.js`. New UI is not "done" until it has
+### II. Design System Consistency
+All content-facing UI (templates, partials, shortcodes, CSS) MUST use the site's current
+design system: the color tokens, typography, and components defined in
+`assets/css/main.css` (no one-off colors or fonts outside those tokens), and MUST work
+correctly in both light and dark mode via the `data-theme` attribute toggled by
+`static/js/theme.js`. New UI is not "done" until it has
 been checked in both themes. Rationale: visual inconsistency or dark-mode breakage is highly
 visible on a public blog and cheap to prevent by checking both modes before shipping.
 
@@ -86,4 +92,4 @@ wording/clarification fixes. All feature specs and plans produced by the Spec Ki
 MUST be checked against these principles at the "Constitution Check" gate in the plan
 template; unjustifiable violations block the plan from proceeding.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-31 | **Last Amended**: 2026-07-31
+**Version**: 2.0.0 | **Ratified**: 2026-07-31 | **Last Amended**: 2026-10-19
