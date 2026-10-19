@@ -95,7 +95,7 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
 **Purpose**: The look and the shared building blocks every story uses.
 ⚠️ Must be done before any story phase.
 
-- [ ] T007 Load the `frontend-design` skill. Use it to settle the visual direction:
+- [X] T007 Load the `frontend-design` skill. Use it to settle the visual direction:
   - a clean, light product page with one accent color, large type, and large
     screenshots, plus a matching dark mode
   - the system UI font stack with an `IBM Plex Sans Thai` fallback, and a
@@ -104,7 +104,7 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
   Write the decisions (palette hex values for light and dark, type scale,
   radius, shadow, spacing) as a short comment at the top of
   `assets/css/main.css`.
-- [ ] T008 Rewrite the top of `assets/css/main.css`, everything **before** the
+- [X] T008 Rewrite the top of `assets/css/main.css`, everything **before** the
   `/* ---------- apps section (mini apps hub + shells) ---------- */` block:
   - New tokens on `:root` and `html[data-theme="dark"]`: `--bg`, `--surface`,
     `--surface-2`, `--ink`, `--muted`, `--faint`, `--line`, `--accent`,
@@ -130,7 +130,7 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
   Delete every halftone, speedline, hero-cat, filter-bar, TOC, share, episode-nav,
   and search/pagefind rule. Keep the apps block and everything after it,
   unchanged for now.
-- [ ] T009 Rewrite `layouts/_default/baseof.html` per contracts/site-urls.md "Shared shell":
+- [X] T009 Rewrite `layouts/_default/baseof.html` per contracts/site-urls.md "Shared shell":
   - Keep the inline `mha-theme` head script, `seo.html`, `css.html`, and GA.
   - The Google Fonts link loads only `IBM Plex Sans Thai:wght@400;600;700` and
     `IBM Plex Mono:wght@400;500`.
@@ -142,9 +142,9 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
   - Scripts: only `theme.js` and `external-links.js`.
   - Remove `.top-stripe`, `.halftone`, and the `.to-top` link.
   - `<title>`: use `.Params.seo_title` when set, otherwise the existing logic.
-- [ ] T010 [P] Edit `static/js/theme.js`: delete the scroll-to-top block. Keep the
+- [X] T010 [P] Edit `static/js/theme.js`: delete the scroll-to-top block. Keep the
   toggle, the `mha-theme` key, and the `anim-pre` → `is-loaded` handoff.
-- [ ] T011 Create `layouts/partials/shot.html`, the single place that builds
+- [X] T011 Create `layouts/partials/shot.html`, the single place that builds
   screenshot markup (contracts/site-urls.md "Image output"):
   - **Input**: a dict with `page`, `src` (resource name), `alt`, `caption`
     (optional), `width` (target px, default 1200), and `hero` (bool).
@@ -162,13 +162,13 @@ US1, US2, and US4 (all P1), then US3 and US5 (P2), then US6 (P3).
   - Add CSS in `assets/css/main.css`: `.shot` (rounded, border, shadow,
     max-width 100%, height auto), `html[data-theme="dark"] .shot-light{display:none}`,
     and `html:not([data-theme="dark"]) .shot-dark{display:none}`.
-- [ ] T012 Create `layouts/_default/_markup/render-image.html`. It calls `shot.html`
+- [X] T012 Create `layouts/_default/_markup/render-image.html`. It calls `shot.html`
   with `page=.Page`, `src=.Destination`, `alt=.Text`, `caption=.Title`, and
   `width=1200`. It must render as a block figure. Add a `.prose figure` rule so a
   figure inside a paragraph doesn't break the layout. If Hugo wraps it in `<p>`,
   set `[markup.goldmark.parser] wrapStandAloneImageWithinParagraph = false` in
   `hugo.toml`.
-- [ ] T013 Create `layouts/_default/project.html` per contracts/site-urls.md
+- [X] T013 Create `layouts/_default/project.html` per contracts/site-urls.md
   "Product page anatomy":
   - **Hero**: `eyebrow`, `<h1>`, `tagline`, `.btn` primary (`cta`), a GitHub
     `.btn-ghost` (`repo_url`), and the meta line

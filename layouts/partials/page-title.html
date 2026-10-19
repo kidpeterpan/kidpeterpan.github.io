@@ -1,0 +1,10 @@
+{{- $siteTitle := site.Title -}}
+{{- $pageTitle := printf "%s · %s" .Title $siteTitle -}}
+{{- if .IsHome -}}
+  {{- $pageTitle = site.Params.siteTitleFull | default $siteTitle -}}
+{{- else if .Params.seo_title -}}
+  {{- $pageTitle = .Params.seo_title -}}
+{{- else if not .Title -}}
+  {{- $pageTitle = $siteTitle -}}
+{{- end -}}
+{{- return $pageTitle -}}

@@ -1,0 +1,80 @@
+{{ define "main" }}
+  {{- $product := .Params -}}
+  <main class="wrap">
+    <section class="product-hero">
+      <div class="product-hero-copy">
+        <p class="eyebrow reveal">{{ $product.eyebrow }}</p>
+        <h1 class="reveal d1">{{ .Title }}</h1>
+        <p class="tagline reveal d1">{{ $product.tagline }}</p>
+        {{ partial "route.html" . }}
+        <div class="actions reveal d2">
+          <a class="btn" href="{{ $product.cta.url }}">{{ $product.cta.label }}</a>
+          <a class="btn-ghost" href="{{ $product.repo_url }}">View on GitHub</a>
+        </div>
+        {{ with $product.notice }}
+          <aside class="notice reveal d2" aria-labelledby="notice-title">
+            <h2 id="notice-title">{{ .title }}</h2>
+            <div>{{ .body | markdownify }}</div>
+          </aside>
+        {{ end }}
+        {{ partial "product-facts.html" . }}
+      </div>
+      <div class="product-hero-shot reveal d3">
+        {{ partial "shot.html" (dict
+          "page" .
+          "src" $product.hero_image
+          "alt" $product.hero_alt
+          "caption" $product.hero_caption
+          "width" 1600
+          "hero" true
+        ) }}
+      </div>
+    </section>
+
+    <div class="product-body prose">
+      {{ .Content }}
+    </div>
+
+    <section class="get" id="get" aria-labelledby="get-title">
+      <h2 id="get-title">Get {{ .Title }}</h2>
+      <div class="get-grid">
+        <ol class="steps">
+          {{ range $product.steps }}
+            <li><p>{{ . | markdownify }}</p></li>
+          {{ end }}
+        </ol>
+        <div>
+          <h3>You need</h3>
+          <ul class="requirements">
+            {{ range $product.requirements }}
+              <li>{{ . | markdownify }}</li>
+            {{ end }}
+          </ul>
+          <div class="actions">
+            <a class="btn" href="{{ $product.cta.url }}">{{ $product.cta.label }}</a>
+            {{ with $product.cta_secondary }}
+              <a class="text-link" href="{{ .url }}">{{ .label }}</a>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{ with $product.faq }}
+      <section class="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Questions</h2>
+        {{ range . }}
+          <details>
+            <summary>{{ .q }}</summary>
+            <div class="answer">{{ .a | markdownify }}</div>
+          </details>
+        {{ end }}
+      </section>
+    {{ end }}
+
+    <section class="support">
+      <p>{{ .Title }} is free. If it saved you time, you can <a class="text-link" href="{{ site.Params.coffee }}">buy me a coffee</a>.</p>
+      <a class="text-link" href="{{ $product.repo_url }}/issues">Report a problem</a>
+    </section>
+  </main>
+{{ end }}

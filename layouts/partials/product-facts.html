@@ -1,0 +1,21 @@
+{{- $product := .Params -}}
+<dl class="facts reveal d2">
+  <div>
+    <dt>Price</dt>
+    <dd>Free</dd>
+  </div>
+  <div>
+    <dt>License</dt>
+    <dd>Open source, {{ $product.license }}</dd>
+  </div>
+  <div>
+    <dt>Version</dt>
+    <dd class="version">{{ $product.version }}</dd>
+  </div>
+  {{ with $product.requirements }}
+    <div>
+      <dt>Needs</dt>
+      <dd>{{ index . 0 | markdownify }}</dd>
+    </div>
+  {{ end }}
+</dl>

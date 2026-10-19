@@ -1,0 +1,15 @@
+{{- $image := .image -}}
+{{- $displayWidth := math.Min .width $image.Width | int -}}
+{{- $fallbackImage := $image -}}
+{{- if gt $image.Width $displayWidth -}}
+  {{- $fallbackImage = $image.Resize (printf "%dx" $displayWidth) -}}
+{{- end -}}
+{{- $webpImage := $image.Process (printf "resize %dx webp" $displayWidth) -}}
+{{- $loadingAttributes := `loading="lazy"` -}}
+{{- if .hero -}}
+  {{- $loadingAttributes = `fetchpriority="high"` -}}
+{{- end -}}
+<picture class="{{ .class }}">
+  <source type="image/webp" srcset="{{ $webpImage.RelPermalink }}">
+  <img src="{{ $fallbackImage.RelPermalink }}" width="{{ $fallbackImage.Width }}" height="{{ $fallbackImage.Height }}" alt="{{ .alt }}" {{ $loadingAttributes | safeHTMLAttr }} decoding="async">
+</picture>

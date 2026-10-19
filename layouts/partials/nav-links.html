@@ -1,0 +1,10 @@
+{{- $currentPath := .RelPermalink -}}
+{{- $links := slice
+  (dict "label" "open-mtp-client" "url" ("/open-mtp-client/" | relURL))
+  (dict "label" "Inkbound" "url" ("/inkbound/" | relURL))
+  (dict "label" "Mini apps" "url" ("/apps/" | relURL))
+  (dict "label" "GitHub" "url" site.Params.github)
+-}}
+{{- range $links }}
+  <a href="{{ .url }}"{{ if eq .url $currentPath }} aria-current="page"{{ end }}>{{ .label }}</a>
+{{- end }}

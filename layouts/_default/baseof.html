@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode | default site.Language.Lang }}" data-theme="light">
+<html lang="{{ site.Language.Locale | default site.Language.Lang }}" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ "/favicon.svg" | relURL }}" type="image/svg+xml">
-    <title>{{ if .IsHome }}{{ site.Params.siteTitleFull | default site.Title }}{{ else }}{{ block "title" . }}{{ with .Title }}{{ . }} · {{ end }}{{ site.Title }}{{ end }}{{ end }}</title>
+    <title>{{ partial "page-title.html" . }}</title>
     <script>
       (function () {
         try {
@@ -16,7 +16,7 @@
     {{ partial "seo.html" . }}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     {{ with (templates.Defer (dict "key" "global")) }}
       {{ partial "css.html" . }}
     {{ end }}
@@ -31,52 +31,43 @@
     {{ end }}
   </head>
   <body>
-
-    <div class="top-stripe"></div>
+    <a class="skip-link" href="#content">Skip to content</a>
 
     <header class="site-header">
       <div class="wrap">
-        <a href="{{ "/" | relURL }}" class="brand">
-          <span>[<b>kidpeterpan</b><span class="brand-suffix">.github.io</span>]</span>
-        </a>
+        <a href="{{ "/" | relURL }}" class="brand">kidpeterpan</a>
         <div class="header-right">
-          <nav class="site-nav">
-            {{ range site.Sections }}
-              <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
-            {{ end }}
+          <nav class="site-nav" aria-label="Main">
+            {{ partial "nav-links.html" . }}
           </nav>
           <details class="nav-mobile">
-            <summary aria-label="Menu">☰</summary>
-            <nav>
-              {{ range site.Sections }}
-                <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
-              {{ end }}
+            <summary class="icon-btn" aria-label="Menu">☰</summary>
+            <nav aria-label="Main">
+              {{ partial "nav-links.html" . }}
             </nav>
           </details>
-          <button class="theme-toggle" aria-label="Toggle dark mode">
-            <span class="sun">☀</span>
-            <span class="moon">☾</span>
+          <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark mode">
+            <span class="sun" aria-hidden="true">☀</span>
+            <span class="moon" aria-hidden="true">☾</span>
           </button>
-          <a href="https://buymeacoffee.com/kidpeterpan" target="_blank" rel="noopener" class="coffee-btn" aria-label="Buy me a coffee">☕</a>
+          <a href="{{ site.Params.coffee }}" class="icon-btn" aria-label="Buy me a coffee">☕</a>
         </div>
       </div>
     </header>
 
-    {{ block "main" . }}{{ end }}
+    <div id="content">
+      {{ block "main" . }}{{ end }}
+    </div>
 
     <footer class="site-footer">
-      <div class="halftone"></div>
       <div class="wrap">
-        <p class="sig">© {{ now.Year }} <b>kidpeterpan</b> — built with 💚</p>
-        <nav>
-          {{ range site.Sections }}
-            <a href="{{ .RelPermalink }}">{{ lower .Title }}</a>
-          {{ end }}
+        <p>© {{ now.Year }} kidpeterpan. Free and open source.</p>
+        <nav aria-label="Footer">
+          {{ partial "nav-links.html" . }}
+          <a href="{{ site.Params.coffee }}">Buy me a coffee</a>
         </nav>
       </div>
     </footer>
-
-    <a href="#" class="to-top" aria-label="Scroll to top">↑</a>
 
     <script src="{{ "/js/theme.js" | relURL }}"></script>
     <script src="{{ "/js/external-links.js" | relURL }}"></script>

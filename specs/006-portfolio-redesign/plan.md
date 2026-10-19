@@ -180,3 +180,15 @@ cards all call it.
 
 No unjustified violations. The only gate issue (Principle II) was resolved by
 an owner-approved constitution amendment (v2.0.0), not by a waiver.
+
+## Implementation notes
+
+- assets/css/main.css:1 — Design tokens chosen with the `frontend-design` skill (T007):
+  - Light: bg `#F6F7F9`, surface `#FFFFFF`, ink `#161A23`, muted `#586072`, line `#DDE1E8`, accent "fountain-pen ink" `#2340C8`.
+  - Dark: bg `#0E111A`, surface `#161B27`, ink `#E9ECF3`, accent `#8FA3FF`.
+  - Type: system UI stack with an IBM Plex Sans Thai fallback. Headline tracking −0.035 to −0.045em.
+  - Radii: panels 16, shots 12, controls 10.
+  - The memorable element is the dashed "route" cable (`route_from` → `route_to`), which echoes what both apps do: move things from one place to another.
+- assets/css/main.css:31 — `--green`, `--red`, `--shadow-pop` (and the reused `--surface`, `--line-strong`, `--muted`, `--faint`, `--ink`, `--line`, `--accent`, `--bg`, `--font-mono`, `--font-display`) are legacy token names. The kept mini-app CSS block still reads them, and they are now aliases of the new palette (research R6).
+- layouts/partials/product-facts.html:1 — A `<dl>` of facts replaces the planned middle-dot meta line, which the frontend-design review flagged as template chrome.
+- layouts/_default/_markup/render-image.html:7 — Images that share a paragraph render as an inline `<span class="shot">`, because a `<figure>` inside `<p>` is invalid HTML. This lets two portrait photos sit side by side through `.prose p:has(> .shot + .shot)`. Standalone images render as `<figure>` because `wrapStandAloneImageWithinParagraph = false`.

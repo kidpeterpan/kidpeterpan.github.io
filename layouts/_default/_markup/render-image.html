@@ -1,0 +1,8 @@
+{{- partial "shot.html" (dict
+  "page" .Page
+  "src" .Destination
+  "alt" .PlainText
+  "caption" .Title
+  "width" 1200
+  "inline" (not .IsBlock)
+) -}}

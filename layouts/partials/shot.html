@@ -1,0 +1,28 @@
+{{- $page := .page -}}
+{{- $source := .src -}}
+{{- $altText := .alt | default "" -}}
+{{- $caption := .caption | default "" -}}
+{{- $targetWidth := .width | default 1200 -}}
+{{- $isHero := .hero | default false -}}
+{{- $isInline := .inline | default false -}}
+{{- $wrapperTag := cond $isInline "span" "figure" -}}
+{{- $captionTag := cond $isInline "span" "figcaption" -}}
+
+{{- $lightImage := $page.Resources.Get $source -}}
+{{- if not $lightImage -}}
+  <img src="{{ $source | safeURL }}" alt="{{ $altText }}" loading="lazy" decoding="async">
+{{- else -}}
+  {{- $extension := path.Ext $lightImage.Name -}}
+  {{- $darkImageName := printf "%s-dark%s" (strings.TrimSuffix $extension $lightImage.Name) $extension -}}
+  {{- $darkImage := $page.Resources.Get $darkImageName -}}
+  {{- $pictureOptions := dict "alt" $altText "width" $targetWidth "hero" $isHero -}}
+  <{{ $wrapperTag }} class="shot">
+    {{- partial "shot-picture.html" (merge $pictureOptions (dict "image" $lightImage "class" "shot-light")) -}}
+    {{- with $darkImage -}}
+      {{- partial "shot-picture.html" (merge $pictureOptions (dict "image" . "class" "shot-dark")) -}}
+    {{- end -}}
+    {{- with $caption }}
+      <{{ $captionTag }} class="shot-caption">{{ . | markdownify }}</{{ $captionTag }}>
+    {{- end }}
+  </{{ $wrapperTag }}>
+{{- end -}}
