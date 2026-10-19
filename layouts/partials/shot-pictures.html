@@ -1,0 +1,10 @@
+{{- $lightImage := .image -}}
+{{- $extension := path.Ext $lightImage.Name -}}
+{{- $darkImageName := printf "%s-dark%s" (strings.TrimSuffix $extension $lightImage.Name) $extension -}}
+{{- $darkImage := .page.Resources.Get $darkImageName -}}
+{{- $pictureOptions := dict "alt" .alt "width" .width "hero" .hero -}}
+
+{{- partial "shot-picture.html" (merge $pictureOptions (dict "image" $lightImage "class" "shot-light")) -}}
+{{- with $darkImage -}}
+  {{- partial "shot-picture.html" (merge $pictureOptions (dict "image" . "class" "shot-dark")) -}}
+{{- end -}}

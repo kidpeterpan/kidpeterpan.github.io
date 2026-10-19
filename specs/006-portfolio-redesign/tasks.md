@@ -204,14 +204,14 @@ Download goes to `…/releases/latest` in 1 click, the first-launch steps for
 macOS 15+ and macOS ≤ 14 are right under the button, and the screenshot swaps
 with the theme.
 
-- [ ] T014 [P] [US1] Create the bundle `content/open-mtp-client/` and download
+- [X] T014 [P] [US1] Create the bundle `content/open-mtp-client/` and download
   the images into it:
   - `docs/screenshots/main-light.png` → `main.png`
   - `docs/screenshots/main-dark.png` → `main-dark.png`
   - `assets/icon-1024.png` → `icon.png`
 
   All come from the `kidpeterpan/open-mtp-client` repo.
-- [ ] T015 [US1] Write `content/open-mtp-client/index.md` with the TOML front
+- [X] T015 [US1] Write `content/open-mtp-client/index.md` with the TOML front
   matter from data-model.md:
   - **Release facts**:
     - `layout='project'`, `order=1`, `version='0.1.0'`
@@ -255,7 +255,7 @@ with the theme.
         import new photos by date.
       - Optionally one `![…](main-dark.png "…")` is fine, but don't repeat the
         hero.
-- [ ] T016 [US1] Verify US1: run `hugo server` and open `/open-mtp-client/` at
+- [X] T016 [US1] Verify US1: run `hugo server` and open `/open-mtp-client/` at
   desktop and 360px in light and dark. Check every acceptance scenario of US1
   in spec.md. Run `grep -rn '0\.1\.0' content/open-mtp-client` and expect
   exactly 1 line. Fix anything that fails, then commit as
@@ -274,7 +274,7 @@ visitor to install it.
 `obsidian.md/plugins?id=inkbound`, the 3-step picture story renders, the
 portrait Boox photos are undistorted, and the README link works.
 
-- [ ] T017 [P] [US2] Create the bundle `content/inkbound/` and download these
+- [X] T017 [P] [US2] Create the bundle `content/inkbound/` and download these
   files from `kidpeterpan/inkbound` `docs/images/`: `note-in-obsidian.png`,
   `export-menu.png`, `boox-library.jpg`, `boox-reading.jpg`, `settings.png`.
 - [ ] T018 [US2] Write `content/inkbound/index.md` with the front matter from

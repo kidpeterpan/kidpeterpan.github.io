@@ -74,6 +74,14 @@ body {
 
 a { color: inherit; }
 
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
 img { max-width: 100%; height: auto; }
 
 h1, h2, h3 {
@@ -547,13 +555,6 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   font-weight: 600;
 }
 
-.prose code {
-  font-family: var(--font-mono);
-  font-size: 0.88em;
-  background: var(--surface-2);
-  padding: 2px 6px;
-  border-radius: 6px;
-}
 
 .prose pre {
   background: var(--surface-2);
@@ -858,7 +859,6 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 .faq .answer { padding: 0 0 18px; color: var(--muted); }
 .faq .answer p { margin: 0 0 10px; }
 .faq .answer > :last-child { margin-bottom: 0; }
-.faq code { font-family: var(--font-mono); font-size: 0.9em; }
 
 .support {
   margin-top: 72px;
