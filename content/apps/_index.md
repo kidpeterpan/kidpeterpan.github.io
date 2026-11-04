@@ -1,6 +1,6 @@
 +++
 title = 'Mini apps'
-description = 'Small web tools that run in your browser: a Thai mortgage calculator and an OpenCode Go model comparison.'
+description = 'Small web tools that run in your browser, each doing one job well.'
 [params]
 kicker = 'Mini apps'
 +++

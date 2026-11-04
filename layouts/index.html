@@ -37,7 +37,7 @@
         <h2 id="mini-apps-title">{{ .Title }}</h2>
         <p>{{ .Description }}</p>
         <ul class="mini-app-list">
-          {{ range sort .RegularPages "Params.order" }}
+          {{ range sort (where .RegularPages "Params.home_hidden" "ne" true) "Params.order" }}
             <li>
               <a href="{{ .RelPermalink }}"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }}>
                 <span class="app-icon" aria-hidden="true">{{ .Params.icon | default "🔧" }}</span>

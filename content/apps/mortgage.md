@@ -8,6 +8,7 @@ tags = ['tools', 'finance']
 order = 1
 content_lang = 'th'
 icon = '🏠'
+home_hidden = true   # listed on /apps/ only, not in the homepage mini-app list
 app_data = 'mortgage'
 app_core_js = 'mortgage-core.js'
 app_js = 'mortgage.js'
