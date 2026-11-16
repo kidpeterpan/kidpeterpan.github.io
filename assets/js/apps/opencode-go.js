@@ -32,14 +32,15 @@
   root.innerHTML = `
     <div class="app-table-wrap">
       <div class="app-table-head">
-        <p class="app-table-title">Comparing ${models.length} models · click a header to sort</p>
+        <p class="app-table-title">Comparing ${models.length} models on the Go plan · click a header to sort</p>
         <div class="app-table-actions">
           ${updated ? `<p class="app-updated">Updated ${updated}</p>` : ''}
           <button type="button" class="app-copy-btn" id="ocg-copy">⧉ Copy Top 10 by Quality</button>
         </div>
       </div>
       <div class="app-table" id="ocg-table"></div>
-      <p class="app-footnote">Quality is a 0–10 score synthesized from public benchmarks (SWE-bench, Terminal-Bench, …) — a rough scale for comparison, not an official ranking. Request counts and speeds are estimates from opencode.ai and Artificial Analysis.</p>
+      <p class="app-footnote">Go plan estimates ($10/month). Go Plus ($40/month) and Go Teams ($20/member/month) have higher limits. Free models with unlimited usage (limited-time offers) — Beam Free, Iceman Contributor Free and LongCat 2.5 Free — aren’t listed. Qwen4 Max (460 per 5h, 1,160 per week, 2,310 per month) is now in Go but has no output speed at Artificial Analysis yet, so it is not in the table.</p>
+      <p class="app-footnote">Quality is a 0–10 score synthesized from public benchmarks (SWE-bench, Terminal-Bench, …) — a rough scale for comparison, not an official ranking. Request counts are from opencode.ai/docs/go; speeds are from Artificial Analysis (both checked 16 Nov 2026).</p>
     </div>
   `;
 

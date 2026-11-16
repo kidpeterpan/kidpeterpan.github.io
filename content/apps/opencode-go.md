@@ -2,7 +2,7 @@
 title = 'Compare OpenCode Go Models'
 date = '2026-09-22T00:00:00+07:00'
 draft = false
-description = 'Compare OpenCode Go models — requests per 5h, week and month, speed (tok/s), quality and value score. Click a column header to sort.'
+description = 'Compare OpenCode Go models on the $10/month Go plan — requests per 5h, week and month, speed (tok/s), quality and value score. Click a column header to sort.'
 tags = ['tools', 'ai']
 [params]
 order = 2
