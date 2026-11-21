@@ -39,8 +39,8 @@
         </div>
       </div>
       <div class="app-table" id="ocg-table"></div>
-      <p class="app-footnote">Go plan estimates ($10/month). Go Plus ($40/month) and Go Teams ($20/member/month) have higher limits. Free models with unlimited usage (limited-time offers) — Beam Free, Iceman Contributor Free and LongCat 2.5 Free — aren’t listed. Qwen4 Max (460 per 5h, 1,160 per week, 2,310 per month) is now in Go but has no output speed at Artificial Analysis yet, so it is not in the table.</p>
-      <p class="app-footnote">Quality is a 0–10 score synthesized from public benchmarks (SWE-bench, Terminal-Bench, …) — a rough scale for comparison, not an official ranking. Request counts are from opencode.ai/docs/go; speeds are from Artificial Analysis (both checked 16 Nov 2026).</p>
+      <p class="app-footnote">Go plan estimates ($10/month). Go Plus ($40/month) and Go Teams ($20/member/month) have higher limits. Free models with unlimited usage (limited-time offers) — Beam Free, Hy4 flash Free, Iceman Contributor Free and LongCat 2.5 Free — aren’t listed.</p>
+      <p class="app-footnote">Quality is a 0–10 score synthesized from public benchmarks (SWE-bench, Terminal-Bench, …) — a rough scale for comparison, not an official ranking. Request counts are from opencode.ai/console/go (checked 21 Nov 2026), which gives only the 5-hour figure, so week and month are worked out from the documented limits (2.5× and 5× the 5-hour figure); speeds are from Artificial Analysis (checked 16 Nov 2026, Qwen4 Max 21 Nov).</p>
     </div>
   `;
 
