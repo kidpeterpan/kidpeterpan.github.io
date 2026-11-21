@@ -15,7 +15,7 @@ route_from = 'Obsidian notes'
 route_to = 'E-reader'
 hero_image = 'export-menu.png'
 hero_alt = 'An Obsidian book note with its chapter list, and the file menu open on “Export note + linked notes to EPUB”'
-version = '1.15.1'
+version = '1.15.2'
 repo_url = 'https://github.com/kidpeterpan/inkbound'
 license = 'MIT'
 os = 'Windows, macOS, Linux, iOS, Android (Obsidian 1.5 or newer)'
@@ -94,5 +94,6 @@ Open the file on any e-reader. With a Boox, turn on **Push after export** and th
 - **Diagrams and math as pictures.** Mermaid diagrams and LaTeX math show up on readers that can’t draw them.
 - **Real footnotes** you can tap to open and tap to come back from.
 - **A preview before you export**, and a report that names any note that didn’t come through cleanly.
+- **Every book at once.** **Export all books** refreshes your whole library in one go, and `export: false` on a note keeps it out of its book.
 
 Settings and every note property Inkbound reads are explained in the [full README on GitHub](https://github.com/kidpeterpan/inkbound#readme).

@@ -17,7 +17,7 @@ icon = 'icon.png'
 hero_image = 'main.png'
 hero_alt = 'open-mtp-client with a phone’s Camera folder full of photos on the right and a Mac Documents folder on the left'
 hero_caption = 'Shown with a virtual phone and sample files.'
-version = '0.1.0'
+version = '0.2.1'
 repo_url = 'https://github.com/kidpeterpan/open-mtp-client'
 license = 'MIT'
 os = 'macOS 11 or later'
@@ -102,4 +102,5 @@ open-mtp-client fixes these. It explains every failure, frees the phone when mac
 - **Shows your phone and your Mac side by side**, with photo thumbnails, search and sort. Fast with tens of thousands of files.
 - **Imports only new photos**, into folders by date.
 - **Works with several phones at once**, and handles files over 4 GB and any file name, including emoji and Thai.
+- **Speaks your language**: English, Thai, Japanese or Simplified Chinese. Pick one in Settings, or let it follow your Mac.
 - **Feels like a Mac app**: menu bar, Quick Look, drag and drop from Finder, and light and dark themes.
