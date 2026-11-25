@@ -1,16 +1,16 @@
 +++
 title = 'chiaki-ngx'
-description = 'Need Japanese subtitles in PlayStation Remote Play? chiaki-ngx adds optional OCR-powered translation for PS4/PS5 on Steam Deck and desktop.'
+description = 'Need Japanese subtitles translated in PlayStation Remote Play? chiaki-ngx offers multiple OCR engines and Thai or English output.'
 date = '2026-11-25T00:00:00+07:00'
 layout = 'project'
 images = ['screenshot.png']
 
 [params]
 order = 3
-seo_title = 'PlayStation Remote Play with Japanese Subtitles | chiaki-ngx'
+seo_title = 'PlayStation Remote Play Japanese OCR & Translation | chiaki-ngx'
 eyebrow = 'PlayStation Remote Play client'
-tagline = 'Stream PS4 and PS5 games with optional on-screen Japanese subtitle translation.'
-card_pitch = 'Need Japanese subtitles in PlayStation Remote Play? chiaki-ngx adds them on screen.'
+tagline = 'Read Japanese subtitles with multiple OCR engines; translate them into Thai or English.'
+card_pitch = 'Need Japanese subtitles translated? Choose an OCR engine and Thai/English output.'
 route_from = 'PS4 / PS5'
 route_to = 'Steam Deck / Desktop'
 hero_image = 'screenshot.png'
@@ -55,6 +55,12 @@ No. Google Translate is the free default and needs no API key. Other cloud provi
 '''
 
 [[params.faq]]
+q = 'Which languages does chiaki-ngx support?'
+a = '''
+The OCR source language is Japanese. The in-app translation targets are Thai and English, with multiple OCR engines and translation providers to choose from.
+'''
+
+[[params.faq]]
 q = 'Where can I download it?'
 a = '''
 The verified release is an AppImage for Steam Deck and Linux x86_64. macOS builds from source; see the [macOS guide](https://github.com/kidpeterpan/chiaki-ngx/blob/main/docs/translator/MACOS.md).
@@ -63,12 +69,12 @@ The verified release is an AppImage for Steam Deck and Linux x86_64. macOS build
 
 ## Stream and translate
 
-chiaki-ngx is a fork of Chiaki-ng, the open-source PlayStation 4/5 Remote Play client. Its optional translator recognizes Japanese subtitles with OCR and displays translations over the game. The translator is disabled by default, so the client can also be used for Remote Play alone.
+chiaki-ngx is a fork of Chiaki-ng, the open-source PlayStation 4/5 Remote Play client. Its optional translator reads Japanese subtitles with OCR, offers multiple OCR and translation providers, and can show the output in Thai or English. It is disabled by default, so the client can also be used for Remote Play alone.
 
 ## What it adds
 
-- **OCR for Japanese subtitles.** Choose from PaddleOCR, RapidOCR, Google Cloud Vision, OCR.space, Gemini Vision, and Chrome Screen AI on Linux.
-- **Translations with no required API key.** Google Translate is free and works by default; Gemini, DeepL, Google Cloud Translation, OpenAI-compatible services, and offline NLLB are also supported.
+- **Multiple OCR engines.** Read Japanese subtitles with PaddleOCR, RapidOCR, Google Cloud Vision, OCR.space, Gemini Vision, or Chrome Screen AI on Linux.
+- **Thai or English translations.** Google Translate is free and works by default; Gemini, DeepL, Google Cloud Translation, OpenAI-compatible services, and offline NLLB are also supported.
 - **Context and dictionary lookup.** Rolling dialogue context, a translation cache, and the offline JMdict dictionary help keep lines readable and let you look up words.
 - **Steam Deck controls.** Use controller navigation, touch, remappable hotkeys, and an in-viewport translation overlay.
 
