@@ -3,6 +3,7 @@
 {{- $personID := printf "%s#person" $homeURL -}}
 {{- $websiteID := printf "%s#website" $homeURL -}}
 {{- $language := $page.Params.content_lang | default site.Language.Locale -}}
+{{- $licenseURL := $page.Params.license_url | default (printf "%s/blob/main/LICENSE" $page.Params.repo_url) -}}
 
 {{- $person := dict
   "@type" "Person"
@@ -51,7 +52,7 @@
     "operatingSystem" $product.os
     "softwareVersion" $product.version
     "image" .image
-    "license" (printf "%s/blob/main/LICENSE" $product.repo_url)
+    "license" $licenseURL
     "isAccessibleForFree" true
     "offers" (dict "@type" "Offer" "price" "0" "priceCurrency" "USD")
     "author" (dict "@type" "Person" "name" site.Params.author "url" site.Params.github)

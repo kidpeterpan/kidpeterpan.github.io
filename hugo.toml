@@ -23,7 +23,7 @@ disableKinds = ['taxonomy', 'term', 'rss']
 [params]
 author = 'kidpeterpan'
 siteTitleFull = 'kidpeterpan — small, free apps that fix annoying problems'
-description = 'Free, open source apps by kidpeterpan. open-mtp-client copies files between your Mac and your Android phone. Inkbound turns Obsidian notes into EPUB books for e-readers.'
+description = 'Free, open-source apps by kidpeterpan for Android-to-Mac file transfer, Obsidian EPUB export, and Japanese subtitles in PlayStation Remote Play.'
 github = 'https://github.com/kidpeterpan'
 coffee = 'https://buymeacoffee.com/kidpeterpan'
 googleAnalytics = 'G-LT3TCEMESB'
