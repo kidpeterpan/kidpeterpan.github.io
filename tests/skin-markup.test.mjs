@@ -74,3 +74,19 @@ test('window titles are real elements, not escaped text', () => {
     assert.match(home, new RegExp(`<p class=${q}win-title${q} id=${q}${id}${q}>`), `no title element with id ${id}`);
   }
 });
+
+for (const name of ['open-mtp-client', 'inkbound', 'chiaki-ngx']) {
+  test(`product page ${name}: windows, one h1, faq and notice preserved`, () => {
+    const html = page(`/${name}/`);
+    const fm = readFileSync(new URL(`../content/${name}/index.md`, import.meta.url), 'utf8');
+    assert.equal(count(html, /<h1\b/), 1);
+    for (const id of ['win-hero', 'win-readme', 'get', 'win-faq']) {
+      assert.match(html, new RegExp(`<section class=${q}[^>]*\\bwin\\b[^>]*id=${q}${id}${q}|<section id=${q}${id}${q}[^>]*class=${q}[^>]*\\bwin\\b`), `no .win section with id ${id}`);
+    }
+    assert.ok(!/&lt;(?:p|h[1-6])\b/.test(html), 'a window title leaked as escaped markup');
+    // The mobile nav is also a <details>, so count only inside the FAQ window.
+    const faq = (html.match(/<section\b[^>]*id=["']?win-faq[\s\S]*?<\/section>/) || [''])[0];
+    assert.equal(count(faq, /<details\b/), (fm.match(/^\[\[params\.faq\]\]/gm) || []).length, 'faq entries lost');
+    assert.equal(/<aside\b[^>]*\bnotice\b/.test(html), /^\[params\.notice\]/m.test(fm), 'notice presence differs from front matter');
+  });
+}
