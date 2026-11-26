@@ -75,3 +75,9 @@ test('nothing is hidden without JS', () => {
   const inNoPref = noPref.match(/animation:[^;]*blink[^;]*;/g) ?? [];
   assert.equal(blinkRules.length, inNoPref.length, 'blink animation used outside prefers-reduced-motion: no-preference');
 });
+
+test('high-contrast preference drops the stipple', () => {
+  const body = block(css, '@media (prefers-contrast: more)');
+  assert.ok(body, 'no @media (prefers-contrast: more) block');
+  assert.match(body, /body\s*\{[^}]*background-image:\s*none/);
+});

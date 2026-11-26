@@ -1707,6 +1707,11 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 /* Plex Mono has no Thai glyphs; keep Thai window titles in the Thai face. */
 [lang="th"] .win-title { font-family: "IBM Plex Sans Thai", var(--font-mono); }
 
+/* A visitor who asks for more contrast gets a flat desk instead of the stipple. */
+@media (prefers-contrast: more) {
+  body { background-image: none; }
+}
+
 @media (forced-colors: active) {
   .out,
   .in,

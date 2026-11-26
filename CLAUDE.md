@@ -10,11 +10,13 @@ A Hugo static site at kidpeterpan.github.io: an English portfolio of the owner's
 
 The old Thai blog (articles, Go and Git courses, book notes) was removed in `specs/006-portfolio-redesign`. Its URLs now 404 on purpose.
 
-**Look**: a clean product-page style.
-- Colors: a cool light background, a "fountain-pen ink" blue accent (`#2340C8` light / `#8FA3FF` dark), and an ink-navy dark mode.
-- Fonts: the system UI font, with IBM Plex Sans Thai for content marked `lang="th"`.
-- The signature element is the dashed "route" cable (`route_from` → `route_to`) on product pages and homepage rows.
-- Light and dark mode use a `data-theme` attribute, toggled by `static/js/theme.js` and saved in `localStorage` under `mha-theme`. The key name is kept from the old theme so returning visitors keep their choice.
+**Look**: a retro CDE/Motif desktop (the 1990s Solaris/HP-UX look) with modern usability. Pages are stacked windows on a stippled desktop.
+- Palettes: "Default" (light, cool slate) and "Midnight" (dark), named after CDE palettes. Every color is a token on `:root` / `html[data-theme="dark"]`: `--desk-a`/`--desk-b` (stipple), `--face`, `--hi`, `--sh`, `--edge` (bevels), `--paper` (reading surface), `--title`, `--accent`, `--term-*` (xterm). Midnight's `--edge` is light on purpose: a dark edge on a dark face cannot reach 3:1.
+- Structure: a window is `.win.out` > `.win-bar` + `.win-body` > `.well.in`. `layouts/partials/window-bar.html` renders the title bar (`tag` is `h2` or `p`; the min/max/menu buttons are decorative and `aria-hidden`). Bevels are `.out` (raised) and `.in` (sunken), each with a 1px `--edge` outline. The homepage hero is an `xterm` window and the header is the front panel. Do not style a bare `p` or `h2` inside a window by tag: it will hit the title bar (this happened once on `.not-found`).
+- Fonts: the system UI font for body, IBM Plex Mono for window chrome, buttons and the terminal, IBM Plex Sans Thai for content marked `lang="th"`.
+- The signature element is still the "route" cable (`route_from` → `route_to`): a dashed cable between two bevel nodes, on product pages and homepage rows.
+- Light and dark mode use a `data-theme` attribute, toggled by `static/js/theme.js` and saved in `localStorage` under `mha-theme`. The key name is kept from the old theme so returning visitors keep their choice. The toggle button shows the palette name and sets `aria-pressed`.
+- Accessibility rules the CSS keeps: 44px controls, a 3px `--accent` focus ring, a `forced-colors` block and a `prefers-contrast: more` block near the end of `main.css`, and the cursor blink only under `prefers-reduced-motion: no-preference`.
 
 ## Commands
 
@@ -23,7 +25,7 @@ The old Thai blog (articles, Go and Git courses, book notes) was removed in `spe
 - `make restart`: stop, then start.
 - `hugo server`: run the dev server in the foreground.
 - `hugo --minify`: the production build (what CI runs). It writes to `public/` and must finish with zero warnings.
-- `npm test`: Node's test runner over `tests/*.test.mjs`, which covers the mini apps' core logic (`assets/js/apps/*-core.js`).
+- `npm test`: Node's test runner over `tests/*.test.mjs`. It covers the mini apps' core logic (`assets/js/apps/*-core.js`) and the skin: palette contrast and accessibility rules in the CSS (`skin-tokens`), page structure (`skin-markup`), and that every page keeps its h1 and its links (`skin-parity`, compared with `tests/fixtures/parity-baseline.json`; regenerate that file only when you change a heading or link on purpose). The skin tests build the site, so `hugo` must be on `PATH` (or set `HUGO=/path/to/hugo`); Hugo 0.170 also needs Node ≥22.
 - `npm ci`: install the Tailwind dependencies.
 
 There is no linter. `.github/workflows/deploy.yml` builds with Hugo and deploys `public/` to GitHub Pages on every push to `main`, so a push to `main` is a live deploy.

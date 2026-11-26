@@ -2,6 +2,8 @@
 
 A small portfolio of free, open source apps by kidpeterpan, at [kidpeterpan.github.io](https://kidpeterpan.github.io/).
 
+The site is styled as a retro CDE/Motif desktop: stacked windows, an xterm hero, and two palettes named Default and Midnight.
+
 - **[open-mtp-client](https://kidpeterpan.github.io/open-mtp-client/)**: a Mac app for copying files between a Mac and an Android phone.
 - **[Inkbound](https://kidpeterpan.github.io/inkbound/)**: an Obsidian plugin that exports notes as EPUB books for e-readers.
 - **[Mini apps](https://kidpeterpan.github.io/apps/)**: a Thai mortgage calculator and an OpenCode Go model comparison that run in the browser.
