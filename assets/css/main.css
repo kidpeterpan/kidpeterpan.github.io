@@ -188,7 +188,6 @@ h1, h2, h3 {
 
 .header-right {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
@@ -246,39 +245,66 @@ h1, h2, h3 {
 
 .theme-toggle[aria-pressed="true"] { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
 
-/* Language switcher: one bevelled button per language, the current one pressed in. */
-.lang-switch {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-right: 4px;
-}
+/* Language switcher: a bevelled button showing the current language that opens a short list. */
+.lang-switch { position: relative; margin-right: 4px; }
 
-.lang-switch a,
-.lang-switch span {
+.lang-switch summary {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-width: 44px;
+  gap: 6px;
   min-height: 44px;
-  padding: 6px 10px;
+  padding: 6px 12px;
   background: var(--face);
   color: var(--ink);
   border: 2px solid;
   border-color: var(--hi) var(--sh) var(--sh) var(--hi);
   outline: 1px solid var(--edge);
   font: 600 13px/1.2 var(--font-chrome);
+  list-style: none;
+  cursor: pointer;
+}
+
+.lang-switch summary::-webkit-details-marker { display: none; }
+.lang-switch summary::after { content: "▾"; font-size: 11px; }
+.lang-switch summary:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
+.lang-switch details[open] summary { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
+.lang-switch summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.lang-menu {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  z-index: 6;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--face);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  box-shadow: var(--shadow-hard);
+}
+
+.lang-menu a,
+.lang-menu span {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  background: var(--face);
+  color: var(--ink);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  font: 600 14px/1.2 var(--font-chrome);
   text-decoration: none;
 }
 
-.lang-switch a:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
-
-.lang-switch span[aria-current="true"] {
-  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
-  font-weight: 700;
-}
-
-.lang-switch a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.lang-menu a:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
+.lang-menu span[aria-current="true"] { border-color: var(--sh) var(--hi) var(--hi) var(--sh); font-weight: 700; }
+.lang-menu a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
 .nav-mobile { display: none; position: relative; }
 
@@ -304,12 +330,6 @@ h1, h2, h3 {
   box-shadow: var(--shadow-hard);
 }
 
-/* Five languages make the header wrap to two or three rows below about 1200px. A panel that tall
-   stuck to the top eats the screen, so it only sticks where it stays short. */
-@media (max-width: 1199px) {
-  .site-header { position: static; }
-}
-
 @media (max-width: 900px) {
   .site-nav { display: none; }
   .nav-mobile { display: block; }
@@ -325,6 +345,9 @@ h1, h2, h3 {
     z-index: 6;
   }
   .theme-toggle { padding-left: 10px; padding-right: 10px; }
+  /* Same anchoring as the nav menu: to the header row, so the list cannot run off the screen. */
+  .lang-switch { position: static; }
+  .lang-menu { right: var(--gutter); top: calc(100% - 4px); }
 }
 
 @media (max-width: 480px) {
@@ -332,12 +355,11 @@ h1, h2, h3 {
   .site-header { position: static; }
   .brand { width: 100%; }
   .header-right { width: 100%; justify-content: flex-end; }
-  /* Five language buttons are a row of their own, under menu, palette and coffee. */
-  .lang-switch { order: 2; flex-basis: 100%; justify-content: flex-end; margin-right: 0; }
   .nav-mobile nav {
     left: var(--gutter);
     min-width: 0;
   }
+  .lang-menu { left: var(--gutter); min-width: 0; }
 }
 
 /* Status bar (footer) */
@@ -1815,8 +1837,9 @@ html[lang|="ko"] body { line-height: 1.7; word-break: keep-all; overflow-wrap: b
   .btn,
   .btn-ghost,
   .icon-btn,
-  .lang-switch a,
-  .lang-switch span,
+  .lang-switch summary,
+  .lang-menu a,
+  .lang-menu span,
   .app-card,
   .app-result,
   .app-field input,
@@ -1834,7 +1857,8 @@ html[lang|="ko"] body { line-height: 1.7; word-break: keep-all; overflow-wrap: b
   .icon-btn:hover,
   .site-nav a:hover,
   .nav-mobile nav a:hover,
-  .lang-switch a:hover,
+  .lang-switch summary:hover,
+  .lang-menu a:hover,
   .app-card:hover,
   .mini-app-list a:hover {
     background: Highlight;
@@ -1843,7 +1867,7 @@ html[lang|="ko"] body { line-height: 1.7; word-break: keep-all; overflow-wrap: b
 
   .site-nav a[aria-current="page"],
   .nav-mobile nav a[aria-current="page"],
-  .lang-switch span[aria-current="true"] {
+  .lang-menu span[aria-current="true"] {
     text-decoration: underline;
     border-width: 4px;
   }

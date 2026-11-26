@@ -1,21 +1,27 @@
 {{- /*
-  Language switcher. One entry per site language, in weight order: the current language is a
-  plain span, the others link to this page's translation, or to that language's home when the
-  page has none (mini apps, 404).
+  Language switcher: a disclosure showing the current language, so five languages cost one
+  button of header width. The list has one entry per site language in weight order: the current
+  language is a plain span, the others link to this page's translation, or to that language's
+  home when the page has none (mini apps, 404).
 */ -}}
 {{- $page := . -}}
 <nav class="lang-switch" aria-label="{{ i18n "lang_switch_label" }}">
-  {{- range hugo.Sites }}
-    {{- $locale := .Language.Locale }}
-    {{- if eq .Language.Lang $page.Language.Lang }}
-  <span lang="{{ $locale }}" aria-current="true">{{ .Language.Label }}</span>
-    {{- else }}
-      {{- $target := .Home.RelPermalink }}
-      {{- /* A 404 page is never a destination: GitHub Pages serves only the root one. */}}
-      {{- if ne $page.Kind "404" }}
-        {{- range where $page.AllTranslations "Language.Lang" .Language.Lang }}{{ $target = .RelPermalink }}{{ end }}
+  <details>
+    <summary lang="{{ $page.Language.Locale }}">{{ $page.Language.Label }}</summary>
+    <div class="lang-menu">
+    {{- range hugo.Sites }}
+      {{- $locale := .Language.Locale }}
+      {{- if eq .Language.Lang $page.Language.Lang }}
+      <span lang="{{ $locale }}" aria-current="true">{{ .Language.Label }}</span>
+      {{- else }}
+        {{- $target := .Home.RelPermalink }}
+        {{- /* A 404 page is never a destination: GitHub Pages serves only the root one. */}}
+        {{- if ne $page.Kind "404" }}
+          {{- range where $page.AllTranslations "Language.Lang" .Language.Lang }}{{ $target = .RelPermalink }}{{ end }}
+        {{- end }}
+      <a href="{{ $target }}" lang="{{ $locale }}" hreflang="{{ $locale }}">{{ .Language.Label }}</a>
       {{- end }}
-  <a href="{{ $target }}" lang="{{ $locale }}" hreflang="{{ $locale }}">{{ .Language.Label }}</a>
     {{- end }}
-  {{- end }}
+    </div>
+  </details>
 </nav>

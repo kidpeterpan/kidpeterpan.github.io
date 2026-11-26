@@ -57,25 +57,48 @@ test('palette names come from i18n, not from theme.js', () => {
 
 test('language switcher controls are at least 44px, with a focus ring', () => {
   const css = read('assets/css/main.css');
-  const rule = css.match(/\.lang-switch a[^{]*\{[^}]*\}/);
-  assert.ok(rule, 'no .lang-switch a rule in main.css');
-  assert.match(rule[0], /min-height:\s*44px/);
-  assert.match(css, /\.lang-switch a:focus-visible\s*\{[^}]*3px solid var\(--accent\)/);
+  const rules = [...css.matchAll(/([^{}]+)\{([^}]*)\}/g)].map((m) => ({ sel: m[1].trim(), body: m[2] }));
+  for (const sel of ['.lang-switch summary', '.lang-menu a']) {
+    const sized = rules.filter((r) => r.sel.split(',').map((x) => x.trim()).includes(sel) && /min-height:\s*44px/.test(r.body));
+    assert.ok(sized.length, `${sel}: no rule with min-height: 44px`);
+  }
+  assert.match(css, /\.lang-switch summary:focus-visible\s*\{[^}]*3px solid var\(--accent\)/);
+  assert.match(css, /\.lang-menu a:focus-visible\s*\{[^}]*3px solid var\(--accent\)/);
 });
 
-test('on a phone the switcher takes its own row so the header stays short', () => {
-  const css = read('assets/css/main.css');
-  const phone = css.match(/@media \(max-width: 480px\) \{[\s\S]*?\n\}\n/);
-  assert.ok(phone, 'no max-width: 480px block');
-  const rule = phone[0].match(/\.lang-switch\s*\{[^}]*\}/);
-  assert.ok(rule, 'the 480px block has no .lang-switch rule');
-  assert.match(rule[0], /flex-basis:\s*100%/);
-  assert.match(rule[0], /order:\s*2/);
+test('the switcher is a disclosure showing the current language, so the header stays one row', () => {
+  const html = page('/ja/');
+  const nav = (html.match(/<nav\b[^>]*\blang-switch\b[\s\S]*?<\/nav>/) || [''])[0];
+  assert.match(nav, /<details\b/, 'the switcher must be a <details>');
+  assert.match(nav, /<summary\b[^>]*>\s*日本語\s*<\/summary>/, 'the summary names the current language');
 });
 
-test('the header sticks only on wide screens, where five languages still fit in two rows', () => {
+test('the header keeps its original sticky behaviour at every width', () => {
   const css = read('assets/css/main.css');
-  const block = css.match(/@media \(max-width: 1199px\) \{[\s\S]*?\n\}\n/);
-  assert.ok(block, 'no max-width: 1199px block');
-  assert.match(block[0], /\.site-header\s*\{[^}]*position:\s*static/);
+  assert.ok(!/@media \(max-width: 1199px\)/.test(css), 'no 1199px override of the header');
+  assert.ok(!/\.lang-switch\s*\{[^}]*flex-basis/.test(css), 'no phone-row workaround for the switcher');
+});
+
+test('404 pages carry no hreflang alternates and no cross-language canonical', () => {
+  for (const { lang } of languages()) {
+    const html = page(`${prefix(lang)}/404.html`);
+    assert.ok(!/hreflang=/.test(html.replace(/<nav[^>]*\blang-switch\b[\s\S]*?<\/nav>/, '')), `${lang}: 404 has hreflang`);
+  }
+});
+
+test('JSON-LD @id values point at the English home, one Person and one WebSite for all languages', () => {
+  for (const { lang } of languages()) {
+    const html = page(`${prefix(lang)}/`);
+    assert.ok(html.includes('"@id":"https://kidpeterpan.github.io/#person"'), `${lang}: Person @id`);
+    assert.ok(html.includes('"@id":"https://kidpeterpan.github.io/#website"'), `${lang}: WebSite @id`);
+  }
+});
+
+test('on narrow screens the language menu is anchored to the header row, like the mobile nav', () => {
+  const css = read('assets/css/main.css');
+  const tablet = css.match(/@media \(max-width: 900px\) \{[\s\S]*?\n\}\n/)[0];
+  assert.match(tablet, /\.lang-switch\s*\{[^}]*position:\s*static/);
+  assert.match(tablet, /\.lang-menu\s*\{[^}]*right:\s*var\(--gutter\)/);
+  const phone = css.match(/@media \(max-width: 480px\) \{[\s\S]*?\n\}\n/)[0];
+  assert.match(phone, /\.lang-menu\s*\{[^}]*left:\s*var\(--gutter\)/);
 });

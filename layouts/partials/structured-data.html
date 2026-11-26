@@ -1,8 +1,10 @@
 {{- $page := .page -}}
 {{- $params := partial "product-params.html" $page -}}
 {{- $homeURL := site.Home.Permalink -}}
-{{- $personID := printf "%s#person" $homeURL -}}
-{{- $websiteID := printf "%s#website" $homeURL -}}
+{{- /* One Person and one WebSite for every language: the ids always name the default-language home. */ -}}
+{{- $idBase := hugo.Sites.Default.Home.Permalink -}}
+{{- $personID := printf "%s#person" $idBase -}}
+{{- $websiteID := printf "%s#website" $idBase -}}
 {{- $language := $params.content_lang | default site.Language.Locale -}}
 {{- $licenseURL := $params.license_url | default (printf "%s/blob/main/LICENSE" $params.repo_url) -}}
 
