@@ -46,7 +46,8 @@
               {{ partial "nav-links.html" . }}
             </nav>
           </details>
-          <button class="btn-ghost theme-toggle" type="button" aria-pressed="false">{{ i18n "palette_label" }} <span class="pal-name">{{ i18n "palette_default" }}</span></button>
+          {{ partial "lang-switch.html" . }}
+          <button class="btn-ghost theme-toggle" type="button" aria-pressed="false" data-pal-light="{{ i18n "palette_default" }}" data-pal-dark="{{ i18n "palette_midnight" }}">{{ i18n "palette_label" }} <span class="pal-name">{{ i18n "palette_default" }}</span></button>
           <a href="{{ site.Params.coffee }}" class="icon-btn" aria-label="{{ i18n "coffee_aria" }}">☕</a>
         </div>
       </div>

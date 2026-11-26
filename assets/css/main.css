@@ -188,6 +188,7 @@ h1, h2, h3 {
 
 .header-right {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
@@ -244,6 +245,40 @@ h1, h2, h3 {
 .icon-btn:active { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
 
 .theme-toggle[aria-pressed="true"] { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
+
+/* Language switcher: one bevelled button per language, the current one pressed in. */
+.lang-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-right: 4px;
+}
+
+.lang-switch a,
+.lang-switch span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 10px;
+  background: var(--face);
+  color: var(--ink);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  font: 600 13px/1.2 var(--font-chrome);
+  text-decoration: none;
+}
+
+.lang-switch a:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
+
+.lang-switch span[aria-current="true"] {
+  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  font-weight: 700;
+}
+
+.lang-switch a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
 .nav-mobile { display: none; position: relative; }
 
@@ -1743,6 +1778,8 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   .btn,
   .btn-ghost,
   .icon-btn,
+  .lang-switch a,
+  .lang-switch span,
   .app-card,
   .app-result,
   .app-field input,
@@ -1760,6 +1797,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   .icon-btn:hover,
   .site-nav a:hover,
   .nav-mobile nav a:hover,
+  .lang-switch a:hover,
   .app-card:hover,
   .mini-app-list a:hover {
     background: Highlight;
@@ -1767,7 +1805,8 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   }
 
   .site-nav a[aria-current="page"],
-  .nav-mobile nav a[aria-current="page"] {
+  .nav-mobile nav a[aria-current="page"],
+  .lang-switch span[aria-current="true"] {
     text-decoration: underline;
     border-width: 4px;
   }

@@ -9,7 +9,7 @@
     var dark = currentTheme() === 'dark';
     btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
     var name = btn.querySelector('.pal-name');
-    if (name) name.textContent = dark ? 'Midnight' : 'Default';
+    if (name) name.textContent = (dark ? btn.dataset.palDark : btn.dataset.palLight) || name.textContent;
   }
   function setTheme(t) {
     document.documentElement.dataset.theme = t;
