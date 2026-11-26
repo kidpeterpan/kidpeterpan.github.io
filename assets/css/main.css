@@ -150,11 +150,9 @@ h1, h2, h3 {
   border-radius: var(--radius-control);
 }
 
+/* Front panel (header) */
 .site-header {
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
-  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--face);
   position: sticky;
   top: 0;
   z-index: 5;
@@ -164,43 +162,59 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  min-height: 64px;
+  gap: 12px;
+  min-height: 60px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .brand {
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.02em;
+  font: 700 18px/1.2 var(--font-mono);
+  color: var(--ink);
   text-decoration: none;
+  padding: 6px 4px;
 }
+
+.brand i { font-style: normal; color: var(--accent); }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .site-nav {
   display: flex;
-  gap: 4px;
-  margin-right: 6px;
+  gap: 8px;
+  margin-right: 4px;
 }
 
 .site-nav a,
 .nav-mobile nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 14px;
+  background: var(--face);
+  color: var(--ink);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  font: 600 14px/1.2 var(--font-mono);
   text-decoration: none;
-  font-size: 15px;
-  color: var(--muted);
-  padding: 8px 12px;
-  border-radius: var(--radius-control);
-  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .site-nav a:hover,
-.nav-mobile nav a:hover { color: var(--ink); background: var(--surface-2); }
+.nav-mobile nav a:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
 
-.site-nav a[aria-current="page"] { color: var(--ink); font-weight: 600; }
+.site-nav a[aria-current="page"],
+.nav-mobile nav a[aria-current="page"] {
+  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  font-weight: 700;
+}
+
+.site-nav a:focus-visible,
+.nav-mobile nav a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
 .icon-btn {
   display: inline-grid;
@@ -220,15 +234,11 @@ h1, h2, h3 {
 .icon-btn:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
 .icon-btn:active { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
 
-.theme-toggle .moon { display: none; }
-html[data-theme="dark"] .theme-toggle .sun { display: none; }
-html[data-theme="dark"] .theme-toggle .moon { display: inline; }
+.theme-toggle[aria-pressed="true"] { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
 
 .nav-mobile { display: none; position: relative; }
 
-.nav-mobile summary {
-  list-style: none;
-}
+.nav-mobile summary { list-style: none; }
 
 .nav-mobile:not([open]) nav { display: none; }
 
@@ -237,35 +247,46 @@ html[data-theme="dark"] .theme-toggle .moon { display: inline; }
 .nav-mobile nav {
   position: absolute;
   right: 0;
-  top: 48px;
-  min-width: 210px;
+  top: 52px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-panel);
-  box-shadow: var(--shadow-lift);
+  gap: 8px;
+  padding: 10px;
+  background: var(--face);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  box-shadow: var(--shadow-hard);
 }
 
 @media (max-width: 900px) {
   .site-nav { display: none; }
   .nav-mobile { display: block; }
+  .theme-toggle { padding-left: 10px; padding-right: 10px; }
 }
 
+@media (max-width: 480px) {
+  .site-header .wrap { flex-wrap: wrap; }
+  .brand { width: 100%; }
+  .header-right { width: 100%; justify-content: flex-end; }
+}
+
+/* Status bar (footer) */
 .site-footer {
-  margin-top: 96px;
-  border-top: 1px solid var(--line);
-  padding: 32px 0 48px;
-  color: var(--muted);
-  font-size: 15px;
+  margin-top: 64px;
+  background: var(--face);
+  color: var(--ink);
+  font: 500 13px/1.5 var(--font-mono);
 }
 
 .site-footer .wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 16px 32px;
+  gap: 8px 32px;
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 
 .site-footer p { margin: 0; }
@@ -273,11 +294,51 @@ html[data-theme="dark"] .theme-toggle .moon { display: inline; }
 .site-footer nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
+  gap: 4px 20px;
 }
 
-.site-footer a { text-decoration: none; }
-.site-footer a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer a { text-decoration: none; padding: 10px 0; }
+.site-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Windows: .win (raised) holds a .win-bar (title) and a .win-body */
+.win {
+  background: var(--face);
+  box-shadow: var(--shadow-hard);
+}
+
+.win-bar {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px 28px;
+  gap: 6px;
+  align-items: center;
+  background: var(--title);
+  color: var(--title-ink);
+  padding: 4px 6px;
+  border-bottom: 2px solid var(--edge);
+}
+
+.win-title {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font: 700 14px/1.3 var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.win-bar .k { position: relative; width: 22px; height: 22px; background: var(--face); }
+.win-bar .menu::after { content: ""; position: absolute; left: 4px; right: 4px; top: 8px; height: 4px; background: var(--ink); }
+.win-bar .min::after { content: ""; position: absolute; left: 7px; top: 7px; width: 4px; height: 4px; background: var(--ink); }
+.win-bar .max::after { content: ""; position: absolute; inset: 3px; border: 2px solid var(--ink); }
+
+.win-body { padding: 14px; }
+
+.well {
+  background: var(--paper);
+  padding: 18px 20px;
+}
 
 /* Bevel primitives: raised (.out) and sunken (.in), each with a 1px edge for 3:1 boundaries. */
 .out {
@@ -1525,5 +1586,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   .in,
   .btn,
   .btn-ghost,
-  .icon-btn { border-color: CanvasText; outline-color: CanvasText; }
+  .icon-btn,
+  .win-bar .k { border-color: CanvasText; outline-color: CanvasText; }
+  .win-bar { border-bottom-color: CanvasText; }
 }

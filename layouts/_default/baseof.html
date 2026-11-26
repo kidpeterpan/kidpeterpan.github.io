@@ -33,9 +33,9 @@
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
 
-    <header class="site-header">
+    <header class="site-header out">
       <div class="wrap">
-        <a href="{{ "/" | relURL }}" class="brand">kidpeterpan</a>
+        <a href="{{ "/" | relURL }}" class="brand">kidpeterpan<i>:~$</i></a>
         <div class="header-right">
           <nav class="site-nav" aria-label="Main">
             {{ partial "nav-links.html" . }}
@@ -46,10 +46,7 @@
               {{ partial "nav-links.html" . }}
             </nav>
           </details>
-          <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark mode">
-            <span class="sun" aria-hidden="true">☀</span>
-            <span class="moon" aria-hidden="true">☾</span>
-          </button>
+          <button class="btn-ghost theme-toggle" type="button" aria-pressed="false">Palette: <span class="pal-name">Default</span></button>
           <a href="{{ site.Params.coffee }}" class="icon-btn" aria-label="Buy me a coffee">☕</a>
         </div>
       </div>
@@ -59,7 +56,7 @@
       {{ block "main" . }}{{ end }}
     </div>
 
-    <footer class="site-footer">
+    <footer class="site-footer status-bar out">
       <div class="wrap">
         <p>© {{ now.Year }} kidpeterpan. Free and open source.</p>
         <nav aria-label="Footer">

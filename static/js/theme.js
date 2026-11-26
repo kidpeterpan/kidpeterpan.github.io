@@ -3,9 +3,18 @@
   function currentTheme() {
     return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   }
+  function syncToggle() {
+    var btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    var dark = currentTheme() === 'dark';
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    var name = btn.querySelector('.pal-name');
+    if (name) name.textContent = dark ? 'Midnight' : 'Default';
+  }
   function setTheme(t) {
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem('mha-theme', t); } catch (e) {}
+    syncToggle();
   }
   // Load reveal: hide before first paint, release shortly after.
   document.documentElement.classList.add('anim-pre');
@@ -19,6 +28,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var btn = document.querySelector('.theme-toggle');
     if (!btn) return;
+    syncToggle();
     btn.addEventListener('click', function () {
       setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
     });
