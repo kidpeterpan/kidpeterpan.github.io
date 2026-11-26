@@ -17,7 +17,7 @@
             {{ partial "route.html" . }}
             <div class="actions reveal d2">
               <a class="btn" href="{{ $product.cta.url }}">{{ $product.cta.label }}</a>
-              <a class="btn-ghost" href="{{ $product.repo_url }}">View on GitHub</a>
+              <a class="btn-ghost" href="{{ $product.repo_url }}">{{ i18n "view_on_github" }}</a>
             </div>
             {{ with $product.notice }}
               <aside class="notice win out reveal d2" aria-labelledby="notice-title">
@@ -42,7 +42,7 @@
     </section>
 
     <section class="win readme out" id="win-readme" aria-labelledby="win-readme-title">
-      {{ partial "window-bar.html" (dict "id" "win-readme-title" "title" (printf "README — %s" .Title) "tag" "p") }}
+      {{ partial "window-bar.html" (dict "id" "win-readme-title" "title" (i18n "readme_title" (dict "title" .Title)) "tag" "p") }}
       <div class="win-body">
         <div class="well in product-body prose">
           {{ .Content }}
@@ -51,7 +51,7 @@
     </section>
 
     <section class="win get out" id="get" aria-labelledby="get-title">
-      {{ partial "window-bar.html" (dict "id" "get-title" "title" (printf "Get %s" .Title)) }}
+      {{ partial "window-bar.html" (dict "id" "get-title" "title" (i18n "get_title" (dict "title" .Title))) }}
       <div class="win-body">
         <div class="well in get-grid">
           <ol class="steps">
@@ -60,7 +60,7 @@
             {{ end }}
           </ol>
           <div>
-            <h3>You need</h3>
+            <h3>{{ i18n "you_need" }}</h3>
             <ul class="requirements">
               {{ range $product.requirements }}
                 <li>{{ . | markdownify }}</li>
@@ -79,7 +79,7 @@
 
     {{ with $product.faq }}
       <section class="win faq out" id="win-faq" aria-labelledby="faq-title">
-        {{ partial "window-bar.html" (dict "id" "faq-title" "title" "Questions") }}
+        {{ partial "window-bar.html" (dict "id" "faq-title" "title" (i18n "faq_title")) }}
         <div class="win-body">
           <div class="well in">
             {{ range . }}
@@ -94,8 +94,8 @@
     {{ end }}
 
     <section class="support in">
-      <p>{{ .Title }} is free. If it saved you time, you can <a class="text-link" href="{{ site.Params.coffee }}">buy me a coffee</a>.</p>
-      <a class="text-link" href="{{ $product.repo_url }}/issues">Report a problem</a>
+      <p>{{ i18n "support_line" (dict "title" .Title "url" site.Params.coffee) | safeHTML }}</p>
+      <a class="text-link" href="{{ $product.repo_url }}/issues">{{ i18n "report_problem" }}</a>
     </section>
   </main>
 {{ end }}

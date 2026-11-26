@@ -31,23 +31,23 @@
     {{ end }}
   </head>
   <body>
-    <a class="skip-link" href="#content">Skip to content</a>
+    <a class="skip-link" href="#content">{{ i18n "skip_link" }}</a>
 
     <header class="site-header out">
       <div class="wrap">
         <a href="{{ "/" | relURL }}" class="brand">kidpeterpan<i>:~$</i></a>
         <div class="header-right">
-          <nav class="site-nav" aria-label="Main">
+          <nav class="site-nav" aria-label="{{ i18n "nav_main_label" }}">
             {{ partial "nav-links.html" . }}
           </nav>
           <details class="nav-mobile">
-            <summary class="icon-btn" aria-label="Menu">☰</summary>
-            <nav aria-label="Main">
+            <summary class="icon-btn" aria-label="{{ i18n "menu_label" }}">☰</summary>
+            <nav aria-label="{{ i18n "nav_main_label" }}">
               {{ partial "nav-links.html" . }}
             </nav>
           </details>
-          <button class="btn-ghost theme-toggle" type="button" aria-pressed="false">Palette: <span class="pal-name">Default</span></button>
-          <a href="{{ site.Params.coffee }}" class="icon-btn" aria-label="Buy me a coffee">☕</a>
+          <button class="btn-ghost theme-toggle" type="button" aria-pressed="false">{{ i18n "palette_label" }} <span class="pal-name">{{ i18n "palette_default" }}</span></button>
+          <a href="{{ site.Params.coffee }}" class="icon-btn" aria-label="{{ i18n "coffee_aria" }}">☕</a>
         </div>
       </div>
     </header>
@@ -58,10 +58,10 @@
 
     <footer class="site-footer status-bar out">
       <div class="wrap">
-        <p>© {{ now.Year }} kidpeterpan. Free and open source.</p>
-        <nav aria-label="Footer">
+        <p>{{ i18n "footer_line" (dict "year" now.Year) }}</p>
+        <nav aria-label="{{ i18n "nav_footer_label" }}">
           {{ partial "nav-links.html" . }}
-          <a href="{{ site.Params.coffee }}">Buy me a coffee</a>
+          <a href="{{ site.Params.coffee }}">{{ i18n "coffee_link" }}</a>
         </nav>
       </div>
     </footer>

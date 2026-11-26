@@ -1,11 +1,11 @@
 {{ define "main" }}
   <main class="wrap home">
     <section class="win term-win out" aria-labelledby="win-term">
-      {{ partial "window-bar.html" (dict "id" "win-term" "title" "xterm — kidpeterpan@home" "tag" "p") }}
+      {{ partial "window-bar.html" (dict "id" "win-term" "title" (i18n "home_term_title") "tag" "p") }}
       <div class="term in">
         <p class="term-line" aria-hidden="true"><span class="prompt">kidpeterpan@home</span>:~$ cat README</p>
-        <h1 class="reveal">Small apps that fix annoying problems.</h1>
-        <p class="reveal d1">Free and open source. Each one does one job well. Find the one that fixes yours.</p>
+        <h1 class="reveal">{{ i18n "home_title" }}</h1>
+        <p class="reveal d1">{{ i18n "home_lead" }}</p>
         <p class="term-line" aria-hidden="true"><span class="prompt">kidpeterpan@home</span>:~$ <span class="cursor"></span></p>
       </div>
     </section>
@@ -25,7 +25,7 @@
                 {{ partial "route.html" . }}
                 <div class="actions product-row-actions">
                   <a class="btn" href="{{ .Params.cta.url }}">{{ .Params.cta.label }}</a>
-                  <a class="text-link" href="{{ .RelPermalink }}">How it works</a>
+                  <a class="text-link" href="{{ .RelPermalink }}">{{ i18n "product_how" }}</a>
                 </div>
               </div>
               <a class="product-row-shot" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
@@ -45,7 +45,7 @@
 
     {{ with site.GetPage "/apps" }}
       <section class="win mini-apps out" aria-labelledby="win-mini-apps">
-        {{ partial "window-bar.html" (dict "id" "win-mini-apps" "title" (printf "%s — File Manager" .Title) "tag" "p") }}
+        {{ partial "window-bar.html" (dict "id" "win-mini-apps" "title" (i18n "mini_apps_window" (dict "title" .Title)) "tag" "p") }}
         <div class="win-body">
           <div class="well in">
             <h2>{{ .Title }}</h2>
@@ -66,6 +66,6 @@
       </section>
     {{ end }}
 
-    <p class="about-line in">Made by kidpeterpan. The code for everything here is on <a class="text-link" href="{{ site.Params.github }}">GitHub</a>.</p>
+    <p class="about-line in">{{ i18n "about_line" (dict "url" site.Params.github) | safeHTML }}</p>
   </main>
 {{ end }}

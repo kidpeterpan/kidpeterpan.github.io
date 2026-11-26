@@ -1,13 +1,13 @@
 {{ define "main" }}
   <main class="wrap page-body">
     <section class="win not-found out" aria-labelledby="win-404-title">
-      {{ partial "window-bar.html" (dict "id" "win-404-title" "title" "Error 404" "tag" "p") }}
+      {{ partial "window-bar.html" (dict "id" "win-404-title" "title" (i18n "error_title") "tag" "p") }}
       <div class="win-body">
         <div class="well in">
-          <h1>Page not found</h1>
-          <p>This page doesn’t exist any more. The old blog posts were retired when this site became a home for my apps.</p>
+          <h1>{{ i18n "notfound_title" }}</h1>
+          <p>{{ i18n "notfound_body" }}</p>
           <div class="actions">
-            <a class="btn" href="{{ "/" | relURL }}">Go to the home page</a>
+            <a class="btn" href="{{ "/" | relURL }}">{{ i18n "notfound_home" }}</a>
             <a class="btn-ghost" href="{{ "/open-mtp-client/" | relURL }}">open-mtp-client</a>
             <a class="btn-ghost" href="{{ "/inkbound/" | relURL }}">Inkbound</a>
           </div>

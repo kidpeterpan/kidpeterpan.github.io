@@ -1,20 +1,20 @@
 {{- $product := .Params -}}
 <dl class="facts reveal d2">
   <div>
-    <dt>Price</dt>
-    <dd>Free</dd>
+    <dt>{{ i18n "facts_price" }}</dt>
+    <dd>{{ i18n "facts_free" }}</dd>
   </div>
   <div>
-    <dt>License</dt>
-    <dd>Open source, {{ $product.license }}</dd>
+    <dt>{{ i18n "facts_license" }}</dt>
+    <dd>{{ i18n "facts_license_value" (dict "license" $product.license) }}</dd>
   </div>
   <div>
-    <dt>Version</dt>
+    <dt>{{ i18n "facts_version" }}</dt>
     <dd class="version">{{ $product.version }}</dd>
   </div>
   {{ with $product.requirements }}
     <div>
-      <dt>Needs</dt>
+      <dt>{{ i18n "facts_needs" }}</dt>
       <dd>{{ index . 0 | markdownify }}</dd>
     </div>
   {{ end }}
