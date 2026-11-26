@@ -1,12 +1,16 @@
 {{- /*
   Title bar for a CDE-style window. The three controls are decorative.
   Usage: partial "window-bar.html" (dict "id" "win-hero-title" "title" "..." "tag" "h2")
-  "tag" defaults to h2; pass "p" when the bar is not a heading (the xterm hero).
+  "tag" is "h2" (default) or "p". Pass "p" when the bar is not a heading: html/template
+  cannot build an element name from a variable, so each tag is spelled out.
 */ -}}
-{{- $tag := .tag | default "h2" -}}
 <div class="win-bar">
   <span class="k menu out" aria-hidden="true"></span>
-  <{{ $tag }} class="win-title"{{ with .id }} id="{{ . }}"{{ end }}>{{ .title }}</{{ $tag }}>
+  {{- if eq (.tag | default "h2") "p" }}
+  <p class="win-title"{{ with .id }} id="{{ . }}"{{ end }}>{{ .title }}</p>
+  {{- else }}
+  <h2 class="win-title"{{ with .id }} id="{{ . }}"{{ end }}>{{ .title }}</h2>
+  {{- end }}
   <span class="k min out" aria-hidden="true"></span>
   <span class="k max out" aria-hidden="true"></span>
 </div>
