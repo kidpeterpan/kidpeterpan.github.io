@@ -62,3 +62,20 @@ test('language switcher controls are at least 44px, with a focus ring', () => {
   assert.match(rule[0], /min-height:\s*44px/);
   assert.match(css, /\.lang-switch a:focus-visible\s*\{[^}]*3px solid var\(--accent\)/);
 });
+
+test('on a phone the switcher takes its own row so the header stays short', () => {
+  const css = read('assets/css/main.css');
+  const phone = css.match(/@media \(max-width: 480px\) \{[\s\S]*?\n\}\n/);
+  assert.ok(phone, 'no max-width: 480px block');
+  const rule = phone[0].match(/\.lang-switch\s*\{[^}]*\}/);
+  assert.ok(rule, 'the 480px block has no .lang-switch rule');
+  assert.match(rule[0], /flex-basis:\s*100%/);
+  assert.match(rule[0], /order:\s*2/);
+});
+
+test('the header sticks only on wide screens, where five languages still fit in two rows', () => {
+  const css = read('assets/css/main.css');
+  const block = css.match(/@media \(max-width: 1199px\) \{[\s\S]*?\n\}\n/);
+  assert.ok(block, 'no max-width: 1199px block');
+  assert.match(block[0], /\.site-header\s*\{[^}]*position:\s*static/);
+});

@@ -304,6 +304,12 @@ h1, h2, h3 {
   box-shadow: var(--shadow-hard);
 }
 
+/* Five languages make the header wrap to two or three rows below about 1200px. A panel that tall
+   stuck to the top eats the screen, so it only sticks where it stays short. */
+@media (max-width: 1199px) {
+  .site-header { position: static; }
+}
+
 @media (max-width: 900px) {
   .site-nav { display: none; }
   .nav-mobile { display: block; }
@@ -326,6 +332,8 @@ h1, h2, h3 {
   .site-header { position: static; }
   .brand { width: 100%; }
   .header-right { width: 100%; justify-content: flex-end; }
+  /* Five language buttons are a row of their own, under menu, palette and coffee. */
+  .lang-switch { order: 2; flex-basis: 100%; justify-content: flex-end; margin-right: 0; }
   .nav-mobile nav {
     left: var(--gutter);
     min-width: 0;
