@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Hugo static site at kidpeterpan.github.io: an English portfolio of the owner's free, open source apps. It has:
+A Hugo static site at kidpeterpan.github.io: a portfolio of the owner's free, open source apps, in English with Thai, Simplified Chinese, Japanese and Korean translations (see **Languages**). It has:
 - product pages for **open-mtp-client** (a Mac app for Android file transfer) and **Inkbound** (an Obsidian plugin that exports notes to EPUB for e-readers)
 - two browser **mini apps** under `/apps/`: a Thai mortgage calculator and an OpenCode Go model comparison
 
@@ -13,7 +13,7 @@ The old Thai blog (articles, Go and Git courses, book notes) was removed in `spe
 **Look**: a retro CDE/Motif desktop (the 1990s Solaris/HP-UX look) with modern usability. Pages are stacked windows on a stippled desktop.
 - Palettes: "Default" (light, cool slate) and "Midnight" (dark), named after CDE palettes. Every color is a token on `:root` / `html[data-theme="dark"]`: `--desk-a`/`--desk-b` (stipple), `--face`, `--hi`, `--sh`, `--edge` (bevels), `--paper` (reading surface), `--title`, `--accent`, `--term-*` (xterm). Midnight's `--edge` is light on purpose: a dark edge on a dark face cannot reach 3:1.
 - Structure: a window is `.win.out` > `.win-bar` + `.win-body` > `.well.in`. `layouts/partials/window-bar.html` renders the title bar (`tag` is `h2` or `p`; the min/max/menu buttons are decorative and `aria-hidden`). Bevels are `.out` (raised) and `.in` (sunken), each with a 1px `--edge` outline. The homepage hero is an `xterm` window and the header is the front panel. Do not style a bare `p` or `h2` inside a window by tag: it will hit the title bar (this happened once on `.not-found`).
-- Fonts: the system UI font for body, IBM Plex Mono for window chrome, buttons and the terminal, IBM Plex Sans Thai for content marked `lang="th"`.
+- Fonts: the system UI font for body, IBM Plex Mono for window chrome, buttons and the terminal, IBM Plex Sans Thai for Thai (`lang` `th` or `th-TH`). Chinese, Japanese and Korean use system fonts only (see **Languages**).
 - The signature element is still the "route" cable (`route_from` → `route_to`): a dashed cable between two bevel nodes, on product pages and homepage rows.
 - Light and dark mode use a `data-theme` attribute, toggled by `static/js/theme.js` and saved in `localStorage` under `mha-theme`. The key name is kept from the old theme so returning visitors keep their choice. The toggle button shows the palette name and sets `aria-pressed`.
 - Accessibility rules the CSS keeps: 44px controls, a 3px `--accent` focus ring, a `forced-colors` block and a `prefers-contrast: more` block near the end of `main.css`, and the cursor blink only under `prefers-reduced-motion: no-preference`.
@@ -25,7 +25,7 @@ The old Thai blog (articles, Go and Git courses, book notes) was removed in `spe
 - `make restart`: stop, then start.
 - `hugo server`: run the dev server in the foreground.
 - `hugo --minify`: the production build (what CI runs). It writes to `public/` and must finish with zero warnings.
-- `npm test`: Node's test runner over `tests/*.test.mjs`. It covers the mini apps' core logic (`assets/js/apps/*-core.js`) and the skin: palette contrast and accessibility rules in the CSS (`skin-tokens`), page structure (`skin-markup`), and that every page keeps its h1 and its links (`skin-parity`, compared with `tests/fixtures/parity-baseline.json`; regenerate that file only when you change a heading or link on purpose). The skin tests build the site, so `hugo` must be on `PATH` (or set `HUGO=/path/to/hugo`); Hugo 0.170 also needs Node ≥22.
+- `npm test`: Node's test runner over `tests/*.test.mjs`. `i18n.test.mjs`, `i18n-switcher.test.mjs` and `i18n-typography.test.mjs` read the language list from `hugo.toml`, so a new language is tested as soon as it is configured. It covers the mini apps' core logic (`assets/js/apps/*-core.js`) and the skin: palette contrast and accessibility rules in the CSS (`skin-tokens`), page structure (`skin-markup`), and that every page keeps its h1 and its links (`skin-parity`, compared with `tests/fixtures/parity-baseline.json`; regenerate that file only when you change a heading or link on purpose). The skin tests build the site, so `hugo` must be on `PATH` (or set `HUGO=/path/to/hugo`); Hugo 0.170 also needs Node ≥22.
 - `npm ci`: install the Tailwind dependencies.
 
 There is no linter. `.github/workflows/deploy.yml` builds with Hugo and deploys `public/` to GitHub Pages on every push to `main`, so a push to `main` is a live deploy.
@@ -49,6 +49,18 @@ The mini-app rules at the end of the file still read the old token names (`--gre
 - Body images are plain Markdown. `layouts/_default/_markup/render-image.html` routes them through `shot.html`.
 - A standalone image becomes a `<figure>` (`wrapStandAloneImageWithinParagraph = false`). Images that share a paragraph become inline `<span class="shot">`, and `.prose p:has(> .shot + .shot)` lays them side by side.
 - Never hotlink images. Copy them into the bundle.
+
+**Languages**: English at the root (`/`), then `/th/`, `/zh-cn/`, `/ja/`, `/ko/`. Hugo's own multilingual mode, translation by file name (`index.th.md` beside `index.md`; `_index.th.md` for the home page).
+- Translated: the home page and the three product pages. **Not translated**: `/apps/` and the mini apps (English only; the switcher sends their visitors to that language's home page, and the home pages of every language list the English mini apps under `lang="en-US"`).
+- `[languages.<key>]` in `hugo.toml` carries `locale` (also the `<html lang>` and `hreflang` value), `label` (the native name shown in the switcher), `weight`, and its own `params.siteTitleFull` and `params.description`. `hugo.Sites.Default` is the English site (`site.Sites` is deprecated).
+- **A translated file carries only translatable fields** (see `tests/i18n.test.mjs`: `NEUTRAL` and `TRANSLATABLE`). `version`, `repo_url`, `license`, `os`, `order`, `images`, `hero_image`, `icon`, URLs and `cta_kind` live only in the English file; `partials/product-params.html` merges them in. Templates read product fields through it, never `.Params` directly, so a release is still a one-line edit of `version`. A translated file also needs `layout = 'project'` and `date`.
+- UI strings are in `i18n/<key>.toml`, flat `key = "value"` lines (the tests parse them with one regex). Every language file has exactly the keys of `en.toml`. Values that contain HTML go through `safeHTML` in the template.
+- Internal links use `relLangURL` so they stay in the language; the Mini apps link uses `relURL` and carries `lang`. The switcher is `partials/lang-switch.html`; a 404 page never counts as a translation.
+- Fonts: CJK pages redefine `--font-body`, `--font-mono` and `--font-chrome` on `html[lang|="zh"|"ja"|"ko"]` (no webfont), with line-height 1.7 (Korean also `word-break: keep-all`). Use `[lang|="th"]`-style selectors: `:lang(th)` matches every descendant and would override the monospace chrome, and an exact `[lang="th"]` misses `th-TH`. The palette names come from i18n through `data-pal-light`/`data-pal-dark` on the toggle; `theme.js` holds no words.
+- Hugo writes `/en/index.html` as a redirect to `/`, and `/sitemap.xml` is a sitemap index (`/en/sitemap.xml`, `/th/sitemap.xml`, ...). `tests/helpers/build.mjs` skips the redirect stub.
+- **To add a language**: a `[languages.<key>]` block (with `hasCJKLanguage = true` for CJK), `i18n/<key>.toml`, `content/_index.<key>.md` and `content/<product>/index.<key>.md` for the three products, a font rule if it needs one, then add its pages to `tests/fixtures/parity-baseline.json` (additions only: build, `summarize` each new page).
+- **Status**: the Thai text was checked by the owner. The Simplified Chinese, Japanese and Korean text is an **unverified Claude draft**; have a native reader check it before relying on it. Translations do not update themselves: when an English page changes, its translations are stale until someone updates them.
+- The header wraps to two or three rows below about 1200px (five languages), so it is `position: static` there and sticky only on wide screens.
 
 **Mini apps**: `content/apps/*.md` use `layouts/apps/single.html`. It renders `#app-root`, injects `data/<app_data>.yaml` as JSON (`partials/app-data.html`), and loads `assets/js/apps/<app_js>` (`partials/app-script.html`). `params.content_lang = 'th'` marks the mortgage page as Thai. Keep the mini-app URLs stable.
 
