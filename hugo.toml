@@ -35,6 +35,16 @@ hasCJKLanguage = true
 siteTitleFull = 'kidpeterpan — 解决烦心小事的免费小应用'
 description = '免费应用：Android 到 Mac 的文件传输、Obsidian 导出 EPUB，以及支持多种 OCR 引擎、可输出泰语/英语翻译的 PlayStation Remote Play。'
 
+[languages.ja]
+locale = 'ja-JP'
+label = '日本語'
+weight = 4
+hasCJKLanguage = true
+
+[languages.ja.params]
+siteTitleFull = 'kidpeterpan — 小さな悩みを解決する、無料の小さなアプリ'
+description = '無料アプリ：Android から Mac へのファイル転送、Obsidian の EPUB 書き出し、複数の OCR エンジンとタイ語/英語の翻訳表示に対応した PlayStation Remote Play。'
+
 [markup]
   [markup.goldmark.parser]
     wrapStandAloneImageWithinParagraph = false

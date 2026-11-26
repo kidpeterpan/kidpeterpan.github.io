@@ -1778,6 +1778,15 @@ html[lang|="zh"] {
 /* CJK text needs more leading than the Latin 1.6. */
 html[lang|="zh"] body { line-height: 1.7; }
 
+/* Japanese: same approach, Japanese system fonts first. */
+html[lang|="ja"] {
+  --font-body: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", Meiryo, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, "IBM Plex Mono", "Hiragino Sans", "Noto Sans CJK JP", "Yu Gothic", Meiryo, monospace;
+  --font-chrome: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, "Hiragino Sans", "Noto Sans CJK JP", "Yu Gothic", Meiryo, monospace;
+}
+
+html[lang|="ja"] body { line-height: 1.7; }
+
 /* A visitor who asks for more contrast gets a flat desk instead of the stipple. */
 @media (prefers-contrast: more) {
   body { background-image: none; }

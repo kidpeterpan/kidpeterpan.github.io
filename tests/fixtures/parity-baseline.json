@@ -180,5 +180,59 @@
       "https://github.com/kidpeterpan/open-mtp-client/issues",
       "https://github.com/kidpeterpan/open-mtp-client/releases/latest"
     ]
+  },
+  "/ja/": {
+    "h1": "小さな悩みを解決する、小さなアプリ。",
+    "hrefs": [
+      "/apps/opencode-go/",
+      "/ja/chiaki-ngx/",
+      "/ja/inkbound/",
+      "/ja/open-mtp-client/",
+      "https://github.com/kidpeterpan",
+      "https://github.com/kidpeterpan/chiaki-ngx/releases/latest",
+      "https://github.com/kidpeterpan/open-mtp-client/releases/latest",
+      "https://obsidian.md/plugins?id=inkbound"
+    ]
+  },
+  "/ja/404.html": {
+    "h1": "ページが見つかりません",
+    "hrefs": [
+      "/ja/",
+      "/ja/inkbound/",
+      "/ja/open-mtp-client/"
+    ]
+  },
+  "/ja/chiaki-ngx/": {
+    "h1": "chiaki-ngx",
+    "hrefs": [
+      "https://buymeacoffee.com/kidpeterpan",
+      "https://developers.google.com/chromeos/app-development/news/frictionless-pdf-accessibility-with-ml-and-ocr",
+      "https://github.com/kidpeterpan/chiaki-ngx",
+      "https://github.com/kidpeterpan/chiaki-ngx/blob/main/docs/translator/MACOS.md",
+      "https://github.com/kidpeterpan/chiaki-ngx/blob/main/docs/translator/STEAMDECK.md",
+      "https://github.com/kidpeterpan/chiaki-ngx/issues",
+      "https://github.com/kidpeterpan/chiaki-ngx/releases/latest"
+    ]
+  },
+  "/ja/inkbound/": {
+    "h1": "Inkbound",
+    "hrefs": [
+      "https://buymeacoffee.com/kidpeterpan",
+      "https://github.com/kidpeterpan/inkbound",
+      "https://github.com/kidpeterpan/inkbound#readme",
+      "https://github.com/kidpeterpan/inkbound/issues",
+      "https://github.com/kidpeterpan/inkbound/releases/latest",
+      "https://obsidian.md/plugins?id=inkbound"
+    ]
+  },
+  "/ja/open-mtp-client/": {
+    "h1": "open-mtp-client",
+    "hrefs": [
+      "https://buymeacoffee.com/kidpeterpan",
+      "https://github.com/kidpeterpan/open-mtp-client",
+      "https://github.com/kidpeterpan/open-mtp-client#build-from-source",
+      "https://github.com/kidpeterpan/open-mtp-client/issues",
+      "https://github.com/kidpeterpan/open-mtp-client/releases/latest"
+    ]
   }
 }
