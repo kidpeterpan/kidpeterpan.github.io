@@ -1,6 +1,6 @@
 {{- $socialImage := dict "url" "" "width" 0 "height" 0 -}}
 {{- $declaredImage := "" -}}
-{{- with .Params.images -}}
+{{- with (partial "product-params.html" .).images -}}
   {{- $declaredImage = index . 0 -}}
 {{- end -}}
 {{- if reflect.IsMap $declaredImage -}}

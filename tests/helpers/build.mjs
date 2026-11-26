@@ -31,7 +31,9 @@ export function pages(dir) {
       if (statSync(full).isDirectory()) walk(full);
       else if (name === 'index.html' || name === '404.html') {
         const rel = '/' + relative(dir, full).split(sep).join('/');
-        found.push({ path: rel.replace(/index\.html$/, ''), html: readFileSync(full, 'utf8') });
+        const html = readFileSync(full, 'utf8');
+        // Hugo writes a <meta http-equiv=refresh> stub at /en/ pointing at the root; it is not a page.
+        if (!/http-equiv=["']?refresh/.test(html)) found.push({ path: rel.replace(/index\.html$/, ''), html });
       }
     }
   };

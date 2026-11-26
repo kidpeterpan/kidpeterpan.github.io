@@ -1,5 +1,5 @@
 {{ define "main" }}
-  {{- $product := .Params -}}
+  {{- $product := partial "product-params.html" . -}}
   <main class="wrap product-page">
     <section class="win product-hero out" id="win-hero" aria-labelledby="win-hero-title">
       {{ partial "window-bar.html" (dict "id" "win-hero-title" "title" (printf "%s — %s" .Title $product.eyebrow) "tag" "p") }}

@@ -1,4 +1,4 @@
-{{- $product := .Params -}}
+{{- $product := partial "product-params.html" . -}}
 <dl class="facts reveal d2">
   <div>
     <dt>{{ i18n "facts_price" }}</dt>

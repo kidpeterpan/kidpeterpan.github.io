@@ -1,9 +1,10 @@
 {{- $page := .page -}}
+{{- $params := partial "product-params.html" $page -}}
 {{- $homeURL := site.Home.Permalink -}}
 {{- $personID := printf "%s#person" $homeURL -}}
 {{- $websiteID := printf "%s#website" $homeURL -}}
-{{- $language := $page.Params.content_lang | default site.Language.Locale -}}
-{{- $licenseURL := $page.Params.license_url | default (printf "%s/blob/main/LICENSE" $page.Params.repo_url) -}}
+{{- $language := $params.content_lang | default site.Language.Locale -}}
+{{- $licenseURL := $params.license_url | default (printf "%s/blob/main/LICENSE" $params.repo_url) -}}
 
 {{- $person := dict
   "@type" "Person"
@@ -40,7 +41,7 @@
     )
   -}}
 {{- else if eq $page.Layout "project" -}}
-  {{- $product := $page.Params -}}
+  {{- $product := $params -}}
   {{- $schema = dict
     "@context" "https://schema.org"
     "@type" "SoftwareApplication"

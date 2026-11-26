@@ -1,10 +1,29 @@
 baseURL = 'https://kidpeterpan.github.io/'
 defaultContentLanguage = 'en'
-locale = 'en-US'
 title = 'kidpeterpan'
 enableRobotsTXT = true
 enableGitInfo = true
 disableKinds = ['taxonomy', 'term', 'rss']
+
+[languages]
+
+[languages.en]
+locale = 'en-US'
+label = 'English'
+weight = 1
+
+[languages.en.params]
+siteTitleFull = 'kidpeterpan — small, free apps that fix annoying problems'
+description = 'Free apps: Android-to-Mac transfer, Obsidian EPUB export, and PlayStation Remote Play with multiple OCR engines and Thai/English output.'
+
+[languages.th]
+locale = 'th-TH'
+label = 'ไทย'
+weight = 2
+
+[languages.th.params]
+siteTitleFull = 'kidpeterpan — แอปเล็ก ๆ ฟรี ที่แก้ปัญหากวนใจ'
+description = 'แอปฟรี: ย้ายไฟล์ Android ไป Mac, ส่งออกโน้ต Obsidian เป็น EPUB และ PlayStation Remote Play ที่มี OCR หลายเอนจิน พร้อมแปลเป็นไทยหรืออังกฤษ'
 
 [markup]
   [markup.goldmark.parser]
@@ -22,8 +41,6 @@ disableKinds = ['taxonomy', 'term', 'rss']
 
 [params]
 author = 'kidpeterpan'
-siteTitleFull = 'kidpeterpan — small, free apps that fix annoying problems'
-description = 'Free apps: Android-to-Mac transfer, Obsidian EPUB export, and PlayStation Remote Play with multiple OCR engines and Thai/English output.'
 github = 'https://github.com/kidpeterpan'
 coffee = 'https://buymeacoffee.com/kidpeterpan'
 googleAnalytics = 'G-LT3TCEMESB'

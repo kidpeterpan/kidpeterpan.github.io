@@ -1,10 +1,11 @@
 {{- $currentPath := .RelPermalink -}}
 {{- $links := slice
-  (dict "label" "open-mtp-client" "url" ("/open-mtp-client/" | relURL))
-  (dict "label" "Inkbound" "url" ("/inkbound/" | relURL))
-  (dict "label" (i18n "nav_mini_apps") "url" ("/apps/" | relURL))
+  (dict "label" "open-mtp-client" "url" ("/open-mtp-client/" | relLangURL))
+  (dict "label" "Inkbound" "url" ("/inkbound/" | relLangURL))
+  (dict "label" (i18n "nav_mini_apps") "url" ("/apps/" | relURL) "english" true)
   (dict "label" "GitHub" "url" site.Params.github)
 -}}
+{{- $defaultLocale := hugo.Sites.Default.Language.Locale -}}
 {{- range $links }}
-  <a href="{{ .url }}"{{ if eq .url $currentPath }} aria-current="page"{{ end }}>{{ .label }}</a>
+  <a href="{{ .url }}"{{ if eq .url $currentPath }} aria-current="page"{{ end }}{{ if and .english (ne site.Language.Locale $defaultLocale) }} lang="{{ $defaultLocale }}"{{ end }}>{{ .label }}</a>
 {{- end }}

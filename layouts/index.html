@@ -10,9 +10,14 @@
       </div>
     </section>
 
-    {{ $products := sort (where site.RegularPages "Layout" "project") "Params.order" }}
+    {{/* Products in English order, each mapped to its translation in the current language. */}}
+    {{ $products := slice }}
+    {{ range sort (where hugo.Sites.Default.RegularPages "Layout" "project") "Params.order" }}
+      {{ range where .AllTranslations "Language.Lang" site.Language.Lang }}{{ $products = $products | append . }}{{ end }}
+    {{ end }}
     <div class="product-rows reveal d2">
       {{ range $index, $product := $products }}
+        {{ $facts := partial "product-params.html" . }}
         {{ $winID := printf "win-%s" .File.ContentBaseName }}
         <article class="win product-row out" aria-labelledby="{{ $winID }}">
           {{ partial "window-bar.html" (dict "id" $winID "title" (printf "%s — %s" .Title .Params.eyebrow) "tag" "p") }}
@@ -24,14 +29,14 @@
                 <p class="product-row-pitch">{{ .Params.card_pitch }}</p>
                 {{ partial "route.html" . }}
                 <div class="actions product-row-actions">
-                  <a class="btn" href="{{ .Params.cta.url }}">{{ .Params.cta.label }}</a>
+                  <a class="btn" href="{{ $facts.cta.url }}">{{ $facts.cta.label }}</a>
                   <a class="text-link" href="{{ .RelPermalink }}">{{ i18n "product_how" }}</a>
                 </div>
               </div>
               <a class="product-row-shot" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
                 {{ partial "shot.html" (dict
                   "page" .
-                  "src" .Params.hero_image
+                  "src" $facts.hero_image
                   "alt" ""
                   "width" 1200
                   "hero" (eq $index 0)
@@ -43,8 +48,8 @@
       {{ end }}
     </div>
 
-    {{ with site.GetPage "/apps" }}
-      <section class="win mini-apps out" aria-labelledby="win-mini-apps">
+    {{ with hugo.Sites.Default.GetPage "/apps" }}
+      <section class="win mini-apps out"{{ if ne site.Language.Locale hugo.Sites.Default.Language.Locale }} lang="{{ hugo.Sites.Default.Language.Locale }}"{{ end }} aria-labelledby="win-mini-apps">
         {{ partial "window-bar.html" (dict "id" "win-mini-apps" "title" (i18n "mini_apps_window" (dict "title" .Title)) "tag" "p") }}
         <div class="win-body">
           <div class="well in">

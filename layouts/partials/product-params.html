@@ -1,0 +1,15 @@
+{{- /*
+  Params of a product page with the language-neutral facts filled in.
+  Usage: partial "product-params.html" <page>
+  English page: its own Params. Translated page: the English page's Params merged under the
+  translated page's own, so a translated file only carries translatable fields (version,
+  repo_url, license, order, images, cta.url ... live in the English file).
+*/ -}}
+{{- $params := .Params -}}
+{{- $default := hugo.Sites.Default.Language.Lang -}}
+{{- if ne .Language.Lang $default -}}
+  {{- range where .AllTranslations "Language.Lang" $default -}}
+    {{- $params = merge .Params $params -}}
+  {{- end -}}
+{{- end -}}
+{{- return $params -}}

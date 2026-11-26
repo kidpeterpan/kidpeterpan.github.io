@@ -93,7 +93,8 @@ body {
 
 a { color: inherit; }
 
-[lang="th"] {
+[lang|="th"],
+html[lang|="th"] body {
   font-family: "IBM Plex Sans Thai", var(--font-body);
 }
 
@@ -1729,7 +1730,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 .app-table th .sort-btn { min-height: 44px; padding: 0 4px; }
 
 /* Plex Mono has no Thai glyphs; keep Thai window titles in the Thai face. */
-[lang="th"] .win-title { font-family: "IBM Plex Sans Thai", var(--font-mono); }
+[lang|="th"] .win-title { font-family: "IBM Plex Sans Thai", var(--font-mono); }
 
 /* A visitor who asks for more contrast gets a flat desk instead of the stipple. */
 @media (prefers-contrast: more) {
