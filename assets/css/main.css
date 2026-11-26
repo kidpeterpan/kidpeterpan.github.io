@@ -3,27 +3,42 @@
   --font-display: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, "IBM Plex Mono", monospace;
 
-  --bg: #F6F7F9;
-  --surface: #FFFFFF;
-  --surface-2: #EEF0F4;
-  --ink: #161A23;
-  --muted: #586072;
-  --faint: #8A91A1;
-  --line: #DDE1E8;
-  --line-strong: #C3C9D4;
-  --accent: #2340C8;
-  --accent-hover: #1A31A3;
-  --accent-ink: #FFFFFF;
-  --accent-soft: #E7EBFB;
-  --danger: #C2362B;
-  --focus: #2340C8;
+  /* "Default" palette: cool slate, after CDE/Motif on Solaris and HP-UX */
+  --desk-a: #53788a;
+  --desk-b: #46687a;
+  --face: #c3c7d4;
+  --hi: #eceef4;
+  --sh: #5b5f73;
+  --edge: #1d2030;
+  --paper: #e6e8ef;
+  --ink: #10131f;
+  --muted: #3b4057;
+  --title: #44598f;
+  --title-ink: #ffffff;
+  --accent: #1c2fa3;
+  --term-bg: #0c0f14;
+  --term-ink: #cfd6e4;
+  --term-prompt: #7fd48a;
+  --shadow-hard: 5px 5px 0 rgba(0, 0, 0, 0.35);
 
-  --shadow-shot: 0 1px 2px rgba(22, 26, 35, 0.06), 0 18px 48px -18px rgba(22, 26, 35, 0.28);
-  --shadow-lift: 0 10px 30px -16px rgba(22, 26, 35, 0.35);
+  /* Old token names, kept as aliases: the mini-app rules below still read them. */
+  --bg: var(--desk-a);
+  --surface: var(--paper);
+  --surface-2: var(--face);
+  --faint: var(--muted);
+  --line: var(--sh);
+  --line-strong: var(--edge);
+  --accent-hover: var(--accent);
+  --accent-ink: var(--paper);
+  --accent-soft: var(--face);
+  --danger: #a3211a;
+  --focus: var(--accent);
+  --shadow-shot: var(--shadow-hard);
+  --shadow-lift: var(--shadow-hard);
 
-  --radius-panel: 16px;
-  --radius-shot: 12px;
-  --radius-control: 10px;
+  --radius-panel: 0;
+  --radius-shot: 0;
+  --radius-control: 0;
 
   --measure: 66ch;
   --page-max: 1160px;
@@ -34,24 +49,21 @@
   --shadow-pop: var(--shadow-lift);
 }
 
+/* "Midnight" palette */
 html[data-theme="dark"] {
-  --bg: #0E111A;
-  --surface: #161B27;
-  --surface-2: #1C2231;
-  --ink: #E9ECF3;
-  --muted: #A0A8BA;
-  --faint: #6E768A;
-  --line: #283043;
-  --line-strong: #3A4359;
-  --accent: #8FA3FF;
-  --accent-hover: #B0BEFF;
-  --accent-ink: #0E111A;
-  --accent-soft: #1F2745;
-  --danger: #F07A6F;
-  --focus: #8FA3FF;
-
-  --shadow-shot: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 24px 60px -24px rgba(0, 0, 0, 0.7);
-  --shadow-lift: 0 12px 34px -16px rgba(0, 0, 0, 0.8);
+  --desk-a: #101630;
+  --desk-b: #0a0f24;
+  --face: #2a3150;
+  --hi: #4a5484;
+  --sh: #0b0e1c;
+  --edge: #7e8bc4; /* light on purpose: a dark edge on a dark face is only 1.6:1 */
+  --paper: #1a2038;
+  --ink: #e8ebf8;
+  --muted: #aab2d6;
+  --title: #3a4a95;
+  --accent: #9fb0ff;
+  --danger: #f07a6f;
+  --shadow-hard: 5px 5px 0 rgba(0, 0, 0, 0.6);
 }
 
 * { box-sizing: border-box; }
@@ -63,13 +75,15 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--desk-a);
+  /* X11 root-window stipple: a 2px checker of two desk shades */
+  background-image: conic-gradient(var(--desk-b) 25%, transparent 0 50%, var(--desk-b) 0 75%, transparent 0);
+  background-size: 4px 4px;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 a { color: inherit; }
@@ -191,19 +205,20 @@ h1, h2, h3 {
 .icon-btn {
   display: inline-grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-control);
-  background: var(--surface);
+  width: 44px;
+  height: 44px;
+  background: var(--face);
   color: var(--ink);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
   font-size: 17px;
   text-decoration: none;
   cursor: pointer;
-  transition: border-color 0.15s ease;
 }
 
-.icon-btn:hover { border-color: var(--line-strong); }
+.icon-btn:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
+.icon-btn:active { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
 
 .theme-toggle .moon { display: none; }
 html[data-theme="dark"] .theme-toggle .sun { display: none; }
@@ -264,36 +279,59 @@ html[data-theme="dark"] .theme-toggle .moon { display: inline; }
 .site-footer a { text-decoration: none; }
 .site-footer a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
+/* Bevel primitives: raised (.out) and sunken (.in), each with a 1px edge for 3:1 boundaries. */
+.out {
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+}
+
+.in {
+  border: 2px solid;
+  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  outline: 1px solid var(--edge);
+}
+
 .btn,
 .btn-ghost {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 48px;
-  padding: 0 22px;
-  border-radius: var(--radius-control);
-  font: 600 16px/1 var(--font-body);
+  min-height: 44px;
+  padding: 6px 18px;
+  background: var(--face);
+  color: var(--ink);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+  outline: 1px solid var(--edge);
+  font: 700 15px/1.2 var(--font-mono);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
+.btn:hover,
+.btn-ghost:hover { background: color-mix(in srgb, var(--face) 88%, var(--hi)); }
+
+.btn:active,
+.btn-ghost:active {
+  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  padding: 7px 17px 5px 19px;
+}
+
+/* Motif "default button": the primary action gets a recessed ring. */
 .btn {
-  background: var(--accent);
-  color: var(--accent-ink);
-  border: 1px solid var(--accent);
+  color: var(--accent);
+  margin: 4px;
+  box-shadow: 0 0 0 2px var(--face), 0 0 0 4px var(--edge);
 }
 
-.btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-
-.btn-ghost {
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-strong);
+.btn:focus-visible,
+.btn-ghost:focus-visible,
+.icon-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
 }
-
-.btn-ghost:hover { border-color: var(--ink); }
 
 .actions {
   display: flex;
@@ -304,13 +342,13 @@ html[data-theme="dark"] .theme-toggle .moon { display: inline; }
 
 .text-link {
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
 
-.text-link:hover { text-decoration-thickness: 2px; }
+.text-link:hover { text-decoration-thickness: 3px; }
 
 .route {
   display: flex;
@@ -1480,4 +1518,12 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 /* Two result cards per row break currency figures mid-number this narrow. */
 @media (max-width: 380px) {
   .app-results { grid-template-columns: 1fr; }
+}
+
+@media (forced-colors: active) {
+  .out,
+  .in,
+  .btn,
+  .btn-ghost,
+  .icon-btn { border-color: CanvasText; outline-color: CanvasText; }
 }
