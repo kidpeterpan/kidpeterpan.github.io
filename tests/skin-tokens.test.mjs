@@ -81,3 +81,43 @@ test('high-contrast preference drops the stipple', () => {
   assert.ok(body, 'no @media (prefers-contrast: more) block');
   assert.match(body, /body\s*\{[^}]*background-image:\s*none/);
 });
+
+// ---- review fixes (final review) ----
+
+const tabletBlock = block(css, '@media (max-width: 900px) {\n  .site-nav { display: none; }') ?? '';
+const phoneBlock = block(css, '@media (max-width: 480px) {\n  /* A wrapped') ?? '';
+
+test('mobile menu panel is anchored to the header, not to the menu button', () => {
+  // Anchored to the button, the panel hung 91px off a 390px phone and 158px off a wrapped 481px header.
+  assert.match(tabletBlock, /\.nav-mobile\s*\{[^}]*position:\s*static/, 'at <=900px .nav-mobile must be position:static');
+  assert.match(tabletBlock, /\.site-header \.wrap\s*\{[^}]*position:\s*relative/);
+  assert.match(tabletBlock, /\.nav-mobile nav\s*\{[^}]*right:\s*var\(--gutter\)[^}]*z-index:\s*6/, 'panel must paint above later positioned window parts');
+  assert.match(phoneBlock, /\.nav-mobile nav\s*\{[^}]*left:\s*var\(--gutter\)/, 'on phones the panel spans gutter to gutter (right comes from the <=900px rule)');
+});
+
+test('real-heading title bars wrap instead of truncating', () => {
+  assert.match(css, /h2\.win-title\s*\{[^}]*white-space:\s*normal/);
+});
+
+test('forced-colors keeps hover and current-page cues', () => {
+  const body = block(css, '@media (forced-colors: active)') ?? '';
+  assert.match(body, /:hover[^{]*\{[^}]*background:\s*Highlight/);
+  assert.match(body, /aria-current="page"[^{]*\{[^}]*(text-decoration:\s*underline|border-width)/);
+});
+
+test('window chrome asks for IBM Plex Mono first', () => {
+  const root = block(css, ':root {') ?? '';
+  assert.match(root, /--font-chrome:\s*"IBM Plex Mono"/);
+  for (const sel of ['.win-title', '.btn,', '.brand', '.term {', '.route {']) {
+    const i = css.indexOf(sel);
+    assert.ok(i > -1, `selector ${sel} not found`);
+    const rule = css.slice(i, css.indexOf('}', i));
+    assert.ok(/font-chrome/.test(rule), `${sel} must use var(--font-chrome)`);
+  }
+});
+
+test('front panel wraps at every width instead of overflowing', () => {
+  const i = css.indexOf('.site-header .wrap {');
+  assert.ok(i > -1);
+  assert.match(css.slice(i, css.indexOf('}', i)), /flex-wrap:\s*wrap/, 'the header row must be allowed to wrap above 480px too');
+});

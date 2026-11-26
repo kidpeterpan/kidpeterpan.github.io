@@ -2,6 +2,8 @@
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "IBM Plex Sans Thai", sans-serif;
   --font-display: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, "IBM Plex Mono", monospace;
+  /* Window chrome, buttons and the terminal ask for Plex Mono first so Apple devices match the design. */
+  --font-chrome: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* "Default" palette: cool slate, after CDE/Motif on Solaris and HP-UX */
   --desk-a: #53788a;
@@ -165,6 +167,7 @@ h1, h2, h3 {
 
 .site-header .wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -174,7 +177,7 @@ h1, h2, h3 {
 }
 
 .brand {
-  font: 700 18px/1.2 var(--font-mono);
+  font: 700 18px/1.2 var(--font-chrome);
   color: var(--ink);
   text-decoration: none;
   padding: 6px 4px;
@@ -205,7 +208,7 @@ h1, h2, h3 {
   border: 2px solid;
   border-color: var(--hi) var(--sh) var(--sh) var(--hi);
   outline: 1px solid var(--edge);
-  font: 600 14px/1.2 var(--font-mono);
+  font: 600 14px/1.2 var(--font-chrome);
   text-decoration: none;
 }
 
@@ -268,15 +271,29 @@ h1, h2, h3 {
 @media (max-width: 900px) {
   .site-nav { display: none; }
   .nav-mobile { display: block; }
+  /* Anchor the open menu to the header row, not to the 44px menu button. Anchored to the
+     button, a 220px panel started 91px off the left edge of a 390px phone, and 158px off
+     when the header wraps at 481px. */
+  .site-header .wrap { position: relative; }
+  .nav-mobile { position: static; }
+  .header-right { margin-left: auto; }
+  .nav-mobile nav {
+    right: var(--gutter);
+    top: calc(100% - 4px);
+    z-index: 6;
+  }
   .theme-toggle { padding-left: 10px; padding-right: 10px; }
 }
 
 @media (max-width: 480px) {
   /* A wrapped two-row panel is 110px tall: too much to keep stuck to a phone screen. */
   .site-header { position: static; }
-  .site-header .wrap { flex-wrap: wrap; }
   .brand { width: 100%; }
   .header-right { width: 100%; justify-content: flex-end; }
+  .nav-mobile nav {
+    left: var(--gutter);
+    min-width: 0;
+  }
 }
 
 /* Status bar (footer) */
@@ -284,7 +301,7 @@ h1, h2, h3 {
   margin-top: 64px;
   background: var(--face);
   color: var(--ink);
-  font: 500 13px/1.5 var(--font-mono);
+  font: 500 13px/1.5 var(--font-chrome);
 }
 
 .site-footer .wrap {
@@ -331,8 +348,15 @@ h1, h2, h3 {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-  font: 700 14px/1.3 var(--font-mono);
+  font: 700 14px/1.3 var(--font-chrome);
   letter-spacing: 0.02em;
+}
+
+/* Real heading bars (notice, Get, Questions) carry content, so they wrap instead of truncating. */
+h2.win-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
 }
 
 .win-bar .k { position: relative; width: 22px; height: 22px; background: var(--face); }
@@ -373,7 +397,7 @@ h1, h2, h3 {
   border: 2px solid;
   border-color: var(--hi) var(--sh) var(--sh) var(--hi);
   outline: 1px solid var(--edge);
-  font: 700 15px/1.2 var(--font-mono);
+  font: 700 15px/1.2 var(--font-chrome);
   text-decoration: none;
   cursor: pointer;
 }
@@ -424,7 +448,7 @@ h1, h2, h3 {
   align-items: center;
   row-gap: 8px;
   margin: 0;
-  font: 600 13px/1.2 var(--font-mono);
+  font: 600 13px/1.2 var(--font-chrome);
   color: var(--ink);
 }
 
@@ -512,7 +536,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   gap: 6px;
   align-items: center;
   min-height: 44px;
-  font: 700 14px/1.2 var(--font-mono);
+  font: 700 14px/1.2 var(--font-chrome);
   color: var(--accent);
   text-decoration: none;
 }
@@ -521,7 +545,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 
 .kicker {
   margin: 0 0 8px;
-  font: 700 12px/1.3 var(--font-mono);
+  font: 700 12px/1.3 var(--font-chrome);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
@@ -716,7 +740,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   background: var(--term-bg);
   color: var(--term-ink);
   padding: 20px 22px;
-  font: 15px/1.6 var(--font-mono);
+  font: 15px/1.6 var(--font-chrome);
   min-height: 190px;
 }
 
@@ -733,7 +757,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   margin: 12px 0 10px;
   max-width: none;
   color: #fff;
-  font: 700 clamp(26px, 4.6vw, 40px) / 1.15 var(--font-mono);
+  font: 700 clamp(26px, 4.6vw, 40px) / 1.15 var(--font-chrome);
   letter-spacing: -0.02em;
 }
 
@@ -783,7 +807,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 
 .eyebrow {
   margin: 0;
-  font: 700 12px/1.3 var(--font-mono);
+  font: 700 12px/1.3 var(--font-chrome);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
@@ -851,7 +875,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   padding: 12px 16px;
   background: var(--face);
   color: var(--ink);
-  font: 500 14px/1.5 var(--font-mono);
+  font: 500 14px/1.5 var(--font-chrome);
 }
 
 .product-page {
@@ -947,7 +971,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   border-color: var(--hi) var(--sh) var(--sh) var(--hi);
   outline: 1px solid var(--edge);
   color: var(--ink);
-  font: 700 14px var(--font-mono);
+  font: 700 14px var(--font-chrome);
 }
 
 .steps li p { margin: 4px 0 0; }
@@ -1006,7 +1030,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   border: 2px solid;
   border-color: var(--hi) var(--sh) var(--sh) var(--hi);
   outline: 1px solid var(--edge);
-  font: 700 15px/1 var(--font-mono);
+  font: 700 15px/1 var(--font-chrome);
   color: var(--ink);
 }
 
@@ -1024,7 +1048,7 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   padding: 12px 16px;
   background: var(--face);
   color: var(--ink);
-  font: 500 14px/1.5 var(--font-mono);
+  font: 500 14px/1.5 var(--font-chrome);
 }
 
 .support p { margin: 0; }
@@ -1728,4 +1752,22 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
   .app-copy-btn,
   .win-bar .k { border-color: CanvasText; outline-color: CanvasText; }
   .win-bar { border-bottom-color: CanvasText; }
+
+  /* Tints do not survive forced colors, so hover and "you are here" need system colors. */
+  .btn:hover,
+  .btn-ghost:hover,
+  .icon-btn:hover,
+  .site-nav a:hover,
+  .nav-mobile nav a:hover,
+  .app-card:hover,
+  .mini-app-list a:hover {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .site-nav a[aria-current="page"],
+  .nav-mobile nav a[aria-current="page"] {
+    text-decoration: underline;
+    border-width: 4px;
+  }
 }
