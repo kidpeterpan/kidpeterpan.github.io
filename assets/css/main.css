@@ -1767,6 +1767,17 @@ html:not([data-theme="dark"]) .shot-dark { display: none; }
 /* Plex Mono has no Thai glyphs; keep Thai window titles in the Thai face. */
 [lang|="th"] .win-title { font-family: "IBM Plex Sans Thai", var(--font-mono); }
 
+/* Simplified Chinese: system fonts only (no webfont, they weigh megabytes). Redefining the font
+   tokens on <html> reaches the body, the window chrome and the mono text alike. */
+html[lang|="zh"] {
+  --font-body: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, "IBM Plex Mono", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", monospace;
+  --font-chrome: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", monospace;
+}
+
+/* CJK text needs more leading than the Latin 1.6. */
+html[lang|="zh"] body { line-height: 1.7; }
+
 /* A visitor who asks for more contrast gets a flat desk instead of the stipple. */
 @media (prefers-contrast: more) {
   body { background-image: none; }
