@@ -90,3 +90,21 @@ for (const name of ['open-mtp-client', 'inkbound', 'chiaki-ngx']) {
     assert.equal(/<aside\b[^>]*\bnotice\b/.test(html), /^\[params\.notice\]/m.test(fm), 'notice presence differs from front matter');
   });
 }
+
+test('apps and 404 are windows; app roots intact', () => {
+  for (const path of ['/apps/mortgage/', '/apps/opencode-go/']) {
+    const html = page(path);
+    const win = html.match(/<section\b[^>]*\bapp-shell\b[\s\S]*?<\/section>/);
+    assert.ok(win, `${path}: no .app-shell window`);
+    assert.match(win[0], cls('win'));
+    assert.match(win[0], new RegExp(`id=${q}app-root${q}`), `${path}: #app-root is not inside the window`);
+    assert.ok(!/&lt;(?:p|h[1-6])\b/.test(html), `${path}: a window title leaked as escaped markup`);
+  }
+  assert.match(page('/apps/mortgage/'), /lang=["']?th/);
+  const list = page('/apps/');
+  assert.match(list, cls('win'));
+  assert.equal(count(list, /<a\b[^>]*\bapp-card\b/), 2, '/apps/ lost an app card');
+  const notFound = page('/404.html');
+  assert.match(notFound, cls('win'));
+  assert.match(notFound, /noindex/);
+});

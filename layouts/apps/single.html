@@ -1,34 +1,39 @@
 {{ define "main" }}
   <main class="wrap page-body">
-    <article class="reveal app-shell"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }}>
-      <a href="{{ "/apps/" | relURL }}" class="back-link"><span class="arr" aria-hidden="true">←</span> Mini apps</a>
+    <section class="win app-shell out reveal"{{ with .Params.content_lang }} lang="{{ . }}"{{ end }} aria-labelledby="win-app-title">
+      {{ partial "window-bar.html" (dict "id" "win-app-title" "title" .Title "tag" "p") }}
+      <div class="win-body">
+        <div class="well in">
+          <a href="{{ "/apps/" | relURL }}" class="back-link"><span class="arr" aria-hidden="true">←</span> Mini apps</a>
 
-      <header class="article-head">
-        <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
-        <h1>{{ .Title }}</h1>
-        {{ if not .Params.hide_desc }}
-          {{ with .Description }}
-            <p class="desc" style="margin: 10px 0 0;">{{ . }}</p>
+          <header class="article-head">
+            <p class="kicker">{{ or .Parent.Params.kicker (upper .Section) }}</p>
+            <h1>{{ .Title }}</h1>
+            {{ if not .Params.hide_desc }}
+              {{ with .Description }}
+                <p class="desc" style="margin: 10px 0 0;">{{ . }}</p>
+              {{ end }}
+            {{ end }}
+            <div class="article-rule"></div>
+          </header>
+
+          {{ with .Content }}
+            <div class="prose app-intro">{{ . }}</div>
           {{ end }}
-        {{ end }}
-        <div class="article-rule"></div>
-      </header>
 
-      {{ with .Content }}
-        <div class="prose app-intro">{{ . }}</div>
-      {{ end }}
+          <div id="app-root" class="app-root"></div>
 
-      <div id="app-root" class="app-root"></div>
-
-      {{ with .Params.app_data }}
-        {{ partial "app-data.html" . }}
-      {{ end }}
-      {{ with .Params.app_core_js }}
-        {{ partial "app-script.html" . }}
-      {{ end }}
-      {{ with .Params.app_js }}
-        {{ partial "app-script.html" . }}
-      {{ end }}
-    </article>
+          {{ with .Params.app_data }}
+            {{ partial "app-data.html" . }}
+          {{ end }}
+          {{ with .Params.app_core_js }}
+            {{ partial "app-script.html" . }}
+          {{ end }}
+          {{ with .Params.app_js }}
+            {{ partial "app-script.html" . }}
+          {{ end }}
+        </div>
+      </div>
+    </section>
   </main>
 {{ end }}

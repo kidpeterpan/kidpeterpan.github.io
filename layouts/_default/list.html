@@ -1,19 +1,26 @@
 {{ define "main" }}
   <main class="wrap list-body">
-    <header class="list-head reveal">
-      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
-      <h1>{{ .Title }}</h1>
-      {{ with .Description }}
-        <p class="desc">{{ . }}</p>
-      {{ end }}
-    </header>
-    <ul class="page-list reveal d1">
-      {{ range .RegularPages }}
-        <li>
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          {{ with .Description }}<p>{{ . }}</p>{{ end }}
-        </li>
-      {{ end }}
-    </ul>
+    <section class="win out reveal" aria-labelledby="win-list-title">
+      {{ partial "window-bar.html" (dict "id" "win-list-title" "title" .Title "tag" "p") }}
+      <div class="win-body">
+        <div class="well in">
+          <header class="list-head">
+            <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
+            <h1>{{ .Title }}</h1>
+            {{ with .Description }}
+              <p class="desc">{{ . }}</p>
+            {{ end }}
+          </header>
+          <ul class="page-list">
+            {{ range .RegularPages }}
+              <li>
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                {{ with .Description }}<p>{{ . }}</p>{{ end }}
+              </li>
+            {{ end }}
+          </ul>
+        </div>
+      </div>
+    </section>
   </main>
 {{ end }}

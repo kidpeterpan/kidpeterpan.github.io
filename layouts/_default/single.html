@@ -1,16 +1,21 @@
 {{ define "main" }}
   <main class="wrap page-body">
-    <article class="reveal">
-      <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
-      <header class="article-head">
-        <h1>{{ .Title }}</h1>
-        {{ with .Description }}
-          <p class="desc">{{ . }}</p>
-        {{ end }}
-        <div class="article-rule"></div>
-      </header>
-      <div class="prose">
-        {{ .Content }}
+    <article class="win out reveal" aria-labelledby="win-page-title">
+      {{ partial "window-bar.html" (dict "id" "win-page-title" "title" .Title "tag" "p") }}
+      <div class="win-body">
+        <div class="well in">
+          <a href="{{ "/" | relURL }}" class="back-link"><span class="arr">←</span> Home</a>
+          <header class="article-head">
+            <h1>{{ .Title }}</h1>
+            {{ with .Description }}
+              <p class="desc">{{ . }}</p>
+            {{ end }}
+            <div class="article-rule"></div>
+          </header>
+          <div class="prose">
+            {{ .Content }}
+          </div>
+        </div>
       </div>
     </article>
   </main>
