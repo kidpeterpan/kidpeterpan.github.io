@@ -1787,6 +1787,15 @@ html[lang|="ja"] {
 
 html[lang|="ja"] body { line-height: 1.7; }
 
+/* Korean: same approach. Korean separates words with spaces, so keep a word whole when wrapping. */
+html[lang|="ko"] {
+  --font-body: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, "IBM Plex Mono", "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", monospace;
+  --font-chrome: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", monospace;
+}
+
+html[lang|="ko"] body { line-height: 1.7; word-break: keep-all; overflow-wrap: break-word; }
+
 /* A visitor who asks for more contrast gets a flat desk instead of the stipple. */
 @media (prefers-contrast: more) {
   body { background-image: none; }
